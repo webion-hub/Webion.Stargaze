@@ -1,13 +1,26 @@
-﻿using Webion.ClickUp.Api.Team;
+﻿using System.Text.Json;
+using Webion.ClickUp.Api.Team;
+using Refit;
 
 namespace Webion.ClickUp.Api;
 
 public sealed class ClickUpApi
 {
-    public IClickUpTeamApi Teams { get; init; }
+    private readonly HttpClient _client;
 
-    public ClickUpApi (IClickUpTeamApi teams)
+    public IClickUpTeamApi Teams => RestService.For<IClickUpTeamApi>(_client, Settings); 
+
+    public ClickUpApi (HttpClient client)
     {
-        Teams = teams;
+        _client = client;
     }
+    
+    private static readonly RefitSettings Settings = new()
+    {
+        ContentSerializer = new SystemTextJsonContentSerializer(new JsonSerializerOptions
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower,
+        }),
+    };
+
 }
