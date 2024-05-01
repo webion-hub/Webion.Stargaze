@@ -11,7 +11,7 @@ public sealed class RoleClaimDbo : IdentityRoleClaim<TypeId>, IEntityTypeConfigu
     
     public void Configure(EntityTypeBuilder<RoleClaimDbo> builder)
     {
-        builder.ToTable("role_claims", Schemas.Identity);
+        builder.ToTable("role_claim", Schemas.Identity);
 
         builder
             .HasOne(rc => rc.Role)

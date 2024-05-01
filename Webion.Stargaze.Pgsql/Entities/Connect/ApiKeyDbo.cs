@@ -16,7 +16,7 @@ public sealed class ApiKeyDbo : IEntity, IEntityTypeConfiguration<ApiKeyDbo>
     
     public void Configure(EntityTypeBuilder<ApiKeyDbo> builder)
     {
-        builder.ToTable("api_keys", Schemas.Connect);
+        builder.ToTable("api_key", Schemas.Connect);
         builder.HasKey(x => x.Id);
         
         builder.Property(x => x.Secret).HasMaxLength(512).IsRequired();

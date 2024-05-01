@@ -11,7 +11,7 @@ public sealed class UserTokenDbo : IdentityUserToken<TypeId>, IEntityTypeConfigu
     
     public void Configure(EntityTypeBuilder<UserTokenDbo> builder)
     {
-        builder.ToTable("user_tokens", Schemas.Identity);
+        builder.ToTable("user_token", Schemas.Identity);
         builder.HasKey(x => new { x.UserId, x.LoginProvider, x.Name });
 
         builder

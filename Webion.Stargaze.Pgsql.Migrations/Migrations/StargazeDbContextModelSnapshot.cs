@@ -40,12 +40,12 @@ namespace Webion.Stargaze.Pgsql.Migrations.Migrations
                         .HasColumnName("secret");
 
                     b.HasKey("Id")
-                        .HasName("pk_api_keys");
+                        .HasName("pk_api_key");
 
                     b.HasIndex("ClientId")
-                        .HasDatabaseName("ix_api_keys_client_id");
+                        .HasDatabaseName("ix_api_key_client_id");
 
-                    b.ToTable("api_keys", "connect");
+                    b.ToTable("api_key", "connect");
                 });
 
             modelBuilder.Entity("Webion.Stargaze.Pgsql.Entities.Connect.ClientDbo", b =>
@@ -67,9 +67,9 @@ namespace Webion.Stargaze.Pgsql.Migrations.Migrations
                         .HasColumnName("secret");
 
                     b.HasKey("Id")
-                        .HasName("pk_clients");
+                        .HasName("pk_client");
 
-                    b.ToTable("clients", "connect");
+                    b.ToTable("client", "connect");
                 });
 
             modelBuilder.Entity("Webion.Stargaze.Pgsql.Entities.Connect.RefreshTokenDbo", b =>
@@ -94,12 +94,12 @@ namespace Webion.Stargaze.Pgsql.Migrations.Migrations
                         .HasColumnName("user_id");
 
                     b.HasKey("Id")
-                        .HasName("pk_refresh_tokens");
+                        .HasName("pk_refresh_token");
 
                     b.HasIndex("UserId")
-                        .HasDatabaseName("ix_refresh_tokens_user_id");
+                        .HasDatabaseName("ix_refresh_token_user_id");
 
-                    b.ToTable("refresh_tokens", "connect");
+                    b.ToTable("refresh_token", "connect");
                 });
 
             modelBuilder.Entity("Webion.Stargaze.Pgsql.Entities.Identity.RoleClaimDbo", b =>
@@ -125,12 +125,12 @@ namespace Webion.Stargaze.Pgsql.Migrations.Migrations
                         .HasColumnName("role_id");
 
                     b.HasKey("Id")
-                        .HasName("pk_role_claims");
+                        .HasName("pk_role_claim");
 
                     b.HasIndex("RoleId")
-                        .HasDatabaseName("ix_role_claims_role_id");
+                        .HasDatabaseName("ix_role_claim_role_id");
 
-                    b.ToTable("role_claims", "identity");
+                    b.ToTable("role_claim", "identity");
                 });
 
             modelBuilder.Entity("Webion.Stargaze.Pgsql.Entities.Identity.RoleDbo", b =>
@@ -152,9 +152,9 @@ namespace Webion.Stargaze.Pgsql.Migrations.Migrations
                         .HasColumnName("normalized_name");
 
                     b.HasKey("Id")
-                        .HasName("pk_roles");
+                        .HasName("pk_role");
 
-                    b.ToTable("roles", "identity");
+                    b.ToTable("role", "identity");
                 });
 
             modelBuilder.Entity("Webion.Stargaze.Pgsql.Entities.Identity.UserClaimDbo", b =>
@@ -180,12 +180,12 @@ namespace Webion.Stargaze.Pgsql.Migrations.Migrations
                         .HasColumnName("user_id");
 
                     b.HasKey("Id")
-                        .HasName("pk_user_claims");
+                        .HasName("pk_user_claim");
 
                     b.HasIndex("UserId")
-                        .HasDatabaseName("ix_user_claims_user_id");
+                        .HasDatabaseName("ix_user_claim_user_id");
 
-                    b.ToTable("user_claims", "identity");
+                    b.ToTable("user_claim", "identity");
                 });
 
             modelBuilder.Entity("Webion.Stargaze.Pgsql.Entities.Identity.UserDbo", b =>
@@ -290,12 +290,12 @@ namespace Webion.Stargaze.Pgsql.Migrations.Migrations
                         .HasColumnName("user_id");
 
                     b.HasKey("LoginProvider", "ProviderKey")
-                        .HasName("pk_user_logins");
+                        .HasName("pk_user_login");
 
                     b.HasIndex("UserId")
-                        .HasDatabaseName("ix_user_logins_user_id");
+                        .HasDatabaseName("ix_user_login_user_id");
 
-                    b.ToTable("user_logins", "identity");
+                    b.ToTable("user_login", "identity");
                 });
 
             modelBuilder.Entity("Webion.Stargaze.Pgsql.Entities.Identity.UserRoleDbo", b =>
@@ -309,12 +309,12 @@ namespace Webion.Stargaze.Pgsql.Migrations.Migrations
                         .HasColumnName("role_id");
 
                     b.HasKey("UserId", "RoleId")
-                        .HasName("pk_user_roles");
+                        .HasName("pk_user_role");
 
                     b.HasIndex("RoleId")
-                        .HasDatabaseName("ix_user_roles_role_id");
+                        .HasDatabaseName("ix_user_role_role_id");
 
-                    b.ToTable("user_roles", "identity");
+                    b.ToTable("user_role", "identity");
                 });
 
             modelBuilder.Entity("Webion.Stargaze.Pgsql.Entities.Identity.UserTokenDbo", b =>
@@ -336,9 +336,63 @@ namespace Webion.Stargaze.Pgsql.Migrations.Migrations
                         .HasColumnName("value");
 
                     b.HasKey("UserId", "LoginProvider", "Name")
-                        .HasName("pk_user_tokens");
+                        .HasName("pk_user_token");
 
-                    b.ToTable("user_tokens", "identity");
+                    b.ToTable("user_token", "identity");
+                });
+
+            modelBuilder.Entity("Webion.Stargaze.Pgsql.Entities.Projects.ProjectDbo", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("text")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(4096)
+                        .HasColumnType("character varying(4096)")
+                        .HasColumnName("description");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(512)
+                        .HasColumnType("character varying(512)")
+                        .HasColumnName("name");
+
+                    b.HasKey("Id")
+                        .HasName("pk_project");
+
+                    b.ToTable("project", "projects");
+                });
+
+            modelBuilder.Entity("Webion.Stargaze.Pgsql.Entities.Projects.TaskDbo", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("text")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(4096)
+                        .HasColumnType("character varying(4096)")
+                        .HasColumnName("description");
+
+                    b.Property<string>("ProjectId")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("project_id");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(512)
+                        .HasColumnType("character varying(512)")
+                        .HasColumnName("title");
+
+                    b.HasKey("Id")
+                        .HasName("pk_task");
+
+                    b.HasIndex("ProjectId")
+                        .HasDatabaseName("ix_task_project_id");
+
+                    b.ToTable("task", "projects");
                 });
 
             modelBuilder.Entity("Webion.Stargaze.Pgsql.Entities.TimeTracking.TimeEntryDbo", b =>
@@ -377,7 +431,7 @@ namespace Webion.Stargaze.Pgsql.Migrations.Migrations
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_api_keys_client_dbo_client_id");
+                        .HasConstraintName("fk_api_key_client_dbo_client_id");
 
                     b.Navigation("Client");
                 });
@@ -389,7 +443,7 @@ namespace Webion.Stargaze.Pgsql.Migrations.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_refresh_tokens_user_dbo_user_id");
+                        .HasConstraintName("fk_refresh_token_user_dbo_user_id");
 
                     b.Navigation("User");
                 });
@@ -401,7 +455,7 @@ namespace Webion.Stargaze.Pgsql.Migrations.Migrations
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_role_claims_role_dbo_role_id");
+                        .HasConstraintName("fk_role_claim_role_dbo_role_id");
 
                     b.Navigation("Role");
                 });
@@ -413,7 +467,7 @@ namespace Webion.Stargaze.Pgsql.Migrations.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_user_claims_user_dbo_user_id");
+                        .HasConstraintName("fk_user_claim_user_dbo_user_id");
 
                     b.Navigation("User");
                 });
@@ -425,7 +479,7 @@ namespace Webion.Stargaze.Pgsql.Migrations.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_user_logins_users_user_id");
+                        .HasConstraintName("fk_user_login_users_user_id");
 
                     b.Navigation("User");
                 });
@@ -437,14 +491,14 @@ namespace Webion.Stargaze.Pgsql.Migrations.Migrations
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_user_roles_roles_role_id");
+                        .HasConstraintName("fk_user_role_role_role_id");
 
                     b.HasOne("Webion.Stargaze.Pgsql.Entities.Identity.UserDbo", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_user_roles_users_user_id");
+                        .HasConstraintName("fk_user_role_users_user_id");
 
                     b.Navigation("Role");
 
@@ -458,9 +512,21 @@ namespace Webion.Stargaze.Pgsql.Migrations.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_user_tokens_users_user_id");
+                        .HasConstraintName("fk_user_token_users_user_id");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Webion.Stargaze.Pgsql.Entities.Projects.TaskDbo", b =>
+                {
+                    b.HasOne("Webion.Stargaze.Pgsql.Entities.Projects.ProjectDbo", "Project")
+                        .WithMany("Tasks")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired()
+                        .HasConstraintName("fk_task_project_project_id");
+
+                    b.Navigation("Project");
                 });
 
             modelBuilder.Entity("Webion.Stargaze.Pgsql.Entities.Connect.ClientDbo", b =>
@@ -482,6 +548,11 @@ namespace Webion.Stargaze.Pgsql.Migrations.Migrations
                     b.Navigation("RefreshTokens");
 
                     b.Navigation("Tokens");
+                });
+
+            modelBuilder.Entity("Webion.Stargaze.Pgsql.Entities.Projects.ProjectDbo", b =>
+                {
+                    b.Navigation("Tasks");
                 });
 #pragma warning restore 612, 618
         }

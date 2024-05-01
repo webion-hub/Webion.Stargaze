@@ -21,7 +21,7 @@ public sealed class RefreshTokenDbo : IEntity, IEntityTypeConfiguration<RefreshT
     
     public void Configure(EntityTypeBuilder<RefreshTokenDbo> builder)
     {
-        builder.ToTable("refresh_tokens", Schemas.Connect);
+        builder.ToTable("refresh_token", Schemas.Connect);
         builder.HasKey(r => r.Id);
 
         builder.Property(r => r.Secret).HasMaxLength(256).IsRequired();

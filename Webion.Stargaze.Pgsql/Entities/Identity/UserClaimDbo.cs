@@ -11,7 +11,7 @@ public sealed class UserClaimDbo : IdentityUserClaim<TypeId>, IEntityTypeConfigu
     
     public void Configure(EntityTypeBuilder<UserClaimDbo> builder)
     {
-        builder.ToTable("user_claims", Schemas.Identity);
+        builder.ToTable("user_claim", Schemas.Identity);
         builder.HasKey(x => x.Id);
         
         builder

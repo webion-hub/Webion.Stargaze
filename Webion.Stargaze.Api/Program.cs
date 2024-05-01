@@ -1,6 +1,7 @@
 using Webion.ClickUp.Api;
 using Webion.ClickUp.Api.Team.Dtos;
 using Webion.Stargaze.Api.Options;
+using Webion.Stargaze.Pgsql;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,10 +17,15 @@ var settings = builder.Configuration
 
 builder.Services.AddClickUpApi(settings.ApiKey);
 
+var conn = builder.Configuration.GetConnectionString("db")!;
+builder.Services.AddStargazeDbContext(conn);
+
 var app = builder.Build();
 
 app.MapGet("/", async (ClickUpApi api) =>
 {
+    
+    
     return Results.Ok(
         await api.Teams.GetTimeEntriesAsync(settings.TeamId, new GetTeamTimeEntriesRequest
         {

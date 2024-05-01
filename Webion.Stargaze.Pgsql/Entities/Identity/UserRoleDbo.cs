@@ -13,7 +13,7 @@ public sealed class UserRoleDbo : IdentityUserRole<TypeId>, IEntityTypeConfigura
 
     public void Configure(EntityTypeBuilder<UserRoleDbo> builder)
     {
-        builder.ToTable("user_roles", Schemas.Identity);
+        builder.ToTable("user_role", Schemas.Identity);
         builder.HasKey(x => new { x.UserId, x.RoleId });
 
         builder

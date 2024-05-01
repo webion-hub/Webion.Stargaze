@@ -11,7 +11,7 @@ public sealed class UserLoginDbo : IdentityUserLogin<TypeId>, IEntityTypeConfigu
     
     public void Configure(EntityTypeBuilder<UserLoginDbo> builder)
     {
-        builder.ToTable("user_logins", Schemas.Identity);
+        builder.ToTable("user_login", Schemas.Identity);
         builder.HasKey(x => new { x.LoginProvider, x.ProviderKey });
         
         builder

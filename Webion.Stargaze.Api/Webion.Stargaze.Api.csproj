@@ -26,6 +26,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Webion.ClickUp.Api\Webion.ClickUp.Api.csproj" />
+      <ProjectReference Include="..\Webion.Stargaze.Pgsql\Webion.Stargaze.Pgsql.csproj" />
     </ItemGroup>
 
     <ItemGroup>

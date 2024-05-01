@@ -16,7 +16,7 @@ public sealed class ClientDbo : IEntity, IEntityTypeConfiguration<ClientDbo>
 
     public void Configure(EntityTypeBuilder<ClientDbo> builder)
     {
-        builder.ToTable("clients", Schemas.Connect);
+        builder.ToTable("client", Schemas.Connect);
         builder.HasKey(x => x.Id);
         
         builder.Property(x => x.Name).HasMaxLength(256).IsRequired();

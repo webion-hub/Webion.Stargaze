@@ -14,7 +14,7 @@ public sealed class RoleDbo : IdentityRole<TypeId>, IEntity, IEntityTypeConfigur
     
     public void Configure(EntityTypeBuilder<RoleDbo> builder)
     {
-        builder.ToTable("roles", Schemas.Identity);
+        builder.ToTable("role", Schemas.Identity);
         
         builder
             .HasMany(r => r.Users)
