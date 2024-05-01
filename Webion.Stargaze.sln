@@ -8,6 +8,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "clickup", "clickup", "{7F60
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Webion.ClickUp.Api", "Webion.ClickUp.Api\Webion.ClickUp.Api.csproj", "{6F1ADC72-DAB7-4C98-9340-A7F2838B2E87}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "db", "db", "{85093A37-72D6-40F2-915D-D503F836E6E4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Webion.Stargaze.Pgsql", "Webion.Stargaze.Pgsql\Webion.Stargaze.Pgsql.csproj", "{0F5DC970-B404-464D-8848-0B856E393FA2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Webion.Stargaze.Pgsql.Migrations", "Webion.Stargaze.Pgsql.Migrations\Webion.Stargaze.Pgsql.Migrations.csproj", "{54DAF5CD-2B75-4CB5-A654-B2429432F837}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -16,6 +22,8 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{98A837CD-0586-4141-82CA-89F09AC0773A} = {747792B8-D158-4E5D-AB4A-001B42A11FE3}
 		{6F1ADC72-DAB7-4C98-9340-A7F2838B2E87} = {7F60D832-0F35-4044-BE8E-68F703A18206}
+		{0F5DC970-B404-464D-8848-0B856E393FA2} = {85093A37-72D6-40F2-915D-D503F836E6E4}
+		{54DAF5CD-2B75-4CB5-A654-B2429432F837} = {85093A37-72D6-40F2-915D-D503F836E6E4}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{98A837CD-0586-4141-82CA-89F09AC0773A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -26,5 +34,13 @@ Global
 		{6F1ADC72-DAB7-4C98-9340-A7F2838B2E87}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6F1ADC72-DAB7-4C98-9340-A7F2838B2E87}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6F1ADC72-DAB7-4C98-9340-A7F2838B2E87}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F5DC970-B404-464D-8848-0B856E393FA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F5DC970-B404-464D-8848-0B856E393FA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F5DC970-B404-464D-8848-0B856E393FA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F5DC970-B404-464D-8848-0B856E393FA2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{54DAF5CD-2B75-4CB5-A654-B2429432F837}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54DAF5CD-2B75-4CB5-A654-B2429432F837}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54DAF5CD-2B75-4CB5-A654-B2429432F837}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54DAF5CD-2B75-4CB5-A654-B2429432F837}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
