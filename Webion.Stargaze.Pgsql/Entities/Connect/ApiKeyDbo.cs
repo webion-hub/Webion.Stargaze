@@ -1,12 +1,13 @@
+using FastIDs.TypeId;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using TcKs.TypeId;
+using Webion.Stargaze.Pgsql.Extensions;
 
 namespace Webion.Stargaze.Pgsql.Entities.Connect;
 
-public sealed class ApiKeyDbo : IEntity, IEntityTypeConfiguration<ApiKeyDbo>
+public sealed class ApiKeyDbo : IEntityBase, IEntityTypeConfiguration<ApiKeyDbo>
 {
-    public string GetIdPrefix() => "api_key";
+    public string IdPrefix => "apiKey";
     public TypeId Id { get; set; }
     public TypeId ClientId { get; set; }
     
@@ -16,8 +17,13 @@ public sealed class ApiKeyDbo : IEntity, IEntityTypeConfiguration<ApiKeyDbo>
     
     public void Configure(EntityTypeBuilder<ApiKeyDbo> builder)
     {
-        builder.ToTable("api_key", Schemas.Connect);
+        builder.ToTable("api_key", Schemas.Connect, b =>
+        {
+            b.HasTypeIdCheckConstraint(IdPrefix);
+        });
+        
         builder.HasKey(x => x.Id);
+        builder.Property(x => x.Id).HasDefaultTypeIdValue(IdPrefix);
         
         builder.Property(x => x.Secret).HasMaxLength(512).IsRequired();
 

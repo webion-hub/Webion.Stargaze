@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Webion.Stargaze.Pgsql;
@@ -11,9 +12,11 @@ using Webion.Stargaze.Pgsql;
 namespace Webion.Stargaze.Pgsql.Migrations.Migrations
 {
     [DbContext(typeof(StargazeDbContext))]
-    partial class StargazeDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240501152953_LinkTasksToUser")]
+    partial class LinkTasksToUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -28,7 +31,7 @@ namespace Webion.Stargaze.Pgsql.Migrations.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("text")
                         .HasColumnName("id")
-                        .HasDefaultValueSql("typeid_generate_text('apiKey')");
+                        .HasDefaultValueSql("typeid_generate_text('api_key')");
 
                     b.Property<string>("ClientId")
                         .IsRequired()
@@ -49,7 +52,7 @@ namespace Webion.Stargaze.Pgsql.Migrations.Migrations
 
                     b.ToTable("api_key", "connect", t =>
                         {
-                            t.HasCheckConstraint("CK_id", "typeid_check_text(id, 'apiKey')");
+                            t.HasCheckConstraint("CK_id", "typeid_check_text(id, 'api_key')");
                         });
                 });
 
@@ -88,7 +91,7 @@ namespace Webion.Stargaze.Pgsql.Migrations.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("text")
                         .HasColumnName("id")
-                        .HasDefaultValueSql("typeid_generate_text('refreshToken')");
+                        .HasDefaultValueSql("typeid_generate_text('refresh_token')");
 
                     b.Property<DateTime>("ExpiresAt")
                         .HasColumnType("timestamp with time zone")
@@ -113,7 +116,7 @@ namespace Webion.Stargaze.Pgsql.Migrations.Migrations
 
                     b.ToTable("refresh_token", "connect", t =>
                         {
-                            t.HasCheckConstraint("CK_id", "typeid_check_text(id, 'refreshToken')");
+                            t.HasCheckConstraint("CK_id", "typeid_check_text(id, 'refresh_token')");
                         });
                 });
 
@@ -369,10 +372,8 @@ namespace Webion.Stargaze.Pgsql.Migrations.Migrations
             modelBuilder.Entity("Webion.Stargaze.Pgsql.Entities.Projects.ProjectDbo", b =>
                 {
                     b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("text")
-                        .HasColumnName("id")
-                        .HasDefaultValueSql("typeid_generate_text('project')");
+                        .HasColumnName("id");
 
                     b.Property<string>("Description")
                         .HasMaxLength(4096)
@@ -388,10 +389,7 @@ namespace Webion.Stargaze.Pgsql.Migrations.Migrations
                     b.HasKey("Id")
                         .HasName("pk_project");
 
-                    b.ToTable("project", "projects", t =>
-                        {
-                            t.HasCheckConstraint("CK_id", "typeid_check_text(id, 'project')");
-                        });
+                    b.ToTable("project", "projects");
                 });
 
             modelBuilder.Entity("Webion.Stargaze.Pgsql.Entities.Projects.TaskDbo", b =>
@@ -436,7 +434,7 @@ namespace Webion.Stargaze.Pgsql.Migrations.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("text")
                         .HasColumnName("id")
-                        .HasDefaultValueSql("typeid_generate_text('timeEntry')");
+                        .HasDefaultValueSql("typeid_generate_text('time_entry')");
 
                     b.Property<TimeSpan>("Duration")
                         .HasColumnType("interval")
@@ -463,7 +461,7 @@ namespace Webion.Stargaze.Pgsql.Migrations.Migrations
 
                     b.ToTable("time_entry", "time_tracking", t =>
                         {
-                            t.HasCheckConstraint("CK_id", "typeid_check_text(id, 'timeEntry')");
+                            t.HasCheckConstraint("CK_id", "typeid_check_text(id, 'time_entry')");
                         });
                 });
 

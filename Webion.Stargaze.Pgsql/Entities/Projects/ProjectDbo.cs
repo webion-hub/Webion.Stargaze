@@ -1,12 +1,13 @@
+using FastIDs.TypeId;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using TcKs.TypeId;
+using Webion.Stargaze.Pgsql.Extensions;
 
 namespace Webion.Stargaze.Pgsql.Entities.Projects;
 
-public sealed class ProjectDbo : IEntity, IEntityTypeConfiguration<ProjectDbo>
+public sealed class ProjectDbo : IEntityBase, IEntityTypeConfiguration<ProjectDbo>
 {
-    public string GetIdPrefix() => "project";
+    public string IdPrefix => "project";
     public TypeId Id { get; set; }
 
     public string Name { get; set; } = null!;
@@ -17,9 +18,14 @@ public sealed class ProjectDbo : IEntity, IEntityTypeConfiguration<ProjectDbo>
     
     public void Configure(EntityTypeBuilder<ProjectDbo> builder)
     {
-        builder.ToTable("project", Schemas.Projects);
+        builder.ToTable("project", Schemas.Projects, b =>
+        {
+            b.HasTypeIdCheckConstraint(IdPrefix);
+        });
+        
         builder.HasKey(x => x.Id);
-
+        builder.Property(x => x.Id).HasDefaultTypeIdValue(IdPrefix);
+        
         builder.Property(x => x.Name).IsRequired().HasMaxLength(512);
         builder.Property(x => x.Description).HasMaxLength(4096);
     }

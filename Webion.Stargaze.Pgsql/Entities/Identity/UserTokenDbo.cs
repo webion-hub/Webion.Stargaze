@@ -1,7 +1,7 @@
+using FastIDs.TypeId;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using TcKs.TypeId;
 
 namespace Webion.Stargaze.Pgsql.Entities.Identity;
 

@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Webion.Stargaze.Pgsql;
+namespace Webion.Stargaze.Pgsql.Extensions;
 
 public static class ServiceCollectionExtension
 {
@@ -9,6 +9,7 @@ public static class ServiceCollectionExtension
     {
         services.AddDbContext<StargazeDbContext>(options =>
         {
+            options.EnableSensitiveDataLogging();
             options.UseNpgsql(connectionString, x =>
             {
                 x.MigrationsAssembly("Webion.Stargaze.Pgsql.Migrations");

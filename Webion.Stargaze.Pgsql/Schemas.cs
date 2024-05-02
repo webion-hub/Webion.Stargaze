@@ -1,5 +1,3 @@
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-
 namespace Webion.Stargaze.Pgsql;
 
 public static class Schemas

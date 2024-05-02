@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using TcKs.TypeId;
+﻿using FastIDs.TypeId;
+using Microsoft.EntityFrameworkCore;
 using Webion.Stargaze.Pgsql.Converters;
 using Webion.Stargaze.Pgsql.Entities;
 
@@ -27,41 +27,5 @@ public sealed class StargazeDbContext : DbContext
     {
         base.OnConfiguring(builder);
         builder.UseSnakeCaseNamingConvention();
-    }
-    
-    public override int SaveChanges()
-    {
-        GenerateTypeIds();
-        return base.SaveChanges();
-    }
-
-    public override async Task<int> SaveChangesAsync(
-        bool acceptAllChangesOnSuccess,
-        CancellationToken cancellationToken = default
-    )
-    {
-        GenerateTypeIds();
-        return await base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
-    }
-    
-    /// <summary>
-    /// Generates TypeIds for newly added entities implementing IEntity interface.
-    /// </summary>
-    private void GenerateTypeIds()
-    {
-        var addedEntities = ChangeTracker.Entries()
-            .Where(x => x.Entity is IEntity)
-            .Where(x => x.State == EntityState.Added);
-
-        foreach (var entityEntry in addedEntities)
-        {
-            if (entityEntry.Entity is not IEntity entity)
-                continue;
-            
-            if (entity.Id != default)
-                continue;
-                
-            entity.Id = TypeId.NewId(entity.GetIdPrefix());
-        }
     }
 }
