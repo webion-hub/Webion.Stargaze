@@ -30,6 +30,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Config\" />
       <Folder Include="Endpoints\v1\" />
     </ItemGroup>
 

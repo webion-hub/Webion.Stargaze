@@ -7,7 +7,7 @@ namespace Webion.Stargaze.Pgsql.Entities.Connect;
 
 public sealed class ApiKeyDbo : IEntityBase, IEntityTypeConfiguration<ApiKeyDbo>
 {
-    public string IdPrefix => "apiKey";
+    public string IdPrefix => "apikey";
     public TypeId Id { get; set; }
     public TypeId ClientId { get; set; }
     

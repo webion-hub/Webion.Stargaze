@@ -9,7 +9,7 @@ namespace Webion.Stargaze.Pgsql.Entities.Connect;
 
 public sealed class RefreshTokenDbo : IEntityBase, IEntityTypeConfiguration<RefreshTokenDbo>
 {
-    public string IdPrefix => "refreshToken";
+    public string IdPrefix => "refreshtoken";
     public TypeId Id { get; set; }
     public TypeId UserId { get; set; }
     

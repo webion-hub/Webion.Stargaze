@@ -28,7 +28,7 @@ namespace Webion.Stargaze.Pgsql.Migrations.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("text")
                         .HasColumnName("id")
-                        .HasDefaultValueSql("typeid_generate_text('apiKey')");
+                        .HasDefaultValueSql("typeid_generate_text('apikey')");
 
                     b.Property<string>("ClientId")
                         .IsRequired()
@@ -49,7 +49,7 @@ namespace Webion.Stargaze.Pgsql.Migrations.Migrations
 
                     b.ToTable("api_key", "connect", t =>
                         {
-                            t.HasCheckConstraint("CK_id", "typeid_check_text(id, 'apiKey')");
+                            t.HasCheckConstraint("CK_id", "typeid_check_text(id, 'apikey')");
                         });
                 });
 
@@ -88,7 +88,7 @@ namespace Webion.Stargaze.Pgsql.Migrations.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("text")
                         .HasColumnName("id")
-                        .HasDefaultValueSql("typeid_generate_text('refreshToken')");
+                        .HasDefaultValueSql("typeid_generate_text('refreshtoken')");
 
                     b.Property<DateTime>("ExpiresAt")
                         .HasColumnType("timestamp with time zone")
@@ -113,7 +113,7 @@ namespace Webion.Stargaze.Pgsql.Migrations.Migrations
 
                     b.ToTable("refresh_token", "connect", t =>
                         {
-                            t.HasCheckConstraint("CK_id", "typeid_check_text(id, 'refreshToken')");
+                            t.HasCheckConstraint("CK_id", "typeid_check_text(id, 'refreshtoken')");
                         });
                 });
 
@@ -436,7 +436,7 @@ namespace Webion.Stargaze.Pgsql.Migrations.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("text")
                         .HasColumnName("id")
-                        .HasDefaultValueSql("typeid_generate_text('timeEntry')");
+                        .HasDefaultValueSql("typeid_generate_text('timeentry')");
 
                     b.Property<TimeSpan>("Duration")
                         .HasColumnType("interval")
@@ -463,7 +463,7 @@ namespace Webion.Stargaze.Pgsql.Migrations.Migrations
 
                     b.ToTable("time_entry", "time_tracking", t =>
                         {
-                            t.HasCheckConstraint("CK_id", "typeid_check_text(id, 'timeEntry')");
+                            t.HasCheckConstraint("CK_id", "typeid_check_text(id, 'timeentry')");
                         });
                 });
 

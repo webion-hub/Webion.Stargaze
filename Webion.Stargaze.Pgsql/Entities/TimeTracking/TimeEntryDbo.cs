@@ -8,7 +8,7 @@ namespace Webion.Stargaze.Pgsql.Entities.TimeTracking;
 
 public sealed class TimeEntryDbo : IEntityBase, IEntityTypeConfiguration<TimeEntryDbo>
 {
-    public string IdPrefix => "timeEntry";
+    public string IdPrefix => "timeentry";
     public TypeId Id { get; set; }
     public TypeId UserId { get; set; }
     
