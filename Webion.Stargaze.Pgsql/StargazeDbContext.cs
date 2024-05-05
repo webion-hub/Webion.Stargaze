@@ -1,11 +1,10 @@
-﻿using FastIDs.TypeId;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Webion.Stargaze.Pgsql.Converters;
-using Webion.Stargaze.Pgsql.Entities;
+using Webion.Stargaze.Pgsql.Entities.Identity;
 
 namespace Webion.Stargaze.Pgsql;
 
-public sealed class StargazeDbContext : DbContext
+public sealed class StargazeDbContext : IdentityDbContext<UserDbo, RoleDbo, Guid, UserClaimDbo, UserRoleDbo, UserLoginDbo, RoleClaimDbo, UserTokenDbo>
 {
     public StargazeDbContext(DbContextOptions<StargazeDbContext> options) : base(options)
     {
@@ -20,7 +19,7 @@ public sealed class StargazeDbContext : DbContext
     protected override void ConfigureConventions(ModelConfigurationBuilder builder)
     {
         base.ConfigureConventions(builder);
-        builder.Properties<TypeId>().HaveConversion<TypeIdConverter>();
+        builder.Properties<Enum>().HaveConversion<string>();
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder builder)

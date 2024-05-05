@@ -1,11 +1,10 @@
-using FastIDs.TypeId;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Webion.Stargaze.Pgsql.Entities.Identity;
 
-public sealed class UserTokenDbo : IdentityUserToken<TypeId>, IEntityTypeConfiguration<UserTokenDbo>
+public sealed class UserTokenDbo : IdentityUserToken<Guid>, IEntityTypeConfiguration<UserTokenDbo>
 {
     public UserDbo User { get; set; } = null!;
     

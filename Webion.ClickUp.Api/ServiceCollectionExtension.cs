@@ -5,14 +5,13 @@ namespace Webion.ClickUp.Api;
 
 public static class ServiceCollectionExtension
 {
-    public static void AddClickUpApi(this IServiceCollection services, string apiKey)
+    public static IHttpClientBuilder AddClickUpApi(this IServiceCollection services)
     {
-        services
-            .AddHttpClient<ClickUpApi>()
+        return services
+            .AddHttpClient<IClickUpApi, ClickUpApi>()
             .ConfigureHttpClient(x =>
             {
                 x.BaseAddress = new Uri("https://api.clickup.com/api");
-                x.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(apiKey);
             });
     }
 }

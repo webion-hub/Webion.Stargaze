@@ -12,8 +12,8 @@ using Webion.Stargaze.Pgsql;
 namespace Webion.Stargaze.Pgsql.Migrations.Migrations
 {
     [DbContext(typeof(StargazeDbContext))]
-    [Migration("20240501153641_UpdateConstraints")]
-    partial class UpdateConstraints
+    [Migration("20240502190325_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,15 +27,13 @@ namespace Webion.Stargaze.Pgsql.Migrations.Migrations
 
             modelBuilder.Entity("Webion.Stargaze.Pgsql.Entities.Connect.ApiKeyDbo", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("text")
-                        .HasColumnName("id")
-                        .HasDefaultValueSql("typeid_generate_text('api_key')");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
 
-                    b.Property<string>("ClientId")
-                        .IsRequired()
-                        .HasColumnType("text")
+                    b.Property<Guid>("ClientId")
+                        .HasColumnType("uuid")
                         .HasColumnName("client_id");
 
                     b.Property<byte[]>("Secret")
@@ -50,21 +48,15 @@ namespace Webion.Stargaze.Pgsql.Migrations.Migrations
                     b.HasIndex("ClientId")
                         .HasDatabaseName("ix_api_key_client_id");
 
-                    b.ToTable("api_key", "connect", t =>
-                        {
-                            t.HasCheckConstraint("CK_client_id", "typeid_check_text(client_id, 'client')");
-
-                            t.HasCheckConstraint("CK_id", "typeid_check_text(id, 'api_key')");
-                        });
+                    b.ToTable("api_key", "connect");
                 });
 
             modelBuilder.Entity("Webion.Stargaze.Pgsql.Entities.Connect.ClientDbo", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("text")
-                        .HasColumnName("id")
-                        .HasDefaultValueSql("typeid_generate_text('client')");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -81,19 +73,15 @@ namespace Webion.Stargaze.Pgsql.Migrations.Migrations
                     b.HasKey("Id")
                         .HasName("pk_client");
 
-                    b.ToTable("client", "connect", t =>
-                        {
-                            t.HasCheckConstraint("CK_id", "typeid_check_text(id, 'client')");
-                        });
+                    b.ToTable("client", "connect");
                 });
 
             modelBuilder.Entity("Webion.Stargaze.Pgsql.Entities.Connect.RefreshTokenDbo", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("text")
-                        .HasColumnName("id")
-                        .HasDefaultValueSql("typeid_generate_text('refresh_token')");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
 
                     b.Property<DateTime>("ExpiresAt")
                         .HasColumnType("timestamp with time zone")
@@ -105,9 +93,8 @@ namespace Webion.Stargaze.Pgsql.Migrations.Migrations
                         .HasColumnType("bytea")
                         .HasColumnName("secret");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("text")
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
                         .HasColumnName("user_id");
 
                     b.HasKey("Id")
@@ -116,12 +103,7 @@ namespace Webion.Stargaze.Pgsql.Migrations.Migrations
                     b.HasIndex("UserId")
                         .HasDatabaseName("ix_refresh_token_user_id");
 
-                    b.ToTable("refresh_token", "connect", t =>
-                        {
-                            t.HasCheckConstraint("CK_id", "typeid_check_text(id, 'refresh_token')");
-
-                            t.HasCheckConstraint("CK_user_id", "typeid_check_text(user_id, 'user')");
-                        });
+                    b.ToTable("refresh_token", "connect");
                 });
 
             modelBuilder.Entity("Webion.Stargaze.Pgsql.Entities.Identity.RoleClaimDbo", b =>
@@ -141,9 +123,8 @@ namespace Webion.Stargaze.Pgsql.Migrations.Migrations
                         .HasColumnType("text")
                         .HasColumnName("claim_value");
 
-                    b.Property<string>("RoleId")
-                        .IsRequired()
-                        .HasColumnType("text")
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uuid")
                         .HasColumnName("role_id");
 
                     b.HasKey("Id")
@@ -152,39 +133,39 @@ namespace Webion.Stargaze.Pgsql.Migrations.Migrations
                     b.HasIndex("RoleId")
                         .HasDatabaseName("ix_role_claim_role_id");
 
-                    b.ToTable("role_claim", "identity", t =>
-                        {
-                            t.HasCheckConstraint("CK_role_id", "typeid_check_text(role_id, 'role')");
-                        });
+                    b.ToTable("role_claim", "identity");
                 });
 
             modelBuilder.Entity("Webion.Stargaze.Pgsql.Entities.Identity.RoleDbo", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("text")
-                        .HasColumnName("id")
-                        .HasDefaultValueSql("typeid_generate_text('role')");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
 
                     b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
                         .HasColumnType("text")
                         .HasColumnName("concurrency_stamp");
 
                     b.Property<string>("Name")
-                        .HasColumnType("text")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)")
                         .HasColumnName("name");
 
                     b.Property<string>("NormalizedName")
-                        .HasColumnType("text")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)")
                         .HasColumnName("normalized_name");
 
                     b.HasKey("Id")
                         .HasName("pk_role");
 
-                    b.ToTable("role", "identity", t =>
-                        {
-                            t.HasCheckConstraint("CK_id", "typeid_check_text(id, 'role')");
-                        });
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex");
+
+                    b.ToTable("role", "identity");
                 });
 
             modelBuilder.Entity("Webion.Stargaze.Pgsql.Entities.Identity.UserClaimDbo", b =>
@@ -204,9 +185,8 @@ namespace Webion.Stargaze.Pgsql.Migrations.Migrations
                         .HasColumnType("text")
                         .HasColumnName("claim_value");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("text")
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
                         .HasColumnName("user_id");
 
                     b.HasKey("Id")
@@ -215,49 +195,33 @@ namespace Webion.Stargaze.Pgsql.Migrations.Migrations
                     b.HasIndex("UserId")
                         .HasDatabaseName("ix_user_claim_user_id");
 
-                    b.ToTable("user_claim", "identity", t =>
-                        {
-                            t.HasCheckConstraint("CK_user_id", "typeid_check_text(user_id, 'user')");
-                        });
+                    b.ToTable("user_claim", "identity");
                 });
 
             modelBuilder.Entity("Webion.Stargaze.Pgsql.Entities.Identity.UserDbo", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("text")
-                        .HasColumnName("id")
-                        .HasDefaultValueSql("typeid_generate_text('user')");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("integer")
                         .HasColumnName("access_failed_count");
 
                     b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
                         .HasColumnType("text")
                         .HasColumnName("concurrency_stamp");
 
                     b.Property<string>("Email")
-                        .HasColumnType("text")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)")
                         .HasColumnName("email");
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("boolean")
                         .HasColumnName("email_confirmed");
-
-                    b.Property<bool>("Enabled")
-                        .HasColumnType("boolean")
-                        .HasColumnName("enabled");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("first_name");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("last_name");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("boolean")
@@ -268,11 +232,13 @@ namespace Webion.Stargaze.Pgsql.Migrations.Migrations
                         .HasColumnName("lockout_end");
 
                     b.Property<string>("NormalizedEmail")
-                        .HasColumnType("text")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)")
                         .HasColumnName("normalized_email");
 
                     b.Property<string>("NormalizedUserName")
-                        .HasColumnType("text")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)")
                         .HasColumnName("normalized_user_name");
 
                     b.Property<string>("PasswordHash")
@@ -296,16 +262,21 @@ namespace Webion.Stargaze.Pgsql.Migrations.Migrations
                         .HasColumnName("two_factor_enabled");
 
                     b.Property<string>("UserName")
-                        .HasColumnType("text")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)")
                         .HasColumnName("user_name");
 
                     b.HasKey("Id")
                         .HasName("pk_user");
 
-                    b.ToTable("user", "identity", t =>
-                        {
-                            t.HasCheckConstraint("CK_id", "typeid_check_text(id, 'user')");
-                        });
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex");
+
+                    b.ToTable("user", "identity");
                 });
 
             modelBuilder.Entity("Webion.Stargaze.Pgsql.Entities.Identity.UserLoginDbo", b =>
@@ -322,9 +293,8 @@ namespace Webion.Stargaze.Pgsql.Migrations.Migrations
                         .HasColumnType("text")
                         .HasColumnName("provider_display_name");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("text")
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
                         .HasColumnName("user_id");
 
                     b.HasKey("LoginProvider", "ProviderKey")
@@ -333,20 +303,17 @@ namespace Webion.Stargaze.Pgsql.Migrations.Migrations
                     b.HasIndex("UserId")
                         .HasDatabaseName("ix_user_login_user_id");
 
-                    b.ToTable("user_login", "identity", t =>
-                        {
-                            t.HasCheckConstraint("CK_user_id", "typeid_check_text(user_id, 'user')");
-                        });
+                    b.ToTable("user_login", "identity");
                 });
 
             modelBuilder.Entity("Webion.Stargaze.Pgsql.Entities.Identity.UserRoleDbo", b =>
                 {
-                    b.Property<string>("UserId")
-                        .HasColumnType("text")
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
                         .HasColumnName("user_id");
 
-                    b.Property<string>("RoleId")
-                        .HasColumnType("text")
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uuid")
                         .HasColumnName("role_id");
 
                     b.HasKey("UserId", "RoleId")
@@ -355,18 +322,13 @@ namespace Webion.Stargaze.Pgsql.Migrations.Migrations
                     b.HasIndex("RoleId")
                         .HasDatabaseName("ix_user_role_role_id");
 
-                    b.ToTable("user_role", "identity", t =>
-                        {
-                            t.HasCheckConstraint("CK_role_id", "typeid_check_text(role_id, 'role')");
-
-                            t.HasCheckConstraint("CK_user_id", "typeid_check_text(user_id, 'user')");
-                        });
+                    b.ToTable("user_role", "identity");
                 });
 
             modelBuilder.Entity("Webion.Stargaze.Pgsql.Entities.Identity.UserTokenDbo", b =>
                 {
-                    b.Property<string>("UserId")
-                        .HasColumnType("text")
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
                         .HasColumnName("user_id");
 
                     b.Property<string>("LoginProvider")
@@ -384,19 +346,15 @@ namespace Webion.Stargaze.Pgsql.Migrations.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name")
                         .HasName("pk_user_token");
 
-                    b.ToTable("user_token", "identity", t =>
-                        {
-                            t.HasCheckConstraint("CK_user_id", "typeid_check_text(user_id, 'user')");
-                        });
+                    b.ToTable("user_token", "identity");
                 });
 
             modelBuilder.Entity("Webion.Stargaze.Pgsql.Entities.Projects.ProjectDbo", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("text")
-                        .HasColumnName("id")
-                        .HasDefaultValueSql("typeid_generate_text('project')");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
 
                     b.Property<string>("Description")
                         .HasMaxLength(4096)
@@ -412,28 +370,23 @@ namespace Webion.Stargaze.Pgsql.Migrations.Migrations
                     b.HasKey("Id")
                         .HasName("pk_project");
 
-                    b.ToTable("project", "projects", t =>
-                        {
-                            t.HasCheckConstraint("CK_id", "typeid_check_text(id, 'project')");
-                        });
+                    b.ToTable("project", "projects");
                 });
 
             modelBuilder.Entity("Webion.Stargaze.Pgsql.Entities.Projects.TaskDbo", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("text")
-                        .HasColumnName("id")
-                        .HasDefaultValueSql("typeid_generate_text('task')");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
 
                     b.Property<string>("Description")
                         .HasMaxLength(4096)
                         .HasColumnType("character varying(4096)")
                         .HasColumnName("description");
 
-                    b.Property<string>("ProjectId")
-                        .IsRequired()
-                        .HasColumnType("text")
+                    b.Property<Guid>("ProjectId")
+                        .HasColumnType("uuid")
                         .HasColumnName("project_id");
 
                     b.Property<string>("Title")
@@ -448,19 +401,15 @@ namespace Webion.Stargaze.Pgsql.Migrations.Migrations
                     b.HasIndex("ProjectId")
                         .HasDatabaseName("ix_task_project_id");
 
-                    b.ToTable("task", "projects", t =>
-                        {
-                            t.HasCheckConstraint("CK_id", "typeid_check_text(id, 'project')");
-                        });
+                    b.ToTable("task", "projects");
                 });
 
             modelBuilder.Entity("Webion.Stargaze.Pgsql.Entities.TimeTracking.TimeEntryDbo", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("text")
-                        .HasColumnName("id")
-                        .HasDefaultValueSql("typeid_generate_text('time_entry')");
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
 
                     b.Property<TimeSpan>("Duration")
                         .HasColumnType("interval")
@@ -474,9 +423,8 @@ namespace Webion.Stargaze.Pgsql.Migrations.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("start");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("text")
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
                         .HasColumnName("user_id");
 
                     b.HasKey("Id")
@@ -485,12 +433,7 @@ namespace Webion.Stargaze.Pgsql.Migrations.Migrations
                     b.HasIndex("UserId")
                         .HasDatabaseName("ix_time_entry_user_id");
 
-                    b.ToTable("time_entry", "time_tracking", t =>
-                        {
-                            t.HasCheckConstraint("CK_id", "typeid_check_text(id, 'time_entry')");
-
-                            t.HasCheckConstraint("CK_user_id", "typeid_check_text(user_id, 'user')");
-                        });
+                    b.ToTable("time_entry", "time_tracking");
                 });
 
             modelBuilder.Entity("Webion.Stargaze.Pgsql.Entities.Connect.ApiKeyDbo", b =>
@@ -512,7 +455,7 @@ namespace Webion.Stargaze.Pgsql.Migrations.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_refresh_token_user_dbo_user_id");
+                        .HasConstraintName("fk_refresh_token_asp_net_users_user_id");
 
                     b.Navigation("User");
                 });
@@ -524,7 +467,7 @@ namespace Webion.Stargaze.Pgsql.Migrations.Migrations
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_role_claim_role_dbo_role_id");
+                        .HasConstraintName("fk_role_claim_asp_net_roles_role_id");
 
                     b.Navigation("Role");
                 });
@@ -536,7 +479,7 @@ namespace Webion.Stargaze.Pgsql.Migrations.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_user_claim_user_dbo_user_id");
+                        .HasConstraintName("fk_user_claim_asp_net_users_user_id");
 
                     b.Navigation("User");
                 });
