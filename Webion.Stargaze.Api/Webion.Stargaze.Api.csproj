@@ -36,8 +36,4 @@
       <ProjectReference Include="..\Webion.Stargaze.Pgsql\Webion.Stargaze.Pgsql.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Config\" />
-    </ItemGroup>
-
 </Project>

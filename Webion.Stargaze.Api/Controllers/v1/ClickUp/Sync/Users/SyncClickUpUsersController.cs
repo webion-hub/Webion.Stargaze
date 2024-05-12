@@ -2,11 +2,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using Webion.ClickUp.Api;
+using Webion.AspNetCore.Authentication.ClickUp;
 using Webion.ClickUp.Api.V2;
 using Webion.Stargaze.Api.Options;
-using Webion.Stargaze.Auth;
-using Webion.Stargaze.Auth.Core;
 using Webion.Stargaze.Pgsql;
 using Webion.Stargaze.Pgsql.Entities.Identity;
 
@@ -42,7 +40,7 @@ public sealed class SyncClickUpUsersController : ControllerBase
         {
             var exists = await _userManager.FindByLoginAsync(
                 providerKey: m.User.Id,
-                loginProvider: LoginProviders.ClickUp
+                loginProvider: ClickUpDefaults.AuthenticationScheme
             );
 
             if (exists is not null)
@@ -65,9 +63,9 @@ public sealed class SyncClickUpUsersController : ControllerBase
             }
 
             var addLoginResult = await _userManager.AddLoginAsync(user, new UserLoginInfo(
-                loginProvider: LoginProviders.ClickUp,
+                loginProvider: ClickUpDefaults.AuthenticationScheme,
                 providerKey: m.User.Id,
-                displayName: LoginProviders.ClickUp
+                displayName: ClickUpDefaults.DisplayName
             ));
             
             foreach (var e in addLoginResult.Errors)

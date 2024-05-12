@@ -1,97 +1,32 @@
-using System.Net.Http.Headers;
-using System.Text.Json.Serialization;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
 using Webion.Application.Extensions;
-using Webion.AspNetCore.Authentication.ClickUp;
-using Webion.ClickUp.Api;
-using Webion.ClickUp.Api.V2;
-using Webion.Stargaze.Api;
-using Webion.Stargaze.Api.Options;
+using Webion.AspNetCore;
+using Webion.Stargaze.Api.Config;
 using Webion.Stargaze.Auth;
-using Webion.Stargaze.Pgsql;
-using Webion.Stargaze.Pgsql.Entities.Identity;
-using Webion.Stargaze.Pgsql.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services
-    .AddOptions<ClickUpSettings>()
-    .BindConfiguration(ClickUpSettings.Section)
-    .ValidateDataAnnotations()
-    .ValidateOnStart();
+builder.Add<SwaggerConfig>();
+builder.Add<OptionsConfig>();
+builder.Add<ControllersConfig>();
+builder.Add<ClickUpApiConfig>();
 
-builder.Services
-    .AddIdentity<UserDbo, RoleDbo>()
-    .AddEntityFrameworkStores<StargazeDbContext>()
-    .AddDefaultTokenProviders();
+builder.Add<AuthNConfig>();
+builder.Add<AuthZConfig>();
 
-builder.Services.AddSwaggerGen();
-builder.Services.AddControllers();
-
-builder.Services.AddTransient<ClickUpApiAuthHandler>();
-builder.Services
-    .AddClickUpApi()
-    // .AddHttpMessageHandler<ClickUpApiAuthHandler>();
-    .ConfigureHttpClient(x =>
-    {
-        x.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
-            builder.Configuration["ClickUp:ApiKey"]!
-        );
-    });
+builder.Add<CorsConfig>();
+builder.Add<StorageConfig>();
 
 builder.Services.AddHttpContextAccessor();
-
-
-builder.Services
-    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    // .AddGoogle(options =>
-    // {
-    //     options.SignInScheme = IdentityConstants.ExternalScheme;
-    //     options.ClientId = builder.Configuration["Authentication:Google:ClientId"]!;
-    //     options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"]!;
-    // })
-    .AddClickUp(options =>
-    {
-        options.SignInScheme = IdentityConstants.ExternalScheme;
-        options.ClientId = builder.Configuration["ClickUp:ClientId"]!;
-        options.ClientSecret = builder.Configuration["ClickUp:ClientSecret"]!;
-    });
-
-builder.Services.AddAuthorization();
-
-
-builder.Services.AddCors(o =>
-{
-    o.AddDefaultPolicy(x =>
-    {
-        x.AllowAnyHeader();
-        x.AllowAnyMethod();
-        x.AllowCredentials();
-        x.SetIsOriginAllowed(_ => true);
-    });
-});
-
-builder.Services.ConfigureHttpJsonOptions(x =>
-{
-    x.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
-});
-
 builder.Services.AddMemoryCache();
 builder.Services.AddModulesFromAssembly<StargazeAuthAssemblyMarker>();
 
-var conn = builder.Configuration.GetConnectionString("db")!;
-builder.Services.AddStargazeDbContext(conn);
-
 var app = builder.Build();
 
-app.UseSwagger();
-app.UseSwaggerUI();
+app.Use<SwaggerConfig>();
 
-app.UseCors();
+app.Use<CorsConfig>();
+app.Use<AuthNConfig>();
+app.Use<AuthZConfig>();
 
-app.UseAuthentication();
-app.UseAuthorization();
-
-app.MapControllers();
+app.Use<ControllersConfig>();
 app.Run();
