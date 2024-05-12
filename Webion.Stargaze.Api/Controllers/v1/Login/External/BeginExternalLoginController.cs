@@ -1,7 +1,9 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Webion.AspNetCore.Authentication.ClickUp;
 using Webion.Stargaze.Auth.Core;
 using Webion.Stargaze.Pgsql.Entities.Identity;
 
@@ -30,7 +32,7 @@ public sealed class BeginExternalLoginController : ControllerBase
     )
     {
         var properties = _signInManager.ConfigureExternalAuthenticationProperties(
-            provider: LoginProviders.ClickUp,
+            provider: provider,
             redirectUrl: Url.Action("Callback", controller: "EndExternalLogin", new
             {
                 request.ClientId,

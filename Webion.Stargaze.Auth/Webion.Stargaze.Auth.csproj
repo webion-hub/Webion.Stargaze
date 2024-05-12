@@ -7,13 +7,17 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Webion.ClickUp.Api\Webion.ClickUp.Api.csproj" />
+      <ProjectReference Include="..\Webion.ClickUp.Api.V2\Webion.ClickUp.Api.V2.csproj" />
       <ProjectReference Include="..\Webion.Stargaze.Pgsql\Webion.Stargaze.Pgsql.csproj" />
     </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.5.1" />
       <PackageReference Include="Webion.Extensions.DependencyInjection" Version="1.0.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Handlers\ClickUp\" />
     </ItemGroup>
 
 </Project>

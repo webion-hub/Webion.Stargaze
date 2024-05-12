@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Webion.ClickUp.Api;
+using Webion.ClickUp.Api.V2;
 using Webion.Stargaze.Api.Options;
 using Webion.Stargaze.Auth;
 using Webion.Stargaze.Auth.Core;

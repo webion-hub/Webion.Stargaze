@@ -21,7 +21,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Webion.ClickUp.Api\Webion.ClickUp.Api.csproj" />
+      <ProjectReference Include="..\Webion.ClickUp.Api.V2\Webion.ClickUp.Api.V2.csproj" />
     </ItemGroup>
 
 </Project>

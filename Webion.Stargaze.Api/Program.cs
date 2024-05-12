@@ -1,12 +1,14 @@
 using System.Net.Http.Headers;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Webion.Application.Extensions;
+using Webion.AspNetCore.Authentication.ClickUp;
 using Webion.ClickUp.Api;
+using Webion.ClickUp.Api.V2;
 using Webion.Stargaze.Api;
 using Webion.Stargaze.Api.Options;
 using Webion.Stargaze.Auth;
-using Webion.Stargaze.Auth.Handlers.ClickUp;
 using Webion.Stargaze.Pgsql;
 using Webion.Stargaze.Pgsql.Entities.Identity;
 using Webion.Stargaze.Pgsql.Extensions;
@@ -40,17 +42,21 @@ builder.Services
 
 builder.Services.AddHttpContextAccessor();
 
+
 builder.Services
-    .AddAuthentication()
-    .AddOAuth<ClickUpAuthenticationOptions, ClickUpAuthenticationHandler>(
-        authenticationScheme: ClickUpAuthenticationOptions.DefaultScheme,
-        displayName: ClickUpAuthenticationOptions.DefaultScheme,
-        configureOptions: options =>
-        {
-            options.ClientId = builder.Configuration["ClickUp:ClientId"]!;
-            options.ClientSecret = builder.Configuration["ClickUp:ClientSecret"]!;
-        }
-    );
+    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddGoogle(options =>
+    {
+        options.SignInScheme = IdentityConstants.ExternalScheme;
+        options.ClientId = builder.Configuration["Authentication:Google:ClientId"]!;
+        options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"]!;
+    })
+    .AddClickUp(options =>
+    {
+        options.SignInScheme = IdentityConstants.ExternalScheme;
+        options.ClientId = builder.Configuration["ClickUp:ClientId"]!;
+        options.ClientSecret = builder.Configuration["ClickUp:ClientSecret"]!;
+    });
 
 builder.Services.AddAuthorization();
 

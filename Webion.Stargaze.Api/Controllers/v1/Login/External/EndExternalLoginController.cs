@@ -50,7 +50,7 @@ public sealed class EndExternalLoginController : ControllerBase
         );
 
         
-        user ??= await ImportClickUpUserAsync(info);
+        user ??= await ImportExternalUserAsync(info);
         if (user is null || !ModelState.IsValid)
             return ValidationProblem();
         
@@ -72,11 +72,12 @@ public sealed class EndExternalLoginController : ControllerBase
         );
     }
 
-    private async Task<UserDbo?> ImportClickUpUserAsync(ExternalLoginInfo info)
+    private async Task<UserDbo?> ImportExternalUserAsync(ExternalLoginInfo info)
     {
         var user = new UserDbo
         {
             UserName = info.Principal.FindFirstValue(ClaimTypes.Name),
+            Email = info.Principal.FindFirstValue(ClaimTypes.Email),
         };
             
         var res = await _userManager.CreateAsync(user);
@@ -88,15 +89,15 @@ public sealed class EndExternalLoginController : ControllerBase
             return null;
         }
             
-        var loginRes = await _userManager.AddLoginAsync(user, new UserLoginInfo(
-            loginProvider: LoginProviders.ClickUp,
+        var addLoginRes = await _userManager.AddLoginAsync(user, new UserLoginInfo(
+            loginProvider: info.LoginProvider,
             providerKey: info.ProviderKey,
-            displayName: LoginProviders.ClickUp
+            displayName: info.LoginProvider
         ));
 
-        if (!loginRes.Succeeded)
+        if (!addLoginRes.Succeeded)
         {
-            foreach (var e in loginRes.Errors)
+            foreach (var e in addLoginRes.Errors)
                 ModelState.AddModelError(e.Code, e.Description);
 
             return null;

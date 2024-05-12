@@ -2,7 +2,8 @@
 using Refit;
 using Spectre.Console;
 using Webion.ClickUp.Api;
-using Webion.ClickUp.Api.OAuth.Dtos;
+using Webion.ClickUp.Api.V2;
+using Webion.ClickUp.Api.V2.OAuth.Dtos;
 
 const string clientId = "";
 const string clientSecret = "";

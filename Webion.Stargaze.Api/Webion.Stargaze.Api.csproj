@@ -9,6 +9,8 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="8.0.4" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.4" />
         <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.4" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.0"/>
         <PackageReference Include="Refit.HttpClientFactory" Version="7.0.0" />
@@ -28,7 +30,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Webion.ClickUp.Api\Webion.ClickUp.Api.csproj" />
+      <ProjectReference Include="..\Webion.AspNetCore.Authentication.ClickUp\Webion.AspNetCore.Authentication.ClickUp.csproj" />
+      <ProjectReference Include="..\Webion.ClickUp.Api.V2\Webion.ClickUp.Api.V2.csproj" />
       <ProjectReference Include="..\Webion.Stargaze.Auth\Webion.Stargaze.Auth.csproj" />
       <ProjectReference Include="..\Webion.Stargaze.Pgsql\Webion.Stargaze.Pgsql.csproj" />
     </ItemGroup>
