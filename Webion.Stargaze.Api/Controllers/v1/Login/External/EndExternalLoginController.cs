@@ -2,7 +2,6 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Webion.Stargaze.Auth.Core;
 using Webion.Stargaze.Auth.Services.Jwt;
 using Webion.Stargaze.Auth.Services.Jwt.Exchange;
 using Webion.Stargaze.Pgsql;
@@ -59,7 +58,7 @@ public sealed class EndExternalLoginController : ControllerBase
         if (client is null)
         {
             _logger.LogWarning("Could not find client with id {ClientId}", request.ClientId);
-            return BadRequest();
+            return Forbid();
         }
         
         var pair = await _jwtIssuer.IssuePairAsync(user, client);
@@ -92,7 +91,7 @@ public sealed class EndExternalLoginController : ControllerBase
         var addLoginRes = await _userManager.AddLoginAsync(user, new UserLoginInfo(
             loginProvider: info.LoginProvider,
             providerKey: info.ProviderKey,
-            displayName: info.LoginProvider
+            displayName: info.ProviderDisplayName
         ));
 
         if (!addLoginRes.Succeeded)

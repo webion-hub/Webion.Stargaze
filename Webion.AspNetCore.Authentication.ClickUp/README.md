@@ -1,5 +1,5 @@
 # Overview
-This package adds ClickUp as an authentication handler for AspNetCore.
+Adds ClickUp as an authentication handler for AspNetCore.
 
 # Usage
 ```csharp
@@ -33,3 +33,11 @@ public sealed class LoginController : ControllerBase
     }
 }
 ```
+
+# Mapped claims
+
+- `ClaimTypes.NameIdentifier`: ClickUp user id
+- `ClaimTypes.Name`: ClickUp username
+- `ClickUpClaims.ProfilePicture`
+- `ClickUpClaims.Color`
+- `ClickUpClaims.AccessToken`

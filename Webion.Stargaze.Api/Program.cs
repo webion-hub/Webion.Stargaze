@@ -45,12 +45,12 @@ builder.Services.AddHttpContextAccessor();
 
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddGoogle(options =>
-    {
-        options.SignInScheme = IdentityConstants.ExternalScheme;
-        options.ClientId = builder.Configuration["Authentication:Google:ClientId"]!;
-        options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"]!;
-    })
+    // .AddGoogle(options =>
+    // {
+    //     options.SignInScheme = IdentityConstants.ExternalScheme;
+    //     options.ClientId = builder.Configuration["Authentication:Google:ClientId"]!;
+    //     options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"]!;
+    // })
     .AddClickUp(options =>
     {
         options.SignInScheme = IdentityConstants.ExternalScheme;

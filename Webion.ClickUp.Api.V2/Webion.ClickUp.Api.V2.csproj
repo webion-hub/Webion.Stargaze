@@ -5,6 +5,17 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <RootNamespace>Webion.ClickUp.Api.V2</RootNamespace>
+        <OutputType>Library</OutputType>
+        
+        <IsPackable>true</IsPackable>
+        <Authors>Webion</Authors>
+        <Description>Adds support for the ClickUp v2 api.</Description>
+        <Copyright>Webion Srl</Copyright>
+        <PackageProjectUrl>https://github.com/webion-hub/Webion.Stargaze</PackageProjectUrl>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <RepositoryUrl>https://github.com/webion-hub/Webion.Stargaze</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
     </PropertyGroup>
 
     <ItemGroup>
@@ -12,5 +23,8 @@
       <PackageReference Include="Refit" Version="7.0.0" />
       <PackageReference Include="Refit.HttpClientFactory" Version="7.0.0" />
     </ItemGroup>
-
+    
+    <ItemGroup>
+        <None Include="README.md" Pack="true" PackagePath="\"/>
+    </ItemGroup>
 </Project>

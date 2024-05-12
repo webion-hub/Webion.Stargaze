@@ -5,10 +5,19 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <OutputType>Library</OutputType>
+        
+        <IsPackable>true</IsPackable>
+        <Authors>Webion</Authors>
+        <Description>Adds ClickUp as an authentication handler for AspNetCore.</Description>
+        <Copyright>Webion Srl</Copyright>
+        <PackageProjectUrl>https://github.com/webion-hub/Webion.Stargaze</PackageProjectUrl>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <RepositoryUrl>https://github.com/webion-hub/Webion.Stargaze</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Webion.ClickUp.Api.V2\Webion.ClickUp.Api.V2.csproj" />
+        <None Include="README.md" Pack="true" PackagePath="\"/>
     </ItemGroup>
-
 </Project>
