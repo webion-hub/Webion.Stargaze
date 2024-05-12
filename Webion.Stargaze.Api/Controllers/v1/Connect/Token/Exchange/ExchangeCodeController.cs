@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Webion.Stargaze.Auth.Core;
 using Webion.Stargaze.Auth.Services.Clients;
 using Webion.Stargaze.Auth.Services.Jwt.Exchange;
 using Webion.Stargaze.Pgsql;

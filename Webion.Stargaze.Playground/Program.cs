@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Refit;
 using Spectre.Console;
-using Webion.ClickUp.Api;
 using Webion.ClickUp.Api.V2;
 using Webion.ClickUp.Api.V2.OAuth.Dtos;
 

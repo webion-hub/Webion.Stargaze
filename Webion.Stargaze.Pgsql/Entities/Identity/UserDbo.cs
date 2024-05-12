@@ -14,6 +14,7 @@ public sealed class UserDbo : IdentityUser<Guid>, IEntityTypeConfiguration<UserD
     public List<UserTokenDbo> Tokens { get; set; } = [];
     public List<RefreshTokenDbo> RefreshTokens { get; set; } = [];
     public List<TimeEntryDbo> TimeEntries { get; set; } = [];
+    public List<TimePackageRateDbo> TimePackageRates { get; set; } = [];
 
     public void Configure(EntityTypeBuilder<UserDbo> builder)
     {

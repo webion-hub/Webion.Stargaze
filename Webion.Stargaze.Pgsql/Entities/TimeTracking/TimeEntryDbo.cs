@@ -12,6 +12,8 @@ public sealed class TimeEntryDbo : IEntityTypeConfiguration<TimeEntryDbo>
     public Guid UserId { get; set; }
     public Guid? TaskId { get; set; }
     
+    public string? Description { get; set; } 
+    
     public DateTimeOffset Start { get; set; }
     public DateTimeOffset End { get; set; }
     public TimeSpan Duration { get; set; }
@@ -34,6 +36,8 @@ public sealed class TimeEntryDbo : IEntityTypeConfiguration<TimeEntryDbo>
         builder.Property(x => x.End).IsRequired();
         builder.Property(x => x.Duration).IsRequired();
 
+        builder.Property(x => x.Description).HasMaxLength(4096);
+        
         builder.Property(x => x.Locked).IsRequired();
         builder.Property(x => x.Billable).IsRequired();
         builder.Property(x => x.Billed).IsRequired();

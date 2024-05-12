@@ -1,18 +1,16 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Webion.ClickUp.Api;
 using Webion.ClickUp.Api.V2;
 using Webion.ClickUp.Api.V2.Team.Dtos;
 using Webion.Stargaze.Api.Options;
 using Webion.Stargaze.Pgsql;
 using Webion.Stargaze.Pgsql.Entities.TimeTracking;
 
-namespace Webion.Stargaze.Api.Controllers.v1.TimeTracking.ClickUp.Sync;
+namespace Webion.Stargaze.Api.Controllers.v1.ClickUp.Sync.Time;
 
 [ApiController]
 [Authorize]
-[Route("v1/time-tracking/clickup/sync")]
+[Route("v{version:apiVersion}/clickup/sync/time")]
 public sealed class SyncClickUpTrackedTimeController : ControllerBase
 {
     private readonly IClickUpApi _clickUpApi;

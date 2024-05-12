@@ -13,7 +13,7 @@ public sealed class TimeInvoiceDbo : IEntityTypeConfiguration<TimeInvoiceDbo>
     public TimeSpan InvoicedAmount { get; set; }
 
     public InvoiceDbo Invoice { get; set; } = null!;
-    public HourlyPackageDbo? HourlyPackage { get; set; }
+    public TimePackageDbo? HourlyPackage { get; set; }
     public List<TimeEntryInvoiceDbo> BilledEntries { get; set; } = [];
 
     public void Configure(EntityTypeBuilder<TimeInvoiceDbo> builder)

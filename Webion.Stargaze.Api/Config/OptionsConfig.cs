@@ -1,8 +1,5 @@
-using Microsoft.AspNetCore.Identity;
 using Webion.AspNetCore;
 using Webion.Stargaze.Api.Options;
-using Webion.Stargaze.Pgsql;
-using Webion.Stargaze.Pgsql.Entities.Identity;
 
 namespace Webion.Stargaze.Api.Config;
 
@@ -19,6 +16,5 @@ public sealed class OptionsConfig : IWebApplicationConfiguration
 
     public void Use(WebApplication app)
     {
-        throw new NotImplementedException();
     }
 }

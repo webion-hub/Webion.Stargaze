@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Webion.Stargaze.Pgsql.Entities.Accounting;
+using Webion.Stargaze.Pgsql.Entities.Projects;
 
 namespace Webion.Stargaze.Pgsql.Entities.Core;
 
@@ -12,6 +13,7 @@ public sealed class CompanyDbo : IEntityTypeConfiguration<CompanyDbo>
     
     public List<InvoiceDbo> IssuedInvoices { get; set; } = [];
     public List<InvoiceDbo> ReceivedInvoices { get; set; } = [];
+    public List<ProjectDbo> Projects { get; set; } = [];
 
     public void Configure(EntityTypeBuilder<CompanyDbo> builder)
     {
