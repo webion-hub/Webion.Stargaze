@@ -9,9 +9,12 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.4" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.0"/>
         <PackageReference Include="Refit.HttpClientFactory" Version="7.0.0" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
+        <PackageReference Include="Webion.AspNetCore" Version="1.0.1" />
+        <PackageReference Include="Webion.Extensions.EntityFrameworkCore" Version="1.0.0" />
     </ItemGroup>
 
     <ItemGroup>
@@ -26,12 +29,12 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Webion.ClickUp.Api\Webion.ClickUp.Api.csproj" />
+      <ProjectReference Include="..\Webion.Stargaze.Auth\Webion.Stargaze.Auth.csproj" />
       <ProjectReference Include="..\Webion.Stargaze.Pgsql\Webion.Stargaze.Pgsql.csproj" />
     </ItemGroup>
 
     <ItemGroup>
       <Folder Include="Config\" />
-      <Folder Include="Endpoints\v1\" />
     </ItemGroup>
 
 </Project>

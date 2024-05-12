@@ -1,4 +1,5 @@
 using Refit;
+using Webion.ClickUp.Api.Common;
 
 namespace Webion.ClickUp.Api.Team.Dtos;
 
@@ -22,8 +23,8 @@ public class GetTeamTimeEntriesRequest
     /// Example: assignee=1234,9876
     /// Note: Only Workspace Owners/Admins have access to do this.
     /// </summary>
-    [AliasAs("assignees")]
-    public string[] Assignees { get; init; } = [];
+    [AliasAs("assignee")]
+    public IEnumerable<ClickUpId> Assignee { get; init; } = [];
     
     /// <summary>
     /// Include task tags in the response for time entries associated with tasks.
@@ -32,7 +33,7 @@ public class GetTeamTimeEntriesRequest
     public bool? IncludeTaskTags { get; init; }
     
     /// <summary>
-    /// Include the names of the List, Folder, and Space along with the list_id,folder_id, and space_id.
+    /// Include the names of the List, Folder, and Space along with the list_id, folder_id, and space_id.
     /// </summary>
     [AliasAs("include_location_names")]
     public bool? IncludeLocationNames { get; init; }
@@ -59,7 +60,7 @@ public class GetTeamTimeEntriesRequest
     /// Only include time entries associated with a specific task.
     /// </summary>
     [AliasAs("task_id")]
-    public long? TaskId { get; init; }
+    public string? TaskId { get; init; }
 
     /// <summary>
     /// If you want to reference a task by it's custom task id, this value must be true.
@@ -69,11 +70,12 @@ public class GetTeamTimeEntriesRequest
     
     /// <summary>
     /// Only used when the custom_task_ids parameter is set to true.
-    /// 
-    /// For example: custom_task_ids=true&team_id=123.
     /// </summary>
+    /// <example>
+    /// For example: <c>custom_task_ids=true&amp;team_id=123.</c>
+    /// </example>
     [AliasAs("team_id")]
-    public long? TeamId { get; init; }
+    public ClickUpId? TeamId { get; init; }
     
     /// <summary>
     /// Include only billable time entries by using a value of true or only non-billable

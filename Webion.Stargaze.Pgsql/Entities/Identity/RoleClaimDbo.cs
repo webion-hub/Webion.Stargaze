@@ -1,11 +1,10 @@
-using FastIDs.TypeId;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Webion.Stargaze.Pgsql.Entities.Identity;
 
-public sealed class RoleClaimDbo : IdentityRoleClaim<TypeId>, IEntityTypeConfiguration<RoleClaimDbo>
+public sealed class RoleClaimDbo : IdentityRoleClaim<Guid>, IEntityTypeConfiguration<RoleClaimDbo>
 {
     public RoleDbo Role { get; set; } = null!;
     

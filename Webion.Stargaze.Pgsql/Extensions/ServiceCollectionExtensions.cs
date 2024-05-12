@@ -9,7 +9,6 @@ public static class ServiceCollectionExtension
     {
         services.AddDbContext<StargazeDbContext>(options =>
         {
-            options.EnableSensitiveDataLogging();
             options.UseNpgsql(connectionString, x =>
             {
                 x.MigrationsAssembly("Webion.Stargaze.Pgsql.Migrations");
