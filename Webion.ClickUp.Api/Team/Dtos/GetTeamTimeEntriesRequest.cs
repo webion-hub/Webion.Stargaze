@@ -1,4 +1,5 @@
 using Refit;
+using Webion.ClickUp.Api.Common;
 
 namespace Webion.ClickUp.Api.Team.Dtos;
 
@@ -23,7 +24,7 @@ public class GetTeamTimeEntriesRequest
     /// Note: Only Workspace Owners/Admins have access to do this.
     /// </summary>
     [AliasAs("assignee")]
-    public IEnumerable<long> Assignee { get; init; } = [];
+    public IEnumerable<ClickUpId> Assignee { get; init; } = [];
     
     /// <summary>
     /// Include task tags in the response for time entries associated with tasks.
@@ -74,7 +75,7 @@ public class GetTeamTimeEntriesRequest
     /// For example: <c>custom_task_ids=true&amp;team_id=123.</c>
     /// </example>
     [AliasAs("team_id")]
-    public long? TeamId { get; init; }
+    public ClickUpId? TeamId { get; init; }
     
     /// <summary>
     /// Include only billable time entries by using a value of true or only non-billable

@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Webion.Stargaze.Pgsql.Media;
+using Webion.Stargaze.Pgsql.Entities.Media;
 
 namespace Webion.Stargaze.Pgsql.Entities.Accounting;
 

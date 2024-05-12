@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Webion.Stargaze.Pgsql.Entities.Accounting;
 
 namespace Webion.Stargaze.Pgsql.Entities.TimeTracking;
 
@@ -9,6 +10,8 @@ public sealed class HourlyPackageDbo : IEntityTypeConfiguration<HourlyPackageDbo
 
     public int Hours { get; set; }
     public decimal Rate { get; set; }
+
+    public List<TimeInvoiceDbo> Invoices { get; set; } = [];
 
     public void Configure(EntityTypeBuilder<HourlyPackageDbo> builder)
     {

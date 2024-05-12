@@ -2,13 +2,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Webion.Stargaze.Pgsql.Entities.Accounting;
 
-namespace Webion.Stargaze.Pgsql.Core;
+namespace Webion.Stargaze.Pgsql.Entities.Core;
 
 public sealed class CompanyDbo : IEntityTypeConfiguration<CompanyDbo>
 {
     public Guid Id { get; set; }
 
     public string Name { get; set; } = null!;
+    
     public List<InvoiceDbo> IssuedInvoices { get; set; } = [];
     public List<InvoiceDbo> ReceivedInvoices { get; set; } = [];
 

@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Webion.Stargaze.Pgsql.Entities.TimeTracking;
 
 namespace Webion.Stargaze.Pgsql.Entities.Projects;
 
@@ -13,7 +14,8 @@ public sealed class TaskDbo : IEntityTypeConfiguration<TaskDbo>
 
     
     public ProjectDbo Project { get; set; } = null!;
-    
+    public List<TimeEntryDbo> TimeEntries { get; set; } = [];
+
     public void Configure(EntityTypeBuilder<TaskDbo> builder)
     {
         builder.ToTable("task", Schemas.Projects);

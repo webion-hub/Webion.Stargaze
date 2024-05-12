@@ -1,10 +1,11 @@
 using System.Text.Json.Serialization;
+using Webion.ClickUp.Api.Converters;
 
 namespace Webion.ClickUp.Api.Common;
 
 public sealed class UserDto
 {
-    public required long Id { get; init; }
+    public required ClickUpId Id { get; init; }
     
     [JsonPropertyName("username")]
     public required string UserName { get; init; }

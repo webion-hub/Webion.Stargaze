@@ -11,7 +11,7 @@ public sealed class RefreshTokenDbo : IEntityTypeConfiguration<RefreshTokenDbo>
     public Guid UserId { get; set; }
     
     public required byte[] Secret { get; set; }
-    public required DateTime ExpiresAt { get; set; }
+    public required DateTimeOffset ExpiresAt { get; set; }
     
     public UserDbo User { get; set; } = null!;
 

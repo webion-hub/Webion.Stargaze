@@ -18,7 +18,5 @@ public sealed class UserDbo : IdentityUser<Guid>, IEntityTypeConfiguration<UserD
     public void Configure(EntityTypeBuilder<UserDbo> builder)
     {
         builder.ToTable("user", Schemas.Identity);
-        
-        
     }
 }

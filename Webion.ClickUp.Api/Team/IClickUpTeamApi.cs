@@ -25,5 +25,5 @@ public interface IClickUpTeamApi
     /// Note: A time entry that has a negative duration means that timer is currently running for that user.
     /// </remarks>
     [Get("/v2/team/{teamId}/time_entries")]
-    Task<GetTeamTimeEntriesResponse> GetTimeEntriesAsync(long teamId, [Query] GetTeamTimeEntriesRequest request);
+    Task<GetTeamTimeEntriesResponse> GetTimeEntriesAsync(string teamId, [Query] GetTeamTimeEntriesRequest request);
 }

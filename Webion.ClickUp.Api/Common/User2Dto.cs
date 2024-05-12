@@ -1,10 +1,14 @@
+using System.Diagnostics;
 using System.Text.Json.Serialization;
+using Webion.ClickUp.Api.Converters;
 
 namespace Webion.ClickUp.Api.Common;
 
+[DebuggerDisplay("{Email}")]
 public sealed class User2Dto
 {
-    public required ulong Id { get; init; }
+    public required ClickUpId Id { get; init; }
+    
     public required string Username { get; init; }
     public required string Initials { get; init; }
     public required string Email { get; init; }

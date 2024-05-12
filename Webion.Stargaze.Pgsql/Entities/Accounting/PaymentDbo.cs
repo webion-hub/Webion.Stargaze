@@ -11,6 +11,8 @@ public sealed class PaymentDbo : IEntityTypeConfiguration<PaymentDbo>
     public Guid? BankAccountId { get; set; }
     public Guid? CategoryId { get; set; }
     
+    public string? Description { get; set; }
+    
     public decimal Amount { get; set; }
     public decimal TaxedAmount { get; set; }
     public decimal VatPercentage { get; set; }
@@ -28,7 +30,8 @@ public sealed class PaymentDbo : IEntityTypeConfiguration<PaymentDbo>
     {
         builder.ToTable("payment", Schemas.Accounting);
         builder.HasKey(x => x.Id);
-        
+
+        builder.Property(x => x.Description).HasMaxLength(4096);
         builder.Property(x => x.Amount).IsRequired();
         builder.Property(x => x.TaxedAmount).IsRequired();
         builder.Property(x => x.VatPercentage).IsRequired();
