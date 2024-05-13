@@ -1,4 +1,3 @@
-using Asp.Versioning;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Webion.Stargaze.Pgsql;
@@ -9,8 +8,8 @@ namespace Webion.Stargaze.Api.Controllers.v1.TimePackages.Rates.Add;
 [Authorize]
 [ApiController]
 [Route("v{version:apiVersion}/time/packages/{timePackageId}/rates")]
-[ApiVersion("1.0")]
 [Tags("Time Packages")]
+[ApiVersion("1.0")]
 public sealed class AddPackageRateController : ControllerBase
 {
     private readonly StargazeDbContext _db;

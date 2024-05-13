@@ -9,6 +9,7 @@ namespace Webion.Stargaze.Api.Controllers.v1.Companies.Get;
 [ApiController]
 [Route("v{version:apiVersion}/companies/{companyId}")]
 [Tags("Companies")]
+[ApiVersion("1.0")]
 public sealed class GetCompanyController : ControllerBase
 {
     private readonly StargazeDbContext _db;

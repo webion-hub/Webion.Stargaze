@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Webion.Stargaze.Api.Extensions;
 using Webion.Stargaze.Pgsql;
 
 namespace Webion.Stargaze.Api.Controllers.v1.Projects.Update;
@@ -9,13 +10,16 @@ namespace Webion.Stargaze.Api.Controllers.v1.Projects.Update;
 [ApiController]
 [Route("v{version:apiVersion}/projects/{projectId}")]
 [Tags("Projects")]
+[ApiVersion("1.0")]
 public sealed class UpdateProjectController : ControllerBase
 {
     private readonly StargazeDbContext _db;
+    private UpdateProjectRequestValidator _requestValidator;
 
-    public UpdateProjectController(StargazeDbContext db)
+    public UpdateProjectController(StargazeDbContext db, UpdateProjectRequestValidator requestValidator)
     {
         _db = db;
+        _requestValidator = requestValidator;
     }
 
     [HttpPut]
@@ -27,6 +31,10 @@ public sealed class UpdateProjectController : ControllerBase
         CancellationToken cancellationToken
     )
     {
+        await _requestValidator.ValidateModelAsync(request, ModelState, cancellationToken);
+        if (!ModelState.IsValid)
+            return ValidationProblem();
+
         var updatedRows = await _db.Projects
             .Where(x => x.Id == projectId)
             .ExecuteUpdateAsync(

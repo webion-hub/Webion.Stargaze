@@ -12,6 +12,7 @@ namespace Webion.Stargaze.Api.Controllers.v1.TimeEntries.GetAll;
 [ApiController]
 [Route("v{version:apiVersion}/time/entries")]
 [Tags("Time Entries")]
+[ApiVersion("1.0")]
 public sealed class GetAllTimeEntriesController : ControllerBase
 {
     private readonly StargazeDbContext _db;
