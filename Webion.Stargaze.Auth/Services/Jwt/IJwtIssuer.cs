@@ -11,5 +11,5 @@ public interface IJwtIssuer
     /// <param name="user">The user for whom the tokens are generated.</param>
     /// <param name="client">The client requesting the tokens.</param>
     /// <returns>The generated token pair.</returns>
-    Task<TokenPair> IssuePairAsync(UserDbo user, ClientDbo client);
+    Task<TokenPair> IssuePairAsync(UserDbo user);
 }

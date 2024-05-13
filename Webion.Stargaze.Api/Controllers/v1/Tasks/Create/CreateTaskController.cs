@@ -4,29 +4,29 @@ using Webion.Stargaze.Api.Extensions;
 using Webion.Stargaze.Pgsql;
 using Webion.Stargaze.Pgsql.Entities.Projects;
 
-namespace Webion.Stargaze.Api.Controllers.v1.Projects.Create;
+namespace Webion.Stargaze.Api.Controllers.v1.Tasks.Create;
 
 [Authorize]
 [ApiController]
-[Route("v{version:apiVersion}/projects")]
-[Tags("Projects")]
+[Route("v{version:apiVersion}/tasks")]
+[Tags("Tasks")]
 [ApiVersion("1.0")]
-public sealed class CreateProjectController : ControllerBase
+public sealed class CreateTaskController : ControllerBase
 {
     private readonly StargazeDbContext _db;
-    private readonly CreateProjectRequestValidator _requestValidator;
+    private readonly CreateTaskRequestValidator _requestValidator;
 
-    public CreateProjectController(StargazeDbContext db, CreateProjectRequestValidator requestValidator)
+    public CreateTaskController(StargazeDbContext db, CreateTaskRequestValidator requestValidator)
     {
         _db = db;
         _requestValidator = requestValidator;
     }
 
     [HttpPost]
-    [ProducesResponseType<CreateProjectResponse>(201)]
+    [ProducesResponseType<CreateTaskResponse>(201)]
     [ProducesResponseType(400)]
     public async Task<IActionResult> Create(
-        [FromBody] CreateProjectRequest request,
+        [FromBody] CreateTaskRequest request,
         CancellationToken cancellationToken
     )
     {
@@ -34,19 +34,19 @@ public sealed class CreateProjectController : ControllerBase
         if (!ModelState.IsValid)
             return ValidationProblem();
 
-        var project = new ProjectDbo
+        var task = new TaskDbo
         {
-            CompanyId = request.CompanyId,
-            Name = request.Name,
+            ProjectId = request.ProjectId,
+            Title = request.Title,
             Description = request.Description,
         };
 
-        _db.Projects.Add(project);
+        _db.Tasks.Add(task);
         await _db.SaveChangesAsync(cancellationToken);
 
-        return Created($"v1/projects/{project.Id}", new CreateProjectResponse
+        return Created($"v1/tasks/{task.Id}", new CreateTaskResponse
         {
-            Id = project.Id,
+            Id = task.Id,
         });
     }
 }

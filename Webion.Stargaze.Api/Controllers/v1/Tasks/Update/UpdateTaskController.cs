@@ -4,19 +4,19 @@ using Microsoft.EntityFrameworkCore;
 using Webion.Stargaze.Api.Extensions;
 using Webion.Stargaze.Pgsql;
 
-namespace Webion.Stargaze.Api.Controllers.v1.Companies.Update;
+namespace Webion.Stargaze.Api.Controllers.v1.Tasks.Update;
 
 [Authorize]
 [ApiController]
-[Route("v{version:apiVersion}/companies/{companyId}")]
-[Tags("Companies")]
+[Route("v{version:apiVersion}/tasks/{taskId}")]
+[Tags("Tasks")]
 [ApiVersion("1.0")]
-public sealed class UpdateCompanyController : ControllerBase
+public sealed class UpdateTaskController : ControllerBase
 {
     private readonly StargazeDbContext _db;
-    private readonly UpdateCompanyRequestValidator _requestValidator;
+    private UpdateTaskRequestValidator _requestValidator;
 
-    public UpdateCompanyController(StargazeDbContext db, UpdateCompanyRequestValidator requestValidator)
+    public UpdateTaskController(StargazeDbContext db, UpdateTaskRequestValidator requestValidator)
     {
         _db = db;
         _requestValidator = requestValidator;
@@ -27,22 +27,23 @@ public sealed class UpdateCompanyController : ControllerBase
     [ProducesResponseType(400)]
     [ProducesResponseType(404)]
     public async Task<IActionResult> Update(
-        [FromRoute] Guid companyId,
-        [FromBody] UpdateCompanyRequest request,
+        [FromRoute] Guid taskId,
+        [FromBody] UpdateTaskRequest request,
         CancellationToken cancellationToken
     )
     {
-        _requestValidator.CompanyId = companyId;
         await _requestValidator.ValidateModelAsync(request, ModelState, cancellationToken);
         if (!ModelState.IsValid)
             return ValidationProblem();
-        
-        var updatedRows = await _db.Companies
-            .Where(x => x.Id == companyId)
+
+        var updatedRows = await _db.Tasks
+            .Where(x => x.Id == taskId)
             .ExecuteUpdateAsync(
                 cancellationToken: cancellationToken,
                 setPropertyCalls: b => b
-                    .SetProperty(x => x.Name, request.Name)
+                    .SetProperty(x => x.ProjectId, request.ProjectId)
+                    .SetProperty(x => x.Title, request.Title)
+                    .SetProperty(x => x.Description, request.Description)
             );
 
         if (updatedRows <= 0)

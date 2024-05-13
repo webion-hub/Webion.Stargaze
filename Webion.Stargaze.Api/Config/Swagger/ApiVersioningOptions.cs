@@ -35,7 +35,7 @@ public sealed class ApiVersioningOptions : IConfigureNamedOptions<SwaggerGenOpti
     {
         var info = new OpenApiInfo
         {
-            Title = "Qubi",
+            Title = "Stargaze",
             Version = description.ApiVersion.ToString()
         };
 

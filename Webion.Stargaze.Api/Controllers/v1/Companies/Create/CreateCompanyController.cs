@@ -24,6 +24,7 @@ public sealed class CreateCompanyController : ControllerBase
 
     [HttpPost]
     [ProducesResponseType<CreateCompanyResponse>(201)]
+    [ProducesResponseType(400)]
     public async Task<IActionResult> Create(
         [FromBody] CreateCompanyRequest request,
         CancellationToken cancellationToken

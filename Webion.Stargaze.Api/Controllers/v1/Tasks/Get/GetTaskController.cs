@@ -3,37 +3,37 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Webion.Stargaze.Pgsql;
 
-namespace Webion.Stargaze.Api.Controllers.v1.Projects.Get;
+namespace Webion.Stargaze.Api.Controllers.v1.Tasks.Get;
 
 [Authorize]
 [ApiController]
-[Route("v{version:apiVersion}/projects/{projectId}")]
-[Tags("Projects")]
+[Route("v{version:apiVersion}/tasks/{taskId}")]
+[Tags("Tasks")]
 [ApiVersion("1.0")]
-public sealed class GetProjectController : ControllerBase
+public sealed class GetTaskController : ControllerBase
 {
     private readonly StargazeDbContext _db;
 
-    public GetProjectController(StargazeDbContext db)
+    public GetTaskController(StargazeDbContext db)
     {
         _db = db;
     }
 
     [HttpGet]
-    [ProducesResponseType<GetProjectResponse>(200)]
+    [ProducesResponseType<GetTaskResponse>(200)]
     [ProducesResponseType(404)]
     public async Task<IActionResult> Get(
-        [FromRoute] Guid projectId,
+        [FromRoute] Guid taskId,
         CancellationToken cancellationToken
     )
     {
-        var response = await _db.Projects
-            .Where(x => x.Id == projectId)
-            .Select(x => new GetProjectResponse
+        var response = await _db.Tasks
+            .Where(x => x.Id == taskId)
+            .Select(x => new GetTaskResponse
             {
                 Id = x.Id,
-                CompanyId = x.CompanyId,
-                Name = x.Name,
+                ProjectId = x.ProjectId,
+                Title = x.Title,
                 Description = x.Description,
             })
             .AsNoTracking()
