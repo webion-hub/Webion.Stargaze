@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Webion.Stargaze.Api.Extensions;
 using Webion.Stargaze.Pgsql;
 using Webion.Stargaze.Pgsql.Entities.Core;
 
@@ -12,10 +13,12 @@ namespace Webion.Stargaze.Api.Controllers.v1.Companies.Create;
 public sealed class CreateCompanyController : ControllerBase
 {
     private readonly StargazeDbContext _db;
+    private readonly CreateCompanyRequestValidator _requestValidator;
 
-    public CreateCompanyController(StargazeDbContext db)
+    public CreateCompanyController(StargazeDbContext db, CreateCompanyRequestValidator requestValidator)
     {
         _db = db;
+        _requestValidator = requestValidator;
     }
 
     [HttpPost]
@@ -25,6 +28,10 @@ public sealed class CreateCompanyController : ControllerBase
         CancellationToken cancellationToken
     )
     {
+        await _requestValidator.ValidateModelAsync(request, ModelState, cancellationToken);
+        if (!ModelState.IsValid)
+            return ValidationProblem();
+        
         var company = new CompanyDbo
         {
             Name = request.Name,

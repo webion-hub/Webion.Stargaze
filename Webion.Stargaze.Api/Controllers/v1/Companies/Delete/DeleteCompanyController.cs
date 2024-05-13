@@ -7,7 +7,7 @@ namespace Webion.Stargaze.Api.Controllers.v1.Companies.Delete;
 
 [Authorize]
 [ApiController]
-[Route("v{version:apiVersion}/companies/{companyId}")]
+[Route("v{version:apiVersion}/companies/{companyId:guid}")]
 [Tags("Companies")]
 public sealed class DeleteCompanyController : ControllerBase
 {

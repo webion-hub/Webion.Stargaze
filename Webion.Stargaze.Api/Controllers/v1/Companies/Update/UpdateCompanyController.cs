@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Webion.Stargaze.Api.Extensions;
 using Webion.Stargaze.Pgsql;
 
 namespace Webion.Stargaze.Api.Controllers.v1.Companies.Update;
@@ -12,10 +13,12 @@ namespace Webion.Stargaze.Api.Controllers.v1.Companies.Update;
 public sealed class UpdateCompanyController : ControllerBase
 {
     private readonly StargazeDbContext _db;
+    private readonly UpdateCompanyRequestValidator _requestValidator;
 
-    public UpdateCompanyController(StargazeDbContext db)
+    public UpdateCompanyController(StargazeDbContext db, UpdateCompanyRequestValidator requestValidator)
     {
         _db = db;
+        _requestValidator = requestValidator;
     }
 
     [HttpPut]
@@ -27,6 +30,11 @@ public sealed class UpdateCompanyController : ControllerBase
         CancellationToken cancellationToken
     )
     {
+        _requestValidator.CompanyId = companyId;
+        await _requestValidator.ValidateModelAsync(request, ModelState, cancellationToken);
+        if (!ModelState.IsValid)
+            return ValidationProblem();
+        
         var updatedRows = await _db.Companies
             .Where(x => x.Id == companyId)
             .ExecuteUpdateAsync(

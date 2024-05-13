@@ -1,5 +1,7 @@
+using FluentValidation;
 using Webion.Application.Extensions;
 using Webion.AspNetCore;
+using Webion.Stargaze.Api;
 using Webion.Stargaze.Api.Config;
 using Webion.Stargaze.Auth;
 
@@ -18,6 +20,7 @@ builder.Add<StorageConfig>();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddMemoryCache();
+builder.Services.AddValidatorsFromAssemblyContaining<StargazeApiAssemblyMarker>();
 builder.Services.AddModulesFromAssembly<StargazeAuthAssemblyMarker>();
 
 var app = builder.Build();

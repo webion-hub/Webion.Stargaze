@@ -24,5 +24,5 @@ public sealed class GetAllTimeEntriesRequest : PaginatedRequest
     /// <summary>
     /// Filter the time entries by assignee.
     /// </summary>
-    public IEnumerable<Guid> AssignedTo { get; init; } = [];
+    public IEnumerable<Guid> TrackedBy { get; init; } = [];
 }

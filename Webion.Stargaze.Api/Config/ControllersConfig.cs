@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Mvc;
 using Webion.AspNetCore;
 
 namespace Webion.Stargaze.Api.Config;

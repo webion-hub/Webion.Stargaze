@@ -1,3 +1,4 @@
+using Asp.Versioning;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Webion.Stargaze.Pgsql;
@@ -8,6 +9,7 @@ namespace Webion.Stargaze.Api.Controllers.v1.Projects.Create;
 [Authorize]
 [ApiController]
 [Route("v{version:apiVersion}/projects")]
+[ApiVersion("1.0")]
 [Tags("Projects")]
 public sealed class CreateProjectController : ControllerBase
 {

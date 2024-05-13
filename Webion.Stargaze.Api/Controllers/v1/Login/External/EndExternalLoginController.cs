@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using Asp.Versioning;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +12,9 @@ namespace Webion.Stargaze.Api.Controllers.v1.Login.External;
 
 [AllowAnonymous]
 [ApiController]
-[Route("v1/account/login/external/handle")]
+[Route("v{version:apiVersion}/account/login/external/handle")]
+[ApiVersion("1.0")]
+[Tags("Account")]
 public sealed class EndExternalLoginController : ControllerBase
 {
     private readonly UserManager<UserDbo> _userManager;
@@ -73,10 +76,19 @@ public sealed class EndExternalLoginController : ControllerBase
 
     private async Task<UserDbo?> ImportExternalUserAsync(ExternalLoginInfo info)
     {
+        var userName = info.Principal.FindFirstValue(ClaimTypes.Name);
+        var email = info.Principal.FindFirstValue(ClaimTypes.Email);
+
+        if (userName is null)
+        {
+            _logger.LogWarning("ClaimTypes.Name was null");
+            return null;
+        }
+        
         var user = new UserDbo
         {
-            UserName = info.Principal.FindFirstValue(ClaimTypes.Name),
-            Email = info.Principal.FindFirstValue(ClaimTypes.Email),
+            UserName = userName.Replace(" ", ".").Trim(),
+            Email = email,
         };
             
         var res = await _userManager.CreateAsync(user);

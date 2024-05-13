@@ -1,11 +1,10 @@
 using Asp.Versioning;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Webion.Stargaze.Pgsql;
 using Webion.Stargaze.Pgsql.Entities.TimeTracking;
 
-namespace Webion.Stargaze.Api.Controllers.v1.TimePackages.Rates.Create;
+namespace Webion.Stargaze.Api.Controllers.v1.TimePackages.Rates.Add;
 
 [Authorize]
 [ApiController]

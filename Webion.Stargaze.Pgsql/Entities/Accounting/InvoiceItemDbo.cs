@@ -8,10 +8,10 @@ public sealed class InvoiceItemDbo : IEntityTypeConfiguration<InvoiceItemDbo>
     public Guid Id { get; set; }
     public Guid InvoiceId { get; set; }
     
-    public decimal TotalUnits { get; set; } 
+    public decimal TotalUnits { get; set; }
     public string? Description { get; set; }
     
-    public decimal Price { get; set; }
+    public decimal NetPrice { get; set; }
     public decimal TaxedPrice { get; set; }
     public decimal VatPercentage { get; set; }
     
@@ -25,7 +25,7 @@ public sealed class InvoiceItemDbo : IEntityTypeConfiguration<InvoiceItemDbo>
         builder.Property(x => x.TotalUnits).IsRequired();
         builder.Property(x => x.Description).HasMaxLength(4096);
         
-        builder.Property(x => x.Price).IsRequired();
+        builder.Property(x => x.NetPrice).IsRequired();
         builder.Property(x => x.TaxedPrice).IsRequired();
         builder.Property(x => x.VatPercentage).IsRequired();
 

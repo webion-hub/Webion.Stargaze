@@ -13,7 +13,7 @@ public sealed class PaymentDbo : IEntityTypeConfiguration<PaymentDbo>
     
     public string? Description { get; set; }
     
-    public decimal Amount { get; set; }
+    public decimal NetAmount { get; set; }
     public decimal TaxedAmount { get; set; }
     public decimal VatPercentage { get; set; }
     
@@ -32,7 +32,7 @@ public sealed class PaymentDbo : IEntityTypeConfiguration<PaymentDbo>
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.Description).HasMaxLength(4096);
-        builder.Property(x => x.Amount).IsRequired();
+        builder.Property(x => x.NetAmount).IsRequired();
         builder.Property(x => x.TaxedAmount).IsRequired();
         builder.Property(x => x.VatPercentage).IsRequired();
 

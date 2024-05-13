@@ -1,3 +1,4 @@
+using Asp.Versioning;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ namespace Webion.Stargaze.Api.Controllers.v1.TimePackages.Create;
 [ApiController]
 [Route("v{version:apiVersion}/time/packages")]
 [Tags("Time Packages")]
+[ApiVersion("1.0")]
 public class CreateTimePackageController : ControllerBase
 {
     private readonly StargazeDbContext _db;

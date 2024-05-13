@@ -8,12 +8,12 @@ public sealed class TimeInvoiceDbo : IEntityTypeConfiguration<TimeInvoiceDbo>
 {
     public Guid Id { get; set; }
     public Guid InvoiceId { get; set; }
-    public Guid? HourlyPackageId { get; set; }
+    public Guid TimePackageId { get; set; }
     
-    public TimeSpan InvoicedAmount { get; set; }
+    public TimeSpan InvoicedTime { get; set; }
 
     public InvoiceDbo Invoice { get; set; } = null!;
-    public TimePackageDbo? HourlyPackage { get; set; }
+    public TimePackageDbo HourlyPackage { get; set; } = null!;
     public List<TimeEntryInvoiceDbo> BilledEntries { get; set; } = [];
 
     public void Configure(EntityTypeBuilder<TimeInvoiceDbo> builder)
@@ -30,8 +30,7 @@ public sealed class TimeInvoiceDbo : IEntityTypeConfiguration<TimeInvoiceDbo>
         builder
             .HasOne(x => x.HourlyPackage)
             .WithMany(x => x.Invoices)
-            .HasForeignKey(x => x.HourlyPackageId)
-            .IsRequired(false)
+            .HasForeignKey(x => x.TimePackageId)
             .OnDelete(DeleteBehavior.NoAction);
     }
 }

@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Webion.Stargaze.Pgsql.Entities.Identity;
 using Webion.Stargaze.Pgsql.Entities.TimeTracking;
 
 namespace Webion.Stargaze.Pgsql.Entities.Projects;
@@ -15,6 +16,7 @@ public sealed class TaskDbo : IEntityTypeConfiguration<TaskDbo>
     
     public ProjectDbo Project { get; set; } = null!;
     public List<TimeEntryDbo> TimeEntries { get; set; } = [];
+    public List<UserDbo> Assignees { get; set; } = [];
 
     public void Configure(EntityTypeBuilder<TaskDbo> builder)
     {
@@ -29,5 +31,10 @@ public sealed class TaskDbo : IEntityTypeConfiguration<TaskDbo>
             .WithMany(x => x.Tasks)
             .HasForeignKey(x => x.ProjectId)
             .OnDelete(DeleteBehavior.NoAction);
+
+        builder
+            .HasMany(x => x.Assignees)
+            .WithMany(x => x.Tasks)
+            .UsingEntity("user_task");
     }
 }

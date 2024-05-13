@@ -37,8 +37,8 @@ public sealed class GetAllTimeEntriesController : ControllerBase
             .If(request.TaskId is not null, b => b
                 .Where(x => x.TaskId == request.TaskId)
             )
-            .If(request.AssignedTo.Any(), b => b
-                .Where(x => request.AssignedTo.Contains(x.UserId))
+            .If(request.TrackedBy.Any(), b => b
+                .Where(x => request.TrackedBy.Contains(x.UserId))
             )
             .Select(x => new TimeEntryDto
             {
