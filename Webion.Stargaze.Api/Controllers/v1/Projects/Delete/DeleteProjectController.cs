@@ -9,6 +9,7 @@ namespace Webion.Stargaze.Api.Controllers.v1.Projects.Delete;
 [ApiController]
 [Route("v{version:apiVersion}/projects/{projectId}")]
 [Tags("Projects")]
+[ApiVersion("1.0")]
 public sealed class DeleteProjectController : ControllerBase
 {
     private readonly StargazeDbContext _db;

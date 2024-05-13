@@ -6,8 +6,9 @@ namespace Webion.Stargaze.Api.Controllers.v1.Connect.Token.Refresh;
 
 [Authorize]
 [ApiController]
-[Route("v1/connect/token/refresh")]
+[Route("v{version:apiVersion}/connect/token/refresh")]
 [Tags("Connect")]
+[ApiVersion("1.0")]
 public sealed class RefreshTokenController : ControllerBase
 {
     private readonly StargazeDbContext _db;

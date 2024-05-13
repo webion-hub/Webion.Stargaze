@@ -11,7 +11,8 @@ namespace Webion.Stargaze.Api.Controllers.v1.Tasks.GetAll;
 [Authorize]
 [ApiController]
 [Route("v{version:apiVersion}/tasks")]
-[Tags("Tags")]
+[Tags("Tasks")]
+[ApiVersion("1.0")]
 public sealed class GetAllTasksController : ControllerBase
 {
     private readonly StargazeDbContext _db;

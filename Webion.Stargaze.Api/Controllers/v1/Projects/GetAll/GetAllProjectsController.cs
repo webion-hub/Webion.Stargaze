@@ -12,6 +12,7 @@ namespace Webion.Stargaze.Api.Controllers.v1.Projects.GetAll;
 [ApiController]
 [Route("v{version:apiVersion}/projects")]
 [Tags("Projects")]
+[ApiVersion("1.0")]
 public sealed class GetAllProjectsController : ControllerBase
 {
     private readonly StargazeDbContext _db;

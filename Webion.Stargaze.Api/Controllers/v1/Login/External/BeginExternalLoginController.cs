@@ -1,4 +1,3 @@
-using Asp.Versioning;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -10,8 +9,8 @@ namespace Webion.Stargaze.Api.Controllers.v1.Login.External;
 [AllowAnonymous]
 [ApiController]
 [Route("v{version:apiVersion}/account/login/external/{provider}")]
-[ApiVersion("1.0")]
 [Tags("Account")]
+[ApiVersion("1.0")]
 public sealed class BeginExternalLoginController : ControllerBase
 {
     private readonly SignInManager<UserDbo> _signInManager;

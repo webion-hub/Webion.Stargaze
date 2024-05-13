@@ -1,5 +1,4 @@
 using System.Security.Claims;
-using Asp.Versioning;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -13,8 +12,8 @@ namespace Webion.Stargaze.Api.Controllers.v1.Login.External;
 [AllowAnonymous]
 [ApiController]
 [Route("v{version:apiVersion}/account/login/external/handle")]
-[ApiVersion("1.0")]
 [Tags("Account")]
+[ApiVersion("1.0")]
 public sealed class EndExternalLoginController : ControllerBase
 {
     private readonly UserManager<UserDbo> _userManager;

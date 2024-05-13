@@ -1,4 +1,6 @@
 using FluentValidation;
+using Qubi.Api.Config;
+using Qubi.Api.Config.Swagger;
 using Webion.Application.Extensions;
 using Webion.AspNetCore;
 using Webion.Stargaze.Api;
@@ -7,6 +9,7 @@ using Webion.Stargaze.Auth;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Add<ApiVersioningConfig>();
 builder.Add<SwaggerConfig>();
 builder.Add<OptionsConfig>();
 builder.Add<ControllersConfig>();

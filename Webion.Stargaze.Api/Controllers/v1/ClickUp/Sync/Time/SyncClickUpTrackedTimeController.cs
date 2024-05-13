@@ -11,6 +11,8 @@ namespace Webion.Stargaze.Api.Controllers.v1.ClickUp.Sync.Time;
 [ApiController]
 [Authorize]
 [Route("v{version:apiVersion}/clickup/sync/time")]
+[Tags("ClickUp Sync")]
+[ApiVersion("1.0")]
 public sealed class SyncClickUpTrackedTimeController : ControllerBase
 {
     private readonly IClickUpApi _clickUpApi;
@@ -51,7 +53,7 @@ public sealed class SyncClickUpTrackedTimeController : ControllerBase
             Billable = false,
             Billed = false,
             Paid = false,
-            User = null,
+            User = null!,
             Task = null,
         }));
         

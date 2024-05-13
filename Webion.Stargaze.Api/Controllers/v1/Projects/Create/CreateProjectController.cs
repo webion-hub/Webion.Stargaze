@@ -1,6 +1,6 @@
-using Asp.Versioning;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Webion.Stargaze.Api.Extensions;
 using Webion.Stargaze.Pgsql;
 using Webion.Stargaze.Pgsql.Entities.Projects;
 
@@ -9,15 +9,17 @@ namespace Webion.Stargaze.Api.Controllers.v1.Projects.Create;
 [Authorize]
 [ApiController]
 [Route("v{version:apiVersion}/projects")]
-[ApiVersion("1.0")]
 [Tags("Projects")]
+[ApiVersion("1.0")]
 public sealed class CreateProjectController : ControllerBase
 {
     private readonly StargazeDbContext _db;
+    private readonly CreateProjectRequestValidator _requestValidator;
 
-    public CreateProjectController(StargazeDbContext db)
+    public CreateProjectController(StargazeDbContext db, CreateProjectRequestValidator requestValidator)
     {
         _db = db;
+        _requestValidator = requestValidator;
     }
 
     [HttpPost]
@@ -27,6 +29,10 @@ public sealed class CreateProjectController : ControllerBase
         CancellationToken cancellationToken
     )
     {
+        await _requestValidator.ValidateModelAsync(request, ModelState, cancellationToken);
+        if (!ModelState.IsValid)
+            return ValidationProblem();
+
         var project = new ProjectDbo
         {
             CompanyId = request.CompanyId,

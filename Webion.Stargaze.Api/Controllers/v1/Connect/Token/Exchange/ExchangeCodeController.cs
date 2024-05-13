@@ -9,8 +9,9 @@ namespace Webion.Stargaze.Api.Controllers.v1.Connect.Token.Exchange;
 
 [Authorize]
 [ApiController]
-[Route("v1/connect/token/exchange/{code}")]
+[Route("v{version:apiVersion}/connect/token/exchange/{code}")]
 [Tags("Connect")]
+[ApiVersion("1.0")]
 public sealed class ExchangeCodeController : ControllerBase
 {
     private readonly StargazeDbContext _db;
