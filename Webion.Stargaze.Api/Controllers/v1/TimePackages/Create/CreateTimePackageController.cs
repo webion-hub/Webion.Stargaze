@@ -33,8 +33,9 @@ public class CreateTimePackageController : ControllerBase
 
         var package = new TimePackageDbo
         {
-            Hours = request.Hours,
+            CompanyId = request.CompanyId,
             Name = request.Name,
+            Hours = request.Hours,
             AppliesTo = projects,
         };
 

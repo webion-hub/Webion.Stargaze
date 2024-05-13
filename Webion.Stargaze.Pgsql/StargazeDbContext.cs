@@ -13,14 +13,14 @@ public sealed class StargazeDbContext : IdentityDbContext<UserDbo, RoleDbo, Guid
     public StargazeDbContext(DbContextOptions<StargazeDbContext> options) : base(options)
     {
     }
-    
-    
+
+
     public DbSet<CompanyDbo> Companies { get; set; }
     public DbSet<ProjectDbo> Projects { get; set; }
     public DbSet<TaskDbo> Tasks { get; set; }
     public DbSet<TimeEntryDbo> TimeEntries { get; set; }
     public DbSet<TimePackageDbo> TimePackages { get; set; }
-    
+
     public DbSet<ClientDbo> Clients { get; set; }
     public DbSet<ApiKeyDbo> ApiKeys { get; set; }
     public DbSet<RefreshTokenDbo> RefreshTokens { get; set; }

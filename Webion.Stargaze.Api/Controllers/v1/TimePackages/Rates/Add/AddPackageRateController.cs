@@ -23,7 +23,7 @@ public sealed class AddPackageRateController : ControllerBase
     [ProducesResponseType<AddPackageRateResponse>(201)]
     public async Task<IActionResult> Create(
         [FromRoute] Guid timePackageId,
-        [FromBody] CreatePackageRateRequest request,
+        [FromBody] AddPackageRateRequest request,
         CancellationToken cancellationToken
     )
     {
