@@ -32,11 +32,10 @@ public sealed class UpdateCompanyController : ControllerBase
         CancellationToken cancellationToken
     )
     {
-        _requestValidator.CompanyId = companyId;
         await _requestValidator.ValidateModelAsync(request, ModelState, cancellationToken);
         if (!ModelState.IsValid)
             return ValidationProblem();
-        
+
         var updatedRows = await _db.Companies
             .Where(x => x.Id == companyId)
             .ExecuteUpdateAsync(

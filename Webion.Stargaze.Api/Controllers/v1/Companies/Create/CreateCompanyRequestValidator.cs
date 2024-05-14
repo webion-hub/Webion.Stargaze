@@ -11,10 +11,13 @@ public sealed class CreateCompanyRequestValidator : AbstractValidator<CreateComp
     public CreateCompanyRequestValidator(StargazeDbContext db)
     {
         _db = db;
-        RuleFor(x => x.Name).NotEmpty().MustAsync(NotBeADuplicateName);
+        RuleFor(x => x.Name)
+            .NotEmpty()
+            .MustAsync(NotBeADuplicatedName)
+            .WithMessage("Company name can not be duplicated");
     }
 
-    private async Task<bool> NotBeADuplicateName(string name, CancellationToken cancellationToken)
+    private async Task<bool> NotBeADuplicatedName(string name, CancellationToken cancellationToken)
     {
         return !await _db.Companies
             .Where(x => x.Name == name)
