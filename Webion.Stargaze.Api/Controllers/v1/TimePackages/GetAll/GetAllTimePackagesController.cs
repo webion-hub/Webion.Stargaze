@@ -29,30 +29,68 @@ public sealed class GetAllTimePackagesController : ControllerBase
         CancellationToken cancellationToken
     )
     {
+        var timePackages = await _db.TimePackages
+            .Include(x => x.AppliesTo)
+            .If(request.CompanyId is not null, b => b
+                .Where(x => x.CompanyId == request.CompanyId)
+            )
+            .AsNoTracking()
+            .ToListAsync(cancellationToken);
+
+        var linkedProjects = timePackages
+            .SelectMany(x => x.AppliesTo)
+            .Select(x => x.Id);
+            
         var durations = await _db.TimeEntries
+            .Where(x => linkedProjects.Contains(x.Task!.ProjectId))
             .Where(x => !x.Billed)
             .Select(x => x.Duration)
             .ToListAsync(cancellationToken);
-
+        
+        
         var totalTime = durations.Aggregate(TimeSpan.Zero, (p, c) => p + c);
+        var currTime = totalTime;
 
-        var timePackages = await _db.TimePackages
-            .If(request.CompanyId is not null, b => b)
-            .Select(x => new TimePackageDto
-            {
-                Id = x.Id,
-                TotalHours = x.Hours,
-                Name = x.Name
-            })
-            .AsNoTracking()
-            .PaginateAsync(request.Page, request.PageSize, cancellationToken);
-
-        foreach (var package in timePackages.Results)
+        var res = new List<TimePackageDto>();
+        foreach (var package in timePackages)
         {
-            totalTime -= TimeSpan.FromHours(package.TotalHours);
-            package.RemainingHours = totalTime.Hours > 0 ? 0 : package.TotalHours + totalTime.Hours;
+            if (currTime <= TimeSpan.Zero)
+            {
+                res.Add(new TimePackageDto
+                {
+                    Id = package.Id,
+                    TotalHours = package.Hours,
+                    Name = package.Name,
+                    RemainingHours = package.Hours,
+                    TrackedHours = 0,
+                });
+                
+                break;
+            }
+            
+            var totalHours = TimeSpan.FromHours(package.Hours);
+            var diffTime = totalHours - currTime;
+            var remainingTime = diffTime < TimeSpan.Zero
+                ? totalHours
+                : diffTime;
+
+            res.Add(new TimePackageDto
+            {
+                Id = package.Id,
+                TotalHours = package.Hours,
+                Name = package.Name,
+                RemainingHours = remainingTime.TotalHours,
+                TrackedHours = (totalHours - remainingTime).TotalHours,
+            });
+
+            currTime -= remainingTime;
         }
 
-        return Ok(GetAllTimePackagesResponse.From(timePackages));
+        return Ok(new
+        {
+            TotalTime = totalTime,
+            RemainingBillableTime = currTime < TimeSpan.Zero ? 0 : currTime.TotalHours,
+            Packages = res,
+        });
     }
 }

@@ -29,7 +29,6 @@ public sealed class GetAllPackageRatesController : ControllerBase
         CancellationToken cancellationToken
     )
     {
-        var test = await _db.TimePackageRates.ToListAsync();
         var packageRates = await _db.TimePackageRates
             .Where(x => x.TimePackageId == timePackageId)
             .If(request.UserId is not null, b => b
