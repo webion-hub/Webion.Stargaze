@@ -20,7 +20,6 @@ public sealed class AddPackageRateRequestValidator : AbstractValidator<AddPackag
     private async Task<bool> BeAValidUserId(Guid userId, CancellationToken cancellationToken)
     {
         return await _db.Users
-            .Where(x => x.Id == userId)
-            .AnyAsync(cancellationToken);
+            .AnyAsync(x => x.Id == userId, cancellationToken);
     }
 }

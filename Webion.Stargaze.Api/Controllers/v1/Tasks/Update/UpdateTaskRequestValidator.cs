@@ -26,14 +26,12 @@ public sealed class UpdateTaskRequestValidator : AbstractValidator<UpdateTaskReq
     private async Task<bool> NotBeADuplicatedTitle(string title, CancellationToken cancellationToken)
     {
         return !await _db.Tasks
-            .Where(x => x.Title == title)
-            .AnyAsync(cancellationToken);
+            .AnyAsync(x => x.Title == title, cancellationToken);
     }
 
     private async Task<bool> BeAValidProjectId(Guid ProjectId, CancellationToken cancellationToken)
     {
         return await _db.Projects
-            .Where(x => x.Id == ProjectId)
-            .AnyAsync(cancellationToken);
+            .AnyAsync(x => x.Id == ProjectId, cancellationToken);
     }
 }

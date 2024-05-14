@@ -20,7 +20,6 @@ public sealed class CreateCompanyRequestValidator : AbstractValidator<CreateComp
     private async Task<bool> NotBeADuplicatedName(string name, CancellationToken cancellationToken)
     {
         return !await _db.Companies
-            .Where(x => x.Name == name)
-            .AnyAsync(cancellationToken);
+            .AnyAsync(x => x.Name == name, cancellationToken);
     }
 }
