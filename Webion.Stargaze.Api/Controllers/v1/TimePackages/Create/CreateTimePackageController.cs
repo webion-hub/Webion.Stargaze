@@ -25,6 +25,7 @@ public class CreateTimePackageController : ControllerBase
 
     [HttpPost]
     [ProducesResponseType<CreateTimePackageResponse>(201)]
+    [ProducesResponseType(400)]
     public async Task<IActionResult> Create(
         [FromBody] CreateTimePackageRequest request,
         CancellationToken cancellationToken
