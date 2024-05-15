@@ -37,7 +37,10 @@ public sealed class GetAllPackageRatesController : ControllerBase
             .Select(x => new TimePackageRateDto
             {
                 Id = x.Id,
+                UserId = x.UserId,
+                PackageId = x.TimePackageId,
                 Rate = x.Rate,
+
             })
             .AsNoTracking()
             .ToListAsync(cancellationToken);
