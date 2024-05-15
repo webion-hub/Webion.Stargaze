@@ -1,4 +1,6 @@
+using Webion.ClickUp.Api.V2.Lists;
 using Webion.ClickUp.Api.V2.OAuth;
+using Webion.ClickUp.Api.V2.Spaces;
 using Webion.ClickUp.Api.V2.Team;
 using Webion.ClickUp.Api.V2.Users;
 
@@ -9,4 +11,6 @@ public interface IClickUpApi
     public IClickUpTeamApi Teams { get; }
     public IClickUpOAuthApi OAuth { get; }
     public IClickUpUsersApi Users { get; }
+    public IClickUpSpacesApi Spaces { get; }
+    public IClickUpListsApi Lists { get; }
 }

@@ -8,7 +8,7 @@ namespace Webion.Stargaze.Api.Controllers.v1.Projects.Get;
 [Authorize]
 [ApiController]
 [Route("v{version:apiVersion}/projects/{projectId}")]
-[Tags("Project")]
+[Tags("Projects")]
 [ApiVersion("1.0")]
 public sealed class GetProjectController : ControllerBase
 {

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Webion.Stargaze.Auth.Core;
 using Webion.Stargaze.Pgsql.Entities.Identity;
 
-namespace Webion.Stargaze.Api.Controllers.v1.Login.External;
+namespace Webion.Stargaze.Api.Controllers.v1.Account.Login.External;
 
 [AllowAnonymous]
 [ApiController]
@@ -35,7 +35,7 @@ public sealed class BeginExternalLoginController : ControllerBase
                 request.RedirectUri,
             })
         );
-        
+
         return Challenge(properties, provider.ToString());
     }
 }

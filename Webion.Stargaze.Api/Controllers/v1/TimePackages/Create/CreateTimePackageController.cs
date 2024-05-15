@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Webion.Stargaze.Api.Extensions;
 using Webion.Stargaze.Pgsql;
 using Webion.Stargaze.Pgsql.Entities.TimeTracking;
 
@@ -14,10 +15,12 @@ namespace Webion.Stargaze.Api.Controllers.v1.TimePackages.Create;
 public class CreateTimePackageController : ControllerBase
 {
     private readonly StargazeDbContext _db;
+    private readonly CreateTimePackageRequestValidator _requestValidator;
 
-    public CreateTimePackageController(StargazeDbContext db)
+    public CreateTimePackageController(StargazeDbContext db, CreateTimePackageRequestValidator requestValidator)
     {
         _db = db;
+        _requestValidator = requestValidator;
     }
 
     [HttpPost]
@@ -27,14 +30,19 @@ public class CreateTimePackageController : ControllerBase
         CancellationToken cancellationToken
     )
     {
+        await _requestValidator.ValidateModelAsync(request, ModelState, cancellationToken);
+        if (!ModelState.IsValid)
+            return ValidationProblem();
+
         var projects = await _db.Projects
             .Where(x => request.AppliesToProjects.Contains(x.Id))
             .ToListAsync(cancellationToken);
 
         var package = new TimePackageDbo
         {
-            Hours = request.Hours,
+            CompanyId = request.CompanyId,
             Name = request.Name,
+            Hours = request.Hours,
             AppliesTo = projects,
         };
 

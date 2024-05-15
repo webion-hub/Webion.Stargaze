@@ -34,14 +34,13 @@ public sealed class JwtIssuer : IJwtIssuer
         _options = options.Value;
     }
 
-    public async Task<TokenPair> IssuePairAsync(UserDbo user, ClientDbo client)
+    public async Task<TokenPair> IssuePairAsync(UserDbo user)
     {
         var userPrincipal = await _principalFactory.CreateAsync(user);
         var claims = new Claim[]
         {
             new(JwtClaims.Sub, user.Id.ToString()),
             new(JwtClaims.Name, user.UserName!),
-            new(JwtClaims.Email, user.Email!),
         };
 
         var roles = userPrincipal.Claims
@@ -60,9 +59,9 @@ public sealed class JwtIssuer : IJwtIssuer
             notBefore: DateTime.UtcNow,
             expires: DateTime.UtcNow + _options.AccessTokenDuration,
             issuer: _options.Issuer,
-            audience: client.Id.ToString(),
+            audience: "https://stargaze.webion.it",
             signingCredentials: new SigningCredentials(
-                key: new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.Secret)), 
+                key: new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.Secret)),
                 algorithm: SecurityAlgorithms.HmacSha512Signature
             )
         );
@@ -70,10 +69,10 @@ public sealed class JwtIssuer : IJwtIssuer
         var accessToken = _jwtHandler.WriteToken(jwtDescriptor);
         var refreshToken = await GenerateRefreshTokenAsync(user);
 
-        _logger.LogInformation("Issued token pair for user {UserId} and client {ClientId}", user.Id, client.Id);
+        _logger.LogInformation("Issued token pair for user {UserId}", user.Id);
         return new TokenPair(accessToken, refreshToken);
     }
-    
+
 
     private async Task<string> GenerateRefreshTokenAsync(UserDbo user)
     {

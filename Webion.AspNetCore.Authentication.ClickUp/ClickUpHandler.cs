@@ -23,38 +23,46 @@ public sealed class ClickUpHandler : OAuthHandler<ClickUpOptions>
         var userInfo = await Backchannel.GetFromJsonAsync<GetUserResponse>(Options.UserInformationEndpoint);
         if (userInfo is null)
             throw new InvalidOperationException("Error while deserializing user info");
-        
-        var claims = new[]
-        {
-            new Claim(ClaimTypes.NameIdentifier, userInfo.User.Id.ToString()),
-            new Claim(ClaimTypes.Name, userInfo.User.UserName),
-            new Claim(ClickUpClaims.AccessToken, tokens.AccessToken),
-            new Claim(ClickUpClaims.ProfilePicture, userInfo.User.ProfilePicture),
-            new Claim(ClickUpClaims.Color, userInfo.User.Color),
-        };
-        
-        identity.AddClaims(claims);
-        
+
+        identity.AddClaims(
+            GetClaims(userInfo, tokens)
+        );
+
         return await base.CreateTicketAsync(identity, properties, tokens);
+    }
+
+    private static IEnumerable<Claim> GetClaims(GetUserResponse response, OAuthTokenResponse tokens)
+    {
+        yield return new Claim(ClaimTypes.NameIdentifier, response.User.Id.ToString());
+        yield return new Claim(ClaimTypes.Name, response.User.UserName);
+
+        if (tokens.AccessToken is not null)
+            yield return new Claim(ClickUpClaims.AccessToken, tokens.AccessToken);
+
+        if (response.User.ProfilePicture is not null)
+            yield return new Claim(ClickUpClaims.ProfilePicture, response.User.ProfilePicture);
+
+        if (response.User.Color is not null)
+            yield return new Claim(ClickUpClaims.Color, response.User.Color);
     }
 }
 
 internal sealed class GetUserResponse
 {
     public UserDto User { get; set; } = null!;
-    
+
     internal sealed class UserDto
     {
         [JsonPropertyName("id")]
         public long Id { get; init; }
-        
+
         [JsonPropertyName("username")]
         public string UserName { get; init; } = null!;
-    
+
         [JsonPropertyName("color")]
-        public string Color { get; init; } = null!;
-    
+        public string? Color { get; init; }
+
         [JsonPropertyName("profilePicture")]
-        public string ProfilePicture { get; init; } = null!;
+        public string? ProfilePicture { get; init; }
     }
 }

@@ -35,4 +35,4 @@ app.Use<AuthNConfig>();
 app.Use<AuthZConfig>();
 
 app.Use<ControllersConfig>();
-app.Run();
+app.Run("http://localhost:5000");

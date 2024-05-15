@@ -24,6 +24,7 @@ public sealed class CreateProjectController : ControllerBase
 
     [HttpPost]
     [ProducesResponseType<CreateProjectResponse>(201)]
+    [ProducesResponseType(400)]
     public async Task<IActionResult> Create(
         [FromBody] CreateProjectRequest request,
         CancellationToken cancellationToken

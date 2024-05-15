@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Webion.Stargaze.Pgsql.Entities.ClickUp;
 using Webion.Stargaze.Pgsql.Entities.Core;
 using Webion.Stargaze.Pgsql.Entities.TimeTracking;
 
@@ -17,6 +18,7 @@ public sealed class ProjectDbo : IEntityTypeConfiguration<ProjectDbo>
     public CompanyDbo Company { get; set; } = null!;
     public List<TaskDbo> Tasks { get; set; } = [];
     public List<TimePackageDbo> TimePackages { get; set; } = [];
+    public List<ClickUpListDbo> ClickUpLists { get; set; } = [];
 
     public void Configure(EntityTypeBuilder<ProjectDbo> builder)
     {

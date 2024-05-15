@@ -1,5 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Webion.AspNetCore.Authentication.ClickUp;
 using Webion.ClickUp.Api.V2;
 using Webion.ClickUp.Api.V2.Team.Dtos;
 using Webion.Stargaze.Api.Options;
@@ -19,15 +22,15 @@ public sealed class SyncClickUpTrackedTimeController : ControllerBase
     private readonly StargazeDbContext _db;
     private readonly ClickUpSettings _clickUpSettings;
 
-    public SyncClickUpTrackedTimeController(IClickUpApi clickUpApi, ClickUpSettings clickUpSettings, StargazeDbContext db)
+    public SyncClickUpTrackedTimeController(IClickUpApi clickUpApi, IOptions<ClickUpSettings> clickUpSettings, StargazeDbContext db)
     {
         _clickUpApi = clickUpApi;
-        _clickUpSettings = clickUpSettings;
+        _clickUpSettings = clickUpSettings.Value;
         _db = db;
     }
 
     [HttpGet]
-    public async Task<IActionResult> Sync()
+    public async Task<IActionResult> Sync(CancellationToken cancellationToken)
     {
         var teamsResponse = await _clickUpApi.Teams.GetAllAsync();
         var team = teamsResponse.Teams.First(x => x.Id == _clickUpSettings.TeamId);
@@ -38,25 +41,39 @@ public sealed class SyncClickUpTrackedTimeController : ControllerBase
                 .Select(x => x.User.Id)
                 .Distinct()
         };
-            
+        
         var response = await _clickUpApi.Teams.GetTimeEntriesAsync(team.Id, request);
 
-        _db.TimeEntries.AddRange(response.Data.Select(x => new TimeEntryDbo
+        await using var transaction = await _db.Database.BeginTransactionAsync(cancellationToken);
+        var users = await _db.UserLogins
+            .Where(x => x.LoginProvider == ClickUpDefaults.AuthenticationScheme)
+            .AsNoTracking()
+            .ToDictionaryAsync(
+                keySelector: x => x.ProviderKey,
+                elementSelector: x => x.UserId,
+                cancellationToken: cancellationToken
+            );
+
+        var chunks = response.Data.Chunk(1000);
+        foreach (var chunk in chunks)
         {
-            Id = default,
-            UserId = default,
-            TaskId = null,
-            Start = default,
-            End = default,
-            Duration = default,
-            Locked = false,
-            Billable = false,
-            Billed = false,
-            Paid = false,
-            User = null!,
-            Task = null,
-        }));
+            _db.TimeEntries.AddRange(chunk.Select(x => new TimeEntryDbo
+            {
+                UserId = users[x.User.Id],
+                TaskId = null,
+                Start = x.Start,
+                Description = x.Description,
+                End = x.End,
+                Duration = x.Duration,
+                Locked = false,
+                Billable = x.Billable,
+                Billed = false,
+            }));
+
+            await _db.SaveChangesAsync(cancellationToken);
+        }
         
-        return Ok(response.Data);
+        await transaction.CommitAsync(cancellationToken);
+        return Ok();
     }
 }

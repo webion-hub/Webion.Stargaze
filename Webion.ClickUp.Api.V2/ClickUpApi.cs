@@ -1,7 +1,9 @@
 ﻿using System.Text.Json;
 using Refit;
 using Webion.ClickUp.Api.V2.Converters;
+using Webion.ClickUp.Api.V2.Lists;
 using Webion.ClickUp.Api.V2.OAuth;
+using Webion.ClickUp.Api.V2.Spaces;
 using Webion.ClickUp.Api.V2.Team;
 using Webion.ClickUp.Api.V2.Users;
 
@@ -14,6 +16,8 @@ internal sealed class ClickUpApi : IClickUpApi
     public IClickUpTeamApi Teams => RestService.For<IClickUpTeamApi>(_client, Settings);
     public IClickUpOAuthApi OAuth => RestService.For<IClickUpOAuthApi>(_client, Settings);
     public IClickUpUsersApi Users => RestService.For<IClickUpUsersApi>(_client, Settings);
+    public IClickUpSpacesApi Spaces => RestService.For<IClickUpSpacesApi>(_client, Settings);
+    public IClickUpListsApi Lists => RestService.For<IClickUpListsApi>(_client, Settings);
     
     public ClickUpApi (HttpClient client)
     {

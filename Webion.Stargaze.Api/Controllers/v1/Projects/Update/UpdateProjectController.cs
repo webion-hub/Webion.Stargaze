@@ -24,6 +24,7 @@ public sealed class UpdateProjectController : ControllerBase
 
     [HttpPut]
     [ProducesResponseType(204)]
+    [ProducesResponseType(400)]
     [ProducesResponseType(404)]
     public async Task<IActionResult> Update(
         [FromRoute] Guid projectId,

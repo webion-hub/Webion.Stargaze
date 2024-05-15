@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
 namespace Webion.Stargaze.Pgsql;
 
 public static class Schemas
@@ -9,4 +11,5 @@ public static class Schemas
     public const string Projects = "projects";
     public const string Accounting = "accounting";
     public const string TimeTracking = "time_tracking";
+    public const string ClickUp = "click_up";
 }

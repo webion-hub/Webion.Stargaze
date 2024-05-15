@@ -24,6 +24,7 @@ public sealed class UpdateCompanyController : ControllerBase
 
     [HttpPut]
     [ProducesResponseType(204)]
+    [ProducesResponseType(400)]
     [ProducesResponseType(404)]
     public async Task<IActionResult> Update(
         [FromRoute] Guid companyId,
@@ -31,11 +32,10 @@ public sealed class UpdateCompanyController : ControllerBase
         CancellationToken cancellationToken
     )
     {
-        _requestValidator.CompanyId = companyId;
         await _requestValidator.ValidateModelAsync(request, ModelState, cancellationToken);
         if (!ModelState.IsValid)
             return ValidationProblem();
-        
+
         var updatedRows = await _db.Companies
             .Where(x => x.Id == companyId)
             .ExecuteUpdateAsync(
