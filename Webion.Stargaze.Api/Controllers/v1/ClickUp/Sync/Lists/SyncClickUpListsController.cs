@@ -13,8 +13,9 @@ namespace Webion.Stargaze.Api.Controllers.v1.ClickUp.Sync.Lists;
 [ApiController]
 [Authorize]
 [Route("v{version:apiVersion}/clickup/sync/lists")]
-[ApiVersion("1.0")]
 [Tags("ClickUp Sync")]
+[ApiVersion("1.0")]
+
 public sealed class SyncClickUpListsController : ControllerBase
 {
     private readonly StargazeDbContext _db;
@@ -28,14 +29,14 @@ public sealed class SyncClickUpListsController : ControllerBase
         _settings = settings.Value;
     }
 
-    [HttpGet]
+    [HttpPost]
     public async Task<IActionResult> Sync(CancellationToken cancellationToken)
     {
         await using var transaction = await _db.Database.BeginTransactionAsync(cancellationToken);
         var spaces = await _db.ClickUpSpaces
             .Include(x => x.Lists)
             .ToListAsync(cancellationToken);
-        
+
         foreach (var space in spaces)
         {
             var listsResponse = await _api.Lists.GetNotInFolderAsync(space.Id);
@@ -45,7 +46,7 @@ public sealed class SyncClickUpListsController : ControllerBase
                 SpaceId = x.Space.Id,
                 Name = x.Name,
             });
-            
+
             space.Lists.SoftReplace(
                 replacement: lists,
                 match: (o, n) => o.Id == n.Id,

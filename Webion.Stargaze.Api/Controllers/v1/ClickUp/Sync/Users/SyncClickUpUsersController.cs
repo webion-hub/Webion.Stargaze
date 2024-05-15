@@ -29,7 +29,7 @@ public sealed class SyncClickUpUsersController : ControllerBase
         _userManager = userManager;
     }
 
-    [HttpGet]
+    [HttpPost]
     public async Task<IActionResult> Sync(CancellationToken cancellationToken)
     {
         await using var transaction = await _db.Database.BeginTransactionAsync(cancellationToken);
