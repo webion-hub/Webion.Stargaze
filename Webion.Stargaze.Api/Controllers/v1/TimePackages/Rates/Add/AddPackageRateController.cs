@@ -25,6 +25,8 @@ public sealed class AddPackageRateController : ControllerBase
 
     [HttpPost]
     [ProducesResponseType<AddPackageRateResponse>(201)]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(404)]
     public async Task<IActionResult> Create(
         [FromRoute] Guid timePackageId,
         [FromBody] AddPackageRateRequest request,

@@ -29,6 +29,7 @@ public sealed class ExchangeCodeController : ControllerBase
     
     [HttpPost]
     [ProducesResponseType<ExchangeCodeResponse>(200)]
+    [ProducesResponseType(403)]
     public async Task<IActionResult> Exchange(
         [FromRoute] Guid code,
         [FromBody] ExchangeCodeRequest request,

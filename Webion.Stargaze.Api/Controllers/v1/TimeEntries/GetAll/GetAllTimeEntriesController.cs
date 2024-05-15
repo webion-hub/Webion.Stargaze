@@ -57,7 +57,7 @@ public sealed class GetAllTimeEntriesController : ControllerBase
             })
             .AsNoTracking()
             .PaginateAsync(request.Page, request.PageSize, cancellationToken);
-        
+
         return Ok(GetAllTimeEntriesResponse.From(page));
     }
 }
