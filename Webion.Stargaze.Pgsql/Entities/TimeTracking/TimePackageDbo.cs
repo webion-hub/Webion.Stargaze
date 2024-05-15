@@ -8,7 +8,7 @@ namespace Webion.Stargaze.Pgsql.Entities.TimeTracking;
 
 public sealed class TimePackageDbo : IEntityTypeConfiguration<TimePackageDbo>
 {
-    public Guid Id { get; set; }    
+    public Guid Id { get; set; }
     public Guid CompanyId { get; set; }
     public int Hours { get; set; }
     public string? Name { get; set; }

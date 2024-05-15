@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Webion.Stargaze.Api.Controllers.v1.TimePackages.Create;
+namespace Webion.Stargaze.Api.Controllers.v1.TimePackages.Update;
 
-public sealed class CreateTimePackageRequest
+public sealed class UpdateTimePackageRequest
 {
     [Required]
     public Guid CompanyId { get; init; }
