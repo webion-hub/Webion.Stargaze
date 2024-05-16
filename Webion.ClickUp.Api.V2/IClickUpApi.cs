@@ -1,3 +1,4 @@
+using Webion.ClickUp.Api.V2.Folders;
 using Webion.ClickUp.Api.V2.Lists;
 using Webion.ClickUp.Api.V2.OAuth;
 using Webion.ClickUp.Api.V2.Spaces;
@@ -15,4 +16,5 @@ public interface IClickUpApi
     public IClickUpSpacesApi Spaces { get; }
     public IClickUpListsApi Lists { get; }
     public IClickUpTasksApi Tasks { get; }
+    public IClickUpFoldersApi Folders { get; }
 }

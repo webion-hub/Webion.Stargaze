@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using Refit;
 using Webion.ClickUp.Api.V2.Converters;
+using Webion.ClickUp.Api.V2.Folders;
 using Webion.ClickUp.Api.V2.Lists;
 using Webion.ClickUp.Api.V2.OAuth;
 using Webion.ClickUp.Api.V2.Spaces;
@@ -20,6 +21,7 @@ internal sealed class ClickUpApi : IClickUpApi
     public IClickUpSpacesApi Spaces => RestService.For<IClickUpSpacesApi>(_client, Settings);
     public IClickUpListsApi Lists => RestService.For<IClickUpListsApi>(_client, Settings);
     public IClickUpTasksApi Tasks => RestService.For<IClickUpTasksApi>(_client, Settings);
+    public IClickUpFoldersApi Folders => RestService.For<IClickUpFoldersApi>(_client, Settings);
 
     public ClickUpApi(HttpClient client)
     {
