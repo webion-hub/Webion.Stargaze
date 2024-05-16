@@ -32,10 +32,7 @@ public sealed class SyncClickUpSpacesController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Sync(CancellationToken cancellationToken)
     {
-        var spacesResponse = await _api.Spaces.GetAllAsync(
-            teamId: _settings.TeamId,
-            request: new GetAllSpacesRequest()
-        );
+        var spacesResponse = await _api.Spaces.GetAllAsync(_settings.TeamId, null!);
 
         var spaces = await _db.ClickUpSpaces.ToListAsync(cancellationToken);
 

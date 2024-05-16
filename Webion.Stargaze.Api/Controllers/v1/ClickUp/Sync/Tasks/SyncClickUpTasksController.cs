@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Webion.ClickUp.Api.V2;
+using Webion.ClickUp.Api.V2.Tasks.Dtos;
 using Webion.Extensions.Linq;
 using Webion.Stargaze.Pgsql;
 using Webion.Stargaze.Pgsql.Entities.ClickUp;
@@ -34,7 +35,10 @@ public sealed class SyncClickUpTasksController : ControllerBase
 
         foreach (var list in lists)
         {
-            var tasksResponse = await _api.Tasks.GetAllAsync(Convert.ToInt64(list.Id), null!);
+            var tasksResponse = await _api.Tasks.GetAllAsync(
+                Convert.ToInt64(list.Id),
+                new GetAllTasksRequest()
+            );
 
             list.Tasks.SoftReplace(
                 replacement: tasksResponse.Tasks,

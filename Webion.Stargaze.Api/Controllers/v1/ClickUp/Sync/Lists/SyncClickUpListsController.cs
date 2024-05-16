@@ -1,10 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Webion.ClickUp.Api.V2;
 using Webion.Extensions.Linq;
-using Webion.Stargaze.Api.Options;
 using Webion.Stargaze.Pgsql;
 using Webion.Stargaze.Pgsql.Entities.ClickUp;
 
@@ -20,13 +18,11 @@ public sealed class SyncClickUpListsController : ControllerBase
 {
     private readonly StargazeDbContext _db;
     private readonly IClickUpApi _api;
-    private readonly ClickUpSettings _settings;
 
-    public SyncClickUpListsController(StargazeDbContext db, IClickUpApi api, IOptions<ClickUpSettings> settings)
+    public SyncClickUpListsController(StargazeDbContext db, IClickUpApi api)
     {
         _db = db;
         _api = api;
-        _settings = settings.Value;
     }
 
     [HttpPost]
@@ -40,17 +36,43 @@ public sealed class SyncClickUpListsController : ControllerBase
         foreach (var space in spaces)
         {
             var listsResponse = await _api.Lists.GetNotInFolderAsync(space.Id);
-            var lists = listsResponse.Lists.Select(x => new ClickUpListDbo
-            {
-                Id = x.Id,
-                SpaceId = x.Space.Id,
-                Name = x.Name,
-            });
 
             space.Lists.SoftReplace(
-                replacement: lists,
+                replacement: listsResponse.Lists,
                 match: (o, n) => o.Id == n.Id,
-                add: n => n,
+                add: n => new ClickUpListDbo
+                {
+                    Id = n.Id,
+                    SpaceId = n.Space.Id,
+                    Name = n.Name,
+                },
+                update: (o, n) =>
+                {
+                    o.Name = n.Name;
+                },
+                delete: o => _db.Remove(o)
+            );
+
+            await _db.SaveChangesAsync(cancellationToken);
+        }
+
+        var folders = await _db.ClickUpFolders
+            .Include(x => x.Lists)
+            .ToListAsync(cancellationToken);
+
+        foreach (var folder in folders)
+        {
+            var listsResponse = await _api.Lists.GetInFolderAsync(folder.Id);
+
+            folder.Lists.SoftReplace(
+                replacement: listsResponse.Lists,
+                match: (o, n) => o.Id == n.Id,
+                add: n => new ClickUpListDbo
+                {
+                    Id = n.Id,
+                    SpaceId = n.Space.Id,
+                    Name = n.Name,
+                },
                 update: (o, n) =>
                 {
                     o.Name = n.Name;
