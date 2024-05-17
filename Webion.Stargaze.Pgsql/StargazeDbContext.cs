@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Webion.Stargaze.Pgsql.Entities.Accounting;
 using Webion.Stargaze.Pgsql.Entities.ClickUp;
 using Webion.Stargaze.Pgsql.Entities.Connect;
 using Webion.Stargaze.Pgsql.Entities.Core;
@@ -15,6 +16,13 @@ public sealed class StargazeDbContext : IdentityDbContext<UserDbo, RoleDbo, Guid
     {
     }
 
+    public DbSet<BankAccountDbo> BankAccounts { get; set; }
+    public DbSet<InvoiceDbo> Invoices { get; set; }
+    public DbSet<InvoiceItemDbo> InvoiceItems { get; set; }
+    public DbSet<PaymentCategoryDbo> PaymentCategories { get; set; }
+    public DbSet<PaymentDbo> Payments { get; set; }
+    public DbSet<TimeEntryInvoiceDbo> TimeEntryInvoices { get; set; }
+    public DbSet<TimeInvoiceDbo> TimeInvoices { get; set; }
 
     public DbSet<CompanyDbo> Companies { get; set; }
     public DbSet<ProjectDbo> Projects { get; set; }
@@ -26,7 +34,7 @@ public sealed class StargazeDbContext : IdentityDbContext<UserDbo, RoleDbo, Guid
     public DbSet<ApiKeyDbo> ApiKeys { get; set; }
     public DbSet<RefreshTokenDbo> RefreshTokens { get; set; }
     public DbSet<TimePackageRateDbo> TimePackageRates { get; set; }
-    
+
     public DbSet<ClickUpSpaceDbo> ClickUpSpaces { get; set; }
     public DbSet<ClickUpFolderDbo> ClickUpFolders { get; set; }
     public DbSet<ClickUpListDbo> ClickUpLists { get; set; }
