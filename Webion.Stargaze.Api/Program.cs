@@ -34,11 +34,10 @@ var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
 var url = $"http://0.0.0.0:{port}";
 app.Urls.Add(url);
 
-app.Use<SwaggerConfig>();
-
 app.Use<CorsConfig>();
 app.Use<AuthNConfig>();
 app.Use<AuthZConfig>();
 
+app.Use<SwaggerConfig>();
 app.Use<ControllersConfig>();
 app.Run();

@@ -14,7 +14,7 @@ public sealed class LoggingConfig : IWebApplicationConfiguration
                 .ReadFrom.Configuration(ctx.Configuration)
                 .ReadFrom.Services(services);
 
-            if (builder.Environment.IsDevelopment())
+            if (builder.Environment.IsDevelopment() || true)
             {
                 logger.WriteTo.Console();
             }

@@ -24,31 +24,28 @@ public sealed class SwaggerConfig : IWebApplicationConfiguration
     {
         app.UseSwagger();
 
-        app.MapGet("/scalar/{documentName}", (string version) => Results.Content($$"""
-              <!doctype html>
-              <html>
-              <head>
-                  <title>Stargaze Api Reference -- {{version}}</title>
-                  <meta charset="utf-8" />
-                  <meta
-                  name="viewport"
-                  content="width=device-width, initial-scale=1" />
-              </head>
-              <body>
-                  <script
-                  id="api-reference"
-                  data-url="/swagger/{{version}}/swagger.json"></script>
-                  <script>
-                  var configuration = {
-                      theme: 'purple',
-                  }
-              
-                  document.getElementById('api-reference').dataset.configuration =
-                      JSON.stringify(configuration)
-                  </script>
-                  <script src="https://cdn.jsdelivr.net/npm/@scalar/api-reference"></script>
-              </body>
-              </html>
-              """, "text/html"));
+        app.MapGet("/{version}/_docs", (string version) => Results.Content(
+            $$"""
+                <!doctype html>
+                <html>
+                <head>
+                    <title>Stargaze Api Reference -- {{version}}</title>
+                    <meta charset="utf-8" />
+                    <meta name="viewport" content="width=device-width, initial-scale=1" />
+                </head>
+                <body>
+                    <script id="api-reference" data-url="/swagger/{{version}}/swagger.json"></script>
+                    <script>
+                        var configuration = {
+                            theme: 'purple',
+                        }
+
+                        document.getElementById('api-reference').dataset.configuration =
+                        JSON.stringify(configuration)
+                    </script>
+                    <script src="https://cdn.jsdelivr.net/npm/@scalar/api-reference"></script>
+                </body>
+                </html>
+            """, "text/html"));
     }
 }
