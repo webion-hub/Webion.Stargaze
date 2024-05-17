@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Webion.AspNetCore;
 
 namespace Qubi.Api.Config.Swagger;
@@ -24,18 +23,32 @@ public sealed class SwaggerConfig : IWebApplicationConfiguration
     public void Use(WebApplication app)
     {
         app.UseSwagger();
-        app.UseSwaggerUI(options =>
-        {
-            var provider = app.Services.GetRequiredService<IApiVersionDescriptionProvider>();
-            foreach (var description in provider.ApiVersionDescriptions)
-            {
-                options.SwaggerEndpoint(
-                    url: $"{description.GroupName}/swagger.json",
-                    name: description.GroupName
-                );
-            }
-            options.EnableFilter();
-            options.EnablePersistAuthorization();
-        });
+
+        app.MapGet("/scalar/{documentName}", (string version) => Results.Content($$"""
+              <!doctype html>
+              <html>
+              <head>
+                  <title>Stargaze Api Reference -- {{version}}</title>
+                  <meta charset="utf-8" />
+                  <meta
+                  name="viewport"
+                  content="width=device-width, initial-scale=1" />
+              </head>
+              <body>
+                  <script
+                  id="api-reference"
+                  data-url="/swagger/{{version}}/swagger.json"></script>
+                  <script>
+                  var configuration = {
+                      theme: 'purple',
+                  }
+              
+                  document.getElementById('api-reference').dataset.configuration =
+                      JSON.stringify(configuration)
+                  </script>
+                  <script src="https://cdn.jsdelivr.net/npm/@scalar/api-reference"></script>
+              </body>
+              </html>
+              """, "text/html"));
     }
 }
