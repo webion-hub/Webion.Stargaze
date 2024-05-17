@@ -10,23 +10,21 @@ public sealed class PaymentDbo : IEntityTypeConfiguration<PaymentDbo>
     public Guid? InvoiceId { get; set; }
     public Guid? BankAccountId { get; set; }
     public Guid? CategoryId { get; set; }
-    
-    
+
     public string? From { get; set; }
     public string? To { get; set; }
     public string? Description { get; set; }
-    
+
     public decimal Amount { get; set; }
     public MovementType Type { get; set; }
     public PaymentStatus Status { get; set; }
-    
-    
+
     public DateTimeOffset PaidAt { get; set; }
-    
+
     public InvoiceDbo? Invoice { get; set; }
     public BankAccountDbo? BankAccount { get; set; }
     public PaymentCategoryDbo? Category { get; set; }
-    
+
     public void Configure(EntityTypeBuilder<PaymentDbo> builder)
     {
         builder.ToTable("payment", Schemas.Accounting);
