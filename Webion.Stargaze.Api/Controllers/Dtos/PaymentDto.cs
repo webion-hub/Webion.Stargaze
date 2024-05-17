@@ -2,7 +2,7 @@ using Webion.Stargaze.Core.Enums;
 
 namespace Webion.Stargaze.Api.Controllers.Dtos;
 
-public sealed class PaymentsDto
+public sealed class PaymentDto
 {
     public required Guid Id { get; init; }
     public required Guid? InvoiceId { get; init; }
