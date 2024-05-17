@@ -35,10 +35,12 @@ public sealed class DeleteTimeEntryController : ControllerBase
             return NotFound();
 
         if (timeEntries.Locked)
+        {
             return Problem(
                 detail: "Locked time entry",
                 statusCode: StatusCodes.Status403Forbidden
             );
+        }
 
         _db.Remove(timeEntries);
         await _db.SaveChangesAsync(cancellationToken);

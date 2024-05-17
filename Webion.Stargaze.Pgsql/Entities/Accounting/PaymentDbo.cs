@@ -11,13 +11,14 @@ public sealed class PaymentDbo : IEntityTypeConfiguration<PaymentDbo>
     public Guid? BankAccountId { get; set; }
     public Guid? CategoryId { get; set; }
     
+    
+    public string? From { get; set; }
+    public string? To { get; set; }
     public string? Description { get; set; }
     
-    public decimal NetAmount { get; set; }
-    public decimal TaxedAmount { get; set; }
-    public decimal VatPercentage { get; set; }
-    
+    public decimal Amount { get; set; }
     public MovementType Type { get; set; }
+    public PaymentStatus Status { get; set; }
     
     
     public DateTimeOffset PaidAt { get; set; }
@@ -32,9 +33,9 @@ public sealed class PaymentDbo : IEntityTypeConfiguration<PaymentDbo>
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.Description).HasMaxLength(4096);
-        builder.Property(x => x.NetAmount).IsRequired();
-        builder.Property(x => x.TaxedAmount).IsRequired();
-        builder.Property(x => x.VatPercentage).IsRequired();
+        builder.Property(x => x.Amount).IsRequired();
+        builder.Property(x => x.Type).IsRequired();
+        builder.Property(x => x.Status).IsRequired();
 
         builder
             .HasOne(x => x.Invoice)
