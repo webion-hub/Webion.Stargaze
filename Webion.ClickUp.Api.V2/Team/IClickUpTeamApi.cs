@@ -11,7 +11,7 @@ public interface IClickUpTeamApi
     /// <returns></returns>
     [Get("/v2/team")]
     Task<GetTeamsResponse> GetAllAsync();
-    
+
     /// <summary>
     /// View time entries filtered by start and end date.
     /// </summary>
