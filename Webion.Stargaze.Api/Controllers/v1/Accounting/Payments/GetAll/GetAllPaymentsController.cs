@@ -39,7 +39,7 @@ public sealed class GetAllPaymentsController : ControllerBase
             .If(request.CategoryId is not null, b => b
                 .Where(x => x.CategoryId == request.CategoryId)
             )
-            .Select(x => new PaymentsDto
+            .Select(x => new PaymentDto
             {
                 Id = x.Id,
                 InvoiceId = x.InvoiceId,
