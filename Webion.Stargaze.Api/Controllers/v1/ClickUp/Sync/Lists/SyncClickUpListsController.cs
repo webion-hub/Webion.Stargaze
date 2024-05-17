@@ -29,6 +29,16 @@ public sealed class SyncClickUpListsController : ControllerBase
     public async Task<IActionResult> Sync(CancellationToken cancellationToken)
     {
         await using var transaction = await _db.Database.BeginTransactionAsync(cancellationToken);
+        
+        await SyncSpaceListsAsync(cancellationToken);
+        await SyncFolderListsAsync(cancellationToken);
+
+        await transaction.CommitAsync(cancellationToken);
+        return Ok();
+    }
+
+    private async Task SyncSpaceListsAsync(CancellationToken cancellationToken)
+    {
         var spaces = await _db.ClickUpSpaces
             .Include(x => x.Lists)
             .ToListAsync(cancellationToken);
@@ -55,7 +65,10 @@ public sealed class SyncClickUpListsController : ControllerBase
 
             await _db.SaveChangesAsync(cancellationToken);
         }
+    }
 
+    private async Task SyncFolderListsAsync(CancellationToken cancellationToken)
+    {
         var folders = await _db.ClickUpFolders
             .Include(x => x.Lists)
             .ToListAsync(cancellationToken);
@@ -82,8 +95,5 @@ public sealed class SyncClickUpListsController : ControllerBase
 
             await _db.SaveChangesAsync(cancellationToken);
         }
-
-        await transaction.CommitAsync(cancellationToken);
-        return Ok();
     }
 }
