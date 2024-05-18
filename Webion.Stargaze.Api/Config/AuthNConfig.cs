@@ -68,6 +68,12 @@ public sealed class AuthNConfig : IWebApplicationConfiguration
                 options.SignInScheme = IdentityConstants.ExternalScheme;
                 options.ClientId = builder.Configuration["ClickUp:ClientId"]!;
                 options.ClientSecret = builder.Configuration["ClickUp:ClientSecret"]!;
+            })
+            .AddGoogle(options =>
+            {
+                options.SignInScheme = IdentityConstants.ExternalScheme;
+                options.ClientId = builder.Configuration["Google:ClientId"]!;
+                options.ClientSecret = builder.Configuration["Google:ClientSecret"]!;
             });
     }
 
