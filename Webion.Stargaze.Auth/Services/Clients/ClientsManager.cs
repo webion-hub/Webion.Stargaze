@@ -18,7 +18,12 @@ public sealed class ClientsManager : IClientsManager
         _logger = logger;
     }
 
-    public async Task<CreateClientResult?> CreateAsync(string name, CancellationToken cancellationToken)
+    public async Task<ClientDbo?> FindByIdAsync(Guid clientId, CancellationToken cancellationToken)
+    {
+        return await _db.Clients.FindAsync([clientId], cancellationToken);
+    }
+
+    public async Task<CreateClientResult> CreateAsync(string name, CancellationToken cancellationToken)
     {
         var clientName = name.Trim();
 
@@ -29,7 +34,7 @@ public sealed class ClientsManager : IClientsManager
         if (isDuplicate)
         {
             _logger.LogWarning("A client with name {Name} already exists", clientName);
-            return null;
+            return new CreateClientResult.Duplicate();
         }
         
         var secretBytes = RandomNumberGenerator.GetBytes(64);
@@ -44,30 +49,20 @@ public sealed class ClientsManager : IClientsManager
 
         _db.Clients.Add(client);
         await _db.SaveChangesAsync(cancellationToken);
-        return new CreateClientResult(
+        return new CreateClientResult.Created(
             Client: client,
             PlainTextSecret: base64Secret
         );
     }
 
-    public async Task<bool> VerifyAsync(Guid id, string base64Secret, CancellationToken cancellationToken)
+    public bool VerifySecret(ClientDbo client, string base64Secret)
     {
         var secret = Convert.FromBase64String(base64Secret);
-        return await VerifyAsync(id, secret, cancellationToken);
+        return VerifySecret(client, secret);
     }
 
-    public async Task<bool> VerifyAsync(Guid id, byte[] secret, CancellationToken cancellationToken)
+    public bool VerifySecret(ClientDbo client, byte[] secret)
     {
-        var client = await _db.Clients
-            .Where(x => x.Id == id)
-            .FirstOrDefaultAsync(cancellationToken);
-
-        if (client is null)
-        {
-            _logger.LogWarning("Could not find client with id {Id}", id);
-            return false;
-        }
-        
         if (!SecretsHasher.Verify(secret, client.Secret))
         {
             _logger.LogWarning("Secrets do not match for client {ClientId}", client.Id);

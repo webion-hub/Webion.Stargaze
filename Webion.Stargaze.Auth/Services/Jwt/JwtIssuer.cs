@@ -1,6 +1,5 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Security.Cryptography;
 using System.Text;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
@@ -9,7 +8,6 @@ using Microsoft.IdentityModel.Tokens;
 using Webion.Stargaze.Auth.Core;
 using Webion.Stargaze.Auth.Services.Jwt.RefreshTokens;
 using Webion.Stargaze.Auth.Settings;
-using Webion.Stargaze.Pgsql;
 using Webion.Stargaze.Pgsql.Entities.Connect;
 using Webion.Stargaze.Pgsql.Entities.Identity;
 
@@ -21,20 +19,20 @@ public sealed class JwtIssuer : IJwtIssuer
     private readonly IUserClaimsPrincipalFactory<UserDbo> _principalFactory;
     private readonly JwtSecurityTokenHandler _jwtHandler = new();
     private readonly JwtSettings _options;
-    private readonly StargazeDbContext _db;
     private readonly TimeProvider _timeProvider;
+    private readonly IRefreshTokenManager _refreshTokenManager;
     private readonly ILogger<JwtIssuer> _logger;
 
-    public JwtIssuer(IUserClaimsPrincipalFactory<UserDbo> principalFactory, IOptions<JwtSettings> options, StargazeDbContext db, TimeProvider timeProvider, ILogger<JwtIssuer> logger)
+    public JwtIssuer(IUserClaimsPrincipalFactory<UserDbo> principalFactory, IOptions<JwtSettings> options, TimeProvider timeProvider, ILogger<JwtIssuer> logger, IRefreshTokenManager refreshTokenManager)
     {
         _principalFactory = principalFactory;
-        _db = db;
         _timeProvider = timeProvider;
         _logger = logger;
+        _refreshTokenManager = refreshTokenManager;
         _options = options.Value;
     }
 
-    public async Task<TokenPair> IssuePairAsync(UserDbo user)
+    public async Task<TokenPair> IssuePairAsync(UserDbo user, ClientDbo client, CancellationToken cancellationToken)
     {
         var userPrincipal = await _principalFactory.CreateAsync(user);
         var claims = new Claim[]
@@ -51,13 +49,14 @@ public sealed class JwtIssuer : IJwtIssuer
             .Where(c => c.Type is Claims.Scopes)
             .Select(c => new Claim(JwtClaims.Scopes, c.Value));
 
+        var utcNow = _timeProvider.GetUtcNow().UtcDateTime;
         var jwtDescriptor = new JwtSecurityToken(
             claims: claims
                 .Concat(roles)
                 .Concat(scopes),
 
-            notBefore: DateTime.UtcNow,
-            expires: DateTime.UtcNow + _options.AccessTokenDuration,
+            notBefore: utcNow,
+            expires: utcNow + _options.AccessTokenDuration,
             issuer: _options.Issuer,
             audience: "https://stargaze.webion.it",
             signingCredentials: new SigningCredentials(
@@ -67,28 +66,9 @@ public sealed class JwtIssuer : IJwtIssuer
         );
 
         var accessToken = _jwtHandler.WriteToken(jwtDescriptor);
-        var refreshToken = await GenerateRefreshTokenAsync(user);
+        var refreshToken = await _refreshTokenManager.GenerateAsync(user, client, cancellationToken);
 
         _logger.LogInformation("Issued token pair for user {UserId}", user.Id);
         return new TokenPair(accessToken, refreshToken);
-    }
-
-
-    private async Task<string> GenerateRefreshTokenAsync(UserDbo user)
-    {
-        var expiresAt = _timeProvider.GetUtcNow() + _options.RefreshTokenDuration;
-        var secret = RandomNumberGenerator.GetBytes(RefreshToken.SecretSize);
-        var token = new RefreshTokenDbo
-        {
-            UserId = user.Id,
-            Secret = SecretsHasher.Hash(secret),
-            ExpiresAt = expiresAt,
-        };
-
-        _db.RefreshTokens.Add(token);
-        await _db.SaveChangesAsync();
-
-        _logger.LogInformation("Generated refresh token for user {UserId}, {@Token}", user.Id, token);
-        return RefreshTokenSerializer.Serialize(token.Id, secret);
     }
 }

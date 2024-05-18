@@ -35,16 +35,21 @@ public sealed class CreateClientCommand : AsyncCommand<CreateClientCommand.Setti
                 cancellationToken: _lifetime.CancellationToken
             );
 
-            if (result is null)
+            switch (result)
             {
-                AnsiConsole.MarkupLine(Msg.Err("Could not create client"));
-                return 1;
+                case CreateClientResult.Duplicate:
+                    AnsiConsole.MarkupLine(Msg.Err($"A client with name {name} already exists"));
+                    return 1;
+                
+                case CreateClientResult.Created c:
+                    AnsiConsole.MarkupLine(Msg.Ok($"Client {c.Client.Name} created"));
+                    AnsiConsole.MarkupLine(Msg.Ok($"Client id: [yellow]{c.Client.Id}[/]"));
+                    AnsiConsole.MarkupLine(Msg.Ok($"Client secret: [blue]{c.PlainTextSecret}[/]"));
+                    return 0;
+                
+                default:
+                    return -1;
             }
-            
-            AnsiConsole.MarkupLine(Msg.Ok($"Client {result.Client.Name} created"));
-            AnsiConsole.MarkupLine(Msg.Ok($"Client id: [yellow]{result.Client.Id}[/]"));
-            AnsiConsole.MarkupLine(Msg.Ok($"Client secret: [blue]{result.PlainTextSecret}[/]"));
-            return 0;
         });
     }
 }

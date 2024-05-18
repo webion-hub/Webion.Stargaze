@@ -14,11 +14,13 @@ public sealed class ExchangeCodeController : ControllerBase
 {
     private readonly IClientsManager _clientsManager;
     private readonly IExchangeCodeManager _exchangeCodeManager;
+    private readonly ILogger<ExchangeCodeController> _logger;
 
-    public ExchangeCodeController(IExchangeCodeManager exchangeCodeManager, IClientsManager clientsManager)
+    public ExchangeCodeController(IExchangeCodeManager exchangeCodeManager, IClientsManager clientsManager, ILogger<ExchangeCodeController> logger)
     {
         _exchangeCodeManager = exchangeCodeManager;
         _clientsManager = clientsManager;
+        _logger = logger;
     }
     
     [HttpPost]
@@ -30,12 +32,14 @@ public sealed class ExchangeCodeController : ControllerBase
         CancellationToken cancellationToken
     )
     {
-        var isValid = await _clientsManager.VerifyAsync(
-            id: request.ClientId,
-            base64Secret: request.ClientSecret,
-            cancellationToken: cancellationToken
-        );
-
+        var client = await _clientsManager.FindByIdAsync(request.ClientId, cancellationToken);
+        if (client is null)
+        {
+            _logger.LogWarning("Could not find client with id {ClientId}", request.ClientId);
+            return Forbid();
+        }
+            
+        var isValid = _clientsManager.VerifySecret(client, request.ClientSecret);
         if (!isValid)
             return Forbid();
         

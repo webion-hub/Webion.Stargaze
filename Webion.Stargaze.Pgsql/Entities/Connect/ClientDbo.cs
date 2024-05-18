@@ -11,6 +11,7 @@ public sealed class ClientDbo : IEntityTypeConfiguration<ClientDbo>
     public byte[] Secret { get; init; } = null!;
     
     public List<ApiKeyDbo> ApiKeys { get; set; } = [];
+    public List<RefreshTokenDbo> RefreshTokens { get; set; } = [];
 
     public void Configure(EntityTypeBuilder<ClientDbo> builder)
     {

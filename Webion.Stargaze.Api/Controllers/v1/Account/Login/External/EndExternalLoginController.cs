@@ -41,6 +41,7 @@ public sealed class EndExternalLoginController : ControllerBase
         CancellationToken cancellationToken
     )
     {
+        await using var transaction = await _db.Database.BeginTransactionAsync(cancellationToken);
         var info = await _signInManager.GetExternalLoginInfoAsync();
         if (info is null)
             return Problem("User information not found");
@@ -61,10 +62,11 @@ public sealed class EndExternalLoginController : ControllerBase
             _logger.LogWarning("Could not find client with id {ClientId}", request.ClientId);
             return Forbid();
         }
-
-        var pair = await _jwtIssuer.IssuePairAsync(user);
+        
+        var pair = await _jwtIssuer.IssuePairAsync(user, client, cancellationToken);
         var code = await _exchangeCodeManager.GetCodeAsync(pair);
 
+        await transaction.CommitAsync(cancellationToken);
         return Redirect(
             $"{request.ExchangeUri}" +
             $"?code={code}" +
