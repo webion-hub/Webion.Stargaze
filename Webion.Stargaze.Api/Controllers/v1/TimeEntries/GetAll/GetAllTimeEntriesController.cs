@@ -22,6 +22,7 @@ public sealed class GetAllTimeEntriesController : ControllerBase
         _db = db;
     }
 
+
     [HttpGet]
     [ProducesResponseType<GetAllTimeEntriesResponse>(200)]
     public async Task<IActionResult> GetAll(

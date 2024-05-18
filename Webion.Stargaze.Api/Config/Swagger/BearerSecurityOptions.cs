@@ -3,7 +3,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace Qubi.Api.Config.Swagger;
+namespace Webion.Stargaze.Api.Config.Swagger;
 
 public sealed class BearerSecurityOptions : IConfigureNamedOptions<SwaggerGenOptions>
 {

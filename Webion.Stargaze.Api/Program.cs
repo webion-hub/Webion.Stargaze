@@ -1,10 +1,10 @@
 using FluentValidation;
 using Qubi.Api.Config;
-using Qubi.Api.Config.Swagger;
 using Webion.Application.Extensions;
 using Webion.AspNetCore;
 using Webion.Stargaze.Api;
 using Webion.Stargaze.Api.Config;
+using Webion.Stargaze.Api.Config.Swagger;
 using Webion.Stargaze.Auth;
 
 var builder = WebApplication.CreateBuilder(args);

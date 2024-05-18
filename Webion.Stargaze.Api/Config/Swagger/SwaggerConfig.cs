@@ -1,6 +1,9 @@
+using System.Reflection;
+using Microsoft.OpenApi.Any;
+using Microsoft.OpenApi.Models;
 using Webion.AspNetCore;
 
-namespace Qubi.Api.Config.Swagger;
+namespace Webion.Stargaze.Api.Config.Swagger;
 
 public sealed class SwaggerConfig : IWebApplicationConfiguration
 {
@@ -10,7 +13,17 @@ public sealed class SwaggerConfig : IWebApplicationConfiguration
         builder.Services.ConfigureOptions<BearerSecurityOptions>();
         builder.Services.AddEndpointsApiExplorer();
 
-        builder.Services.AddSwaggerGen();
+        builder.Services.AddSwaggerGen(options =>
+        {
+            var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+            options.IncludeXmlComments(xmlPath);
+            
+            options.MapType<Guid>(() => new OpenApiSchema { Type = "string", Format = "duration", Example = new OpenApiString(Guid.NewGuid().ToString()), });
+            options.MapType<DateTime>(() => new OpenApiSchema { Type = "string", Format = "duration", Example = new OpenApiString(DateTime.UtcNow.ToString("O")), });
+            options.MapType<DateTimeOffset>(() => new OpenApiSchema { Type = "string", Format = "duration", Example = new OpenApiString(DateTimeOffset.UtcNow.ToString("O")), });
+            options.MapType<TimeSpan>(() => new OpenApiSchema { Type = "string", Format = "duration", Example = new OpenApiString("00:45:00"), });
+        });
 
         builder.Services.AddVersionedApiExplorer(options =>
         {
@@ -40,8 +53,7 @@ public sealed class SwaggerConfig : IWebApplicationConfiguration
                             theme: 'purple',
                         }
 
-                        document.getElementById('api-reference').dataset.configuration =
-                        JSON.stringify(configuration)
+                        document.getElementById('api-reference').dataset.configuration = JSON.stringify(configuration)
                     </script>
                     <script src="https://cdn.jsdelivr.net/npm/@scalar/api-reference"></script>
                 </body>

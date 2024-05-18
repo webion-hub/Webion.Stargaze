@@ -15,7 +15,7 @@ public sealed class GetAllTimeEntriesRequest : PaginatedRequest
     /// Filter the time entries by task.
     /// </summary>
     public Guid? TaskId { get; init; }
-
+    
     /// <summary>
     /// Filter the time entries by project.
     /// </summary>
