@@ -23,6 +23,8 @@ builder.Add<AuthZConfig>();
 builder.Add<CorsConfig>();
 builder.Add<StorageConfig>();
 
+builder.Add<HealthChecksConfig>();
+
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddMemoryCache();
 builder.Services.AddValidatorsFromAssemblyContaining<StargazeApiAssemblyMarker>();
@@ -39,5 +41,6 @@ app.Use<AuthNConfig>();
 app.Use<AuthZConfig>();
 
 app.Use<SwaggerConfig>();
+app.Use<HealthChecksConfig>();
 app.Use<ControllersConfig>();
 app.Run();
