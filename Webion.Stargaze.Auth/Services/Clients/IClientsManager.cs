@@ -3,6 +3,17 @@ namespace Webion.Stargaze.Auth.Services.Clients;
 public interface IClientsManager
 {
     /// <summary>
+    /// Creates a new client with the specified name and returns the created client entity.
+    /// </summary>
+    /// <param name="name">The name of the client.</param>
+    /// <param name="cancellationToken">A CancellationToken to observe while waiting for the task to complete.</param>
+    /// <returns>
+    /// A task representing the asynchronous operation.
+    /// The task result contains the created client entity, or null if the client creation fails.
+    /// </returns>
+    Task<CreateClientResult?> CreateAsync(string name, CancellationToken cancellationToken);
+
+    /// <summary>
     /// Verifies the client's credentials against the specified identifier and base64-encoded secret.
     /// </summary>
     /// <param name="id">The identifier of the client.</param>

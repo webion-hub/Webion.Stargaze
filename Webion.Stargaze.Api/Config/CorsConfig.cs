@@ -6,6 +6,10 @@ public sealed class CorsConfig : IWebApplicationConfiguration
 {
     public void Add(WebApplicationBuilder builder)
     {
+        var origins = builder.Configuration
+            .GetSection("AllowedOrigins")
+            .Get<string[]>()!;
+        
         builder.Services.AddCors(o =>
         {
             o.AddDefaultPolicy(x =>
@@ -13,7 +17,7 @@ public sealed class CorsConfig : IWebApplicationConfiguration
                 x.AllowAnyHeader();
                 x.AllowAnyMethod();
                 x.AllowCredentials();
-                x.SetIsOriginAllowed(_ => true);
+                x.WithOrigins(origins);
             });
         });
     }

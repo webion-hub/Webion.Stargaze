@@ -24,6 +24,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Webion.Stargaze.Auth", "Web
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Webion.AspNetCore.Authentication.ClickUp", "Webion.AspNetCore.Authentication.ClickUp\Webion.AspNetCore.Authentication.ClickUp.csproj", "{33C5AEFB-E634-4E8B-A65D-98C353E7953E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "cli", "cli", "{D27BECD1-3EAF-4E3C-9027-B2A8CBB274A5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Webion.Stargaze.Cli", "Webion.Stargaze.Cli\Webion.Stargaze.Cli.csproj", "{3B16A1EA-853B-4259-8550-2E5C13439FF1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,6 +40,7 @@ Global
 		{54DAF5CD-2B75-4CB5-A654-B2429432F837} = {85093A37-72D6-40F2-915D-D503F836E6E4}
 		{F7E0CE86-18C2-4913-88C6-AB48563758B5} = {5138D26E-107F-4507-9228-7CEA98613F24}
 		{33C5AEFB-E634-4E8B-A65D-98C353E7953E} = {7F60D832-0F35-4044-BE8E-68F703A18206}
+		{3B16A1EA-853B-4259-8550-2E5C13439FF1} = {D27BECD1-3EAF-4E3C-9027-B2A8CBB274A5}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{98A837CD-0586-4141-82CA-89F09AC0773A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -70,5 +75,9 @@ Global
 		{33C5AEFB-E634-4E8B-A65D-98C353E7953E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{33C5AEFB-E634-4E8B-A65D-98C353E7953E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{33C5AEFB-E634-4E8B-A65D-98C353E7953E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B16A1EA-853B-4259-8550-2E5C13439FF1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B16A1EA-853B-4259-8550-2E5C13439FF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B16A1EA-853B-4259-8550-2E5C13439FF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B16A1EA-853B-4259-8550-2E5C13439FF1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
