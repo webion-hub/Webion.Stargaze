@@ -29,7 +29,14 @@ public sealed class SyncClickUpTrackedTimeController : ControllerBase
         _db = db;
     }
 
+    /// <summary>
+    /// Synchronize time entries
+    /// </summary>
+    /// <remarks>
+    /// Synchronizes all time entries.
+    /// </remarks>
     [HttpPost]
+    [ProducesResponseType(200)]
     public async Task<IActionResult> Sync(CancellationToken cancellationToken)
     {
         var teamsResponse = await _clickUpApi.Teams.GetAllAsync();

@@ -11,8 +11,8 @@ namespace Webion.Stargaze.Api.Controllers.v1.ClickUp.Sync.Tasks;
 [ApiController]
 [Authorize]
 [Route("v{version:apiVersion}/clickup/sync/tasks")]
-[Tags("ClickUp")]
 [ApiVersion("1.0")]
+[Tags("ClickUp")]
 public sealed class SyncClickUpTasksController : ControllerBase
 {
     private readonly StargazeDbContext _db;
@@ -24,7 +24,15 @@ public sealed class SyncClickUpTasksController : ControllerBase
         _api = api;
     }
 
+    /// <summary>
+    /// Synchronize tasks
+    /// </summary>
+    /// <remarks>
+    /// Synchronizes all clickup tasks.<br/>
+    /// It works on the lists that were imported using the <c>v1/clickup/sync/objects</c> endpoint.
+    /// </remarks>
     [HttpPost]
+    [ProducesResponseType(200)]
     public async Task<IActionResult> Sync(CancellationToken cancellationToken)
     {
         await using var transaction = await _db.Database.BeginTransactionAsync(cancellationToken);
@@ -43,7 +51,7 @@ public sealed class SyncClickUpTasksController : ControllerBase
                 add: n => new ClickUpTaskDbo
                 {
                     Id = n.Id,
-                    ListId = n.List.Id
+                    ListId = n.List.Id,
                 },
                 update: (o, n) => { },
                 delete: o => _db.Remove(o)

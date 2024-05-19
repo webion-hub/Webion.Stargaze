@@ -20,7 +20,14 @@ public sealed class BeginExternalLoginController : ControllerBase
         _signInManager = signInManager;
     }
 
+    /// <summary>
+    /// External login
+    /// </summary>
+    /// <remarks>
+    /// Allows access via an external provider.
+    /// </remarks>
     [HttpGet]
+    [ProducesResponseType(307)]
     public IActionResult Login(
         [FromRoute] LoginProvider provider,
         [FromQuery] ExternalLoginRequest request

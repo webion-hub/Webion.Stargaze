@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using Spectre.Console.Cli;
 using Webion.Application.Extensions;
 using Webion.Stargaze.Auth;
+using Webion.Stargaze.Auth.Extensions;
 using Webion.Stargaze.Cli.Branches;
 using Webion.Stargaze.Cli.Core;
 using Webion.Stargaze.Cli.DI;
@@ -24,17 +25,14 @@ public static class CliAppBuilder
         var services = new ServiceCollection();
         services.AddSingleton<IConfiguration>(config);
 
+        services.AddLogging(o => o.ClearProviders());
+        
         services.AddSingleton(TimeProvider.System);
         services.AddSingleton<ICliApplicationLifetime, CliApplicationLifetime>();
 
-        services.AddLogging(o =>
-        {
-            o.AddConsole();
-            o.SetMinimumLevel(LogLevel.Warning);
-        });
-
         services.AddModulesFromAssembly<StargazeAuthAssemblyMarker>();
         services.AddStargazeDbContext(config.GetConnectionString("db")!);
+        services.AddStargazeIdentity();
         services.AddMemoryCache();
 
         var registrar = new TypeRegistrar(services);
@@ -42,6 +40,7 @@ public static class CliAppBuilder
 
         app.Configure(o =>
         {
+            o.PropagateExceptions();
             o.AddBranchesFromAssemblyContaining<StargazeCliAssemblyMarker>();
         });
 

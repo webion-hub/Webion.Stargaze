@@ -9,6 +9,6 @@ public sealed class ClientsBranch : IBranchConfig
         return config.AddBranch("clients", clients =>
         {
             clients.AddCommand<CreateClientCommand>("create");
-        });
+        }).WithAlias("client");
     }
 }

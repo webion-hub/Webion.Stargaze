@@ -6,7 +6,7 @@ using Webion.ClickUp.Sync.Synchronization;
 using Webion.Stargaze.Api.Options;
 using Webion.Stargaze.Pgsql;
 
-namespace Webion.Stargaze.Api.Controllers.v1.ClickUp.Objects.Sync;
+namespace Webion.Stargaze.Api.Controllers.v1.ClickUp.Sync.Objects;
 
 [ApiController]
 [Authorize]
@@ -33,6 +33,7 @@ public sealed class SyncClickUpObjectsController : ControllerBase
     /// Synchronizes all spaces, folders and lists.
     /// </remarks>
     [HttpPost]
+    [ProducesResponseType(200)]
     public async Task<IActionResult> Sync(CancellationToken cancellationToken)
     {
         var sync = new ClickUpObjectsSynchronizer(_db, _api);

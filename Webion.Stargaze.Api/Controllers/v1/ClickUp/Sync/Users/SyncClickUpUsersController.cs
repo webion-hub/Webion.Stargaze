@@ -29,7 +29,14 @@ public sealed class SyncClickUpUsersController : ControllerBase
         _userManager = userManager;
     }
 
+    /// <summary>
+    /// Synchronize users
+    /// </summary>
+    /// <remarks>
+    /// Synchronizes all clickup users in the Stargaze database.
+    /// </remarks>
     [HttpPost]
+    [ProducesResponseType(200)]
     public async Task<IActionResult> Sync(CancellationToken cancellationToken)
     {
         await using var transaction = await _db.Database.BeginTransactionAsync(cancellationToken);
@@ -90,6 +97,6 @@ public sealed class SyncClickUpUsersController : ControllerBase
             .AsNoTracking()
             .ToListAsync(cancellationToken);
         
-        return Ok(users);
+        return Ok();
     }
 }

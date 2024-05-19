@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Webion.AspNetCore;
 using Webion.AspNetCore.Authentication.ClickUp;
+using Webion.Stargaze.Auth.Extensions;
 using Webion.Stargaze.Auth.Settings;
 using Webion.Stargaze.Pgsql;
 using Webion.Stargaze.Pgsql.Entities.Identity;
@@ -16,17 +17,7 @@ public sealed class AuthNConfig : IWebApplicationConfiguration
 {
     public void Add(WebApplicationBuilder builder)
     {
-        builder.Services
-            .AddIdentity<UserDbo, RoleDbo>(options =>
-            {
-                options.Password.RequiredLength = 12;
-                options.Password.RequireDigit = false;
-                options.Password.RequireLowercase = false;
-                options.Password.RequireUppercase = false;
-                options.Password.RequireNonAlphanumeric = false;
-            })
-            .AddEntityFrameworkStores<StargazeDbContext>()
-            .AddDefaultTokenProviders();
+        builder.Services.AddStargazeIdentity();
 
         builder.Services.ConfigureApplicationCookie(options =>
         {
