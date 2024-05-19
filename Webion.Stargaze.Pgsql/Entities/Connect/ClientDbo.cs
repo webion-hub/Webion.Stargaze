@@ -12,6 +12,7 @@ public sealed class ClientDbo : IEntityTypeConfiguration<ClientDbo>
     
     public List<ApiKeyDbo> ApiKeys { get; set; } = [];
     public List<RefreshTokenDbo> RefreshTokens { get; set; } = [];
+    public List<RedirectUriDbo> RedirectUris { get; set; } = [];
 
     public void Configure(EntityTypeBuilder<ClientDbo> builder)
     {

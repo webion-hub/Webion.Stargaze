@@ -2,6 +2,7 @@ using System.Reflection;
 using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
 using Webion.AspNetCore;
+using Webion.Stargaze.Core.Entities;
 
 namespace Webion.Stargaze.Api.Config.Swagger;
 
@@ -19,10 +20,11 @@ public sealed class SwaggerConfig : IWebApplicationConfiguration
             var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
             options.IncludeXmlComments(xmlPath);
             
-            options.MapType<Guid>(() => new OpenApiSchema { Type = "string", Format = "duration", Example = new OpenApiString(Guid.NewGuid().ToString()), });
-            options.MapType<DateTime>(() => new OpenApiSchema { Type = "string", Format = "duration", Example = new OpenApiString(DateTime.UtcNow.ToString("O")), });
-            options.MapType<DateTimeOffset>(() => new OpenApiSchema { Type = "string", Format = "duration", Example = new OpenApiString(DateTimeOffset.UtcNow.ToString("O")), });
+            options.MapType<Guid>(() => new OpenApiSchema { Type = "string", Format = "uuid", Example = new OpenApiString(Guid.NewGuid().ToString()), });
+            options.MapType<DateTime>(() => new OpenApiSchema { Type = "string", Format = "date-time", Example = new OpenApiString(DateTime.UtcNow.ToString("O")), });
+            options.MapType<DateTimeOffset>(() => new OpenApiSchema { Type = "string", Format = "date-time", Example = new OpenApiString(DateTimeOffset.UtcNow.ToString("O")), });
             options.MapType<TimeSpan>(() => new OpenApiSchema { Type = "string", Format = "duration", Example = new OpenApiString("00:45:00"), });
+            options.MapType<ClickUpObjectId>(() => new OpenApiSchema { Type = "string", Format = "string", Example = new OpenApiString(new ClickUpObjectId().Serialize()), });
         });
 
         builder.Services.AddVersionedApiExplorer(options =>

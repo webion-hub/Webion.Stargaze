@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Webion.Stargaze.Pgsql;
@@ -11,9 +12,11 @@ using Webion.Stargaze.Pgsql;
 namespace Webion.Stargaze.Pgsql.Migrations.Migrations
 {
     [DbContext(typeof(StargazeDbContext))]
-    partial class StargazeDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240518181851_AddRefreshTokensToClients")]
+    partial class AddRefreshTokensToClients
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -455,42 +458,6 @@ namespace Webion.Stargaze.Pgsql.Migrations.Migrations
                         .HasName("pk_client");
 
                     b.ToTable("client", "connect");
-                });
-
-            modelBuilder.Entity("Webion.Stargaze.Pgsql.Entities.Connect.RedirectUriDbo", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.Property<Guid>("ClientId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("client_id");
-
-                    b.Property<string>("Kind")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("kind");
-
-                    b.Property<string>("Match")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("match");
-
-                    b.Property<string>("Uri")
-                        .IsRequired()
-                        .HasMaxLength(512)
-                        .HasColumnType("character varying(512)")
-                        .HasColumnName("uri");
-
-                    b.HasKey("Id")
-                        .HasName("pk_redirect_uri");
-
-                    b.HasIndex("ClientId")
-                        .HasDatabaseName("ix_redirect_uri_client_id");
-
-                    b.ToTable("redirect_uri", "connect");
                 });
 
             modelBuilder.Entity("Webion.Stargaze.Pgsql.Entities.Connect.RefreshTokenDbo", b =>
@@ -1256,18 +1223,6 @@ namespace Webion.Stargaze.Pgsql.Migrations.Migrations
                     b.Navigation("Client");
                 });
 
-            modelBuilder.Entity("Webion.Stargaze.Pgsql.Entities.Connect.RedirectUriDbo", b =>
-                {
-                    b.HasOne("Webion.Stargaze.Pgsql.Entities.Connect.ClientDbo", "Client")
-                        .WithMany("RedirectUris")
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_redirect_uri_client_client_id");
-
-                    b.Navigation("Client");
-                });
-
             modelBuilder.Entity("Webion.Stargaze.Pgsql.Entities.Connect.RefreshTokenDbo", b =>
                 {
                     b.HasOne("Webion.Stargaze.Pgsql.Entities.Connect.ClientDbo", "Client")
@@ -1552,8 +1507,6 @@ namespace Webion.Stargaze.Pgsql.Migrations.Migrations
             modelBuilder.Entity("Webion.Stargaze.Pgsql.Entities.Connect.ClientDbo", b =>
                 {
                     b.Navigation("ApiKeys");
-
-                    b.Navigation("RedirectUris");
 
                     b.Navigation("RefreshTokens");
                 });

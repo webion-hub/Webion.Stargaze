@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Webion.ClickUp.Api.V2;
-using Webion.ClickUp.Api.V2.Tasks.Dtos;
 using Webion.Extensions.Linq;
 using Webion.Stargaze.Pgsql;
 using Webion.Stargaze.Pgsql.Entities.ClickUp;
@@ -12,7 +11,7 @@ namespace Webion.Stargaze.Api.Controllers.v1.ClickUp.Sync.Tasks;
 [ApiController]
 [Authorize]
 [Route("v{version:apiVersion}/clickup/sync/tasks")]
-[Tags("ClickUp Sync")]
+[Tags("ClickUp")]
 [ApiVersion("1.0")]
 public sealed class SyncClickUpTasksController : ControllerBase
 {
@@ -33,15 +32,13 @@ public sealed class SyncClickUpTasksController : ControllerBase
             .Include(x => x.Tasks)
             .ToListAsync(cancellationToken);
 
-        foreach (var list in lists)
+        var requests = lists.Select(x => _api.Tasks.GetAllAsync(x.Id));
+        var responses = await Task.WhenAll(requests);
+        
+        foreach (var (list, response) in lists.Zip(responses))
         {
-            var tasksResponse = await _api.Tasks.GetAllAsync(
-                Convert.ToInt64(list.Id),
-                new GetAllTasksRequest()
-            );
-
             list.Tasks.SoftReplace(
-                replacement: tasksResponse.Tasks,
+                replacement: response.Tasks,
                 match: (o, n) => o.Id == n.Id,
                 add: n => new ClickUpTaskDbo
                 {

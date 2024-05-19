@@ -46,6 +46,7 @@
     <ItemGroup>
       <ProjectReference Include="..\Webion.AspNetCore.Authentication.ClickUp\Webion.AspNetCore.Authentication.ClickUp.csproj" />
       <ProjectReference Include="..\Webion.ClickUp.Api.V2\Webion.ClickUp.Api.V2.csproj" />
+      <ProjectReference Include="..\Webion.ClickUp.Services\Webion.ClickUp.Services.csproj" />
       <ProjectReference Include="..\Webion.Stargaze.Auth\Webion.Stargaze.Auth.csproj" />
       <ProjectReference Include="..\Webion.Stargaze.Pgsql\Webion.Stargaze.Pgsql.csproj" />
     </ItemGroup>

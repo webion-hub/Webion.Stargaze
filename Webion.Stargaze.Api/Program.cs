@@ -9,6 +9,8 @@ using Webion.Stargaze.Auth;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Configuration.AddJsonFile("appsettings.Development.json", false);
+
 builder.Add<LoggingConfig>();
 
 builder.Add<ApiVersioningConfig>();

@@ -1,54 +1,43 @@
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Webion.ClickUp.Api.V2;
 using Webion.Extensions.Linq;
 using Webion.Stargaze.Pgsql;
 using Webion.Stargaze.Pgsql.Entities.ClickUp;
 
-namespace Webion.Stargaze.Api.Controllers.v1.ClickUp.Sync.Lists;
+namespace Webion.ClickUp.Sync.Synchronization.Impl;
 
-[ApiController]
-[Authorize]
-[Route("v{version:apiVersion}/clickup/sync/lists")]
-[Tags("ClickUp Sync")]
-[ApiVersion("1.0")]
-
-public sealed class SyncClickUpListsController : ControllerBase
+internal sealed class ClickUpListsSynchronizer
 {
     private readonly StargazeDbContext _db;
     private readonly IClickUpApi _api;
 
-    public SyncClickUpListsController(StargazeDbContext db, IClickUpApi api)
+    public ClickUpListsSynchronizer(StargazeDbContext db, IClickUpApi api)
     {
         _db = db;
         _api = api;
     }
-
-    [HttpPost]
-    public async Task<IActionResult> Sync(CancellationToken cancellationToken)
+    
+    public async Task SynchronizeAsync(CancellationToken cancellationToken)
     {
-        await using var transaction = await _db.Database.BeginTransactionAsync(cancellationToken);
-        
         await SyncSpaceListsAsync(cancellationToken);
         await SyncFolderListsAsync(cancellationToken);
-
-        await transaction.CommitAsync(cancellationToken);
-        return Ok();
     }
 
     private async Task SyncSpaceListsAsync(CancellationToken cancellationToken)
     {
         var spaces = await _db.ClickUpSpaces
-            .Include(x => x.Lists)
+            .Include(x => x.Lists
+                .Where(f => f.FolderId == null)
+            )
             .ToListAsync(cancellationToken);
 
-        foreach (var space in spaces)
+        var requests = spaces.Select(x => _api.Lists.GetNotInFolderAsync(x.Id));
+        var responses = await Task.WhenAll(requests);
+        
+        foreach (var (space, response) in spaces.Zip(responses))
         {
-            var listsResponse = await _api.Lists.GetNotInFolderAsync(space.Id);
-
             space.Lists.SoftReplace(
-                replacement: listsResponse.Lists,
+                replacement: response.Lists,
                 match: (o, n) => o.Id == n.Id,
                 add: n => new ClickUpListDbo
                 {
@@ -70,15 +59,18 @@ public sealed class SyncClickUpListsController : ControllerBase
     private async Task SyncFolderListsAsync(CancellationToken cancellationToken)
     {
         var folders = await _db.ClickUpFolders
-            .Include(x => x.Lists)
+            .Include(x => x.Lists
+                .Where(f => f.FolderId != null)
+            )
             .ToListAsync(cancellationToken);
 
-        foreach (var folder in folders)
-        {
-            var listsResponse = await _api.Lists.GetInFolderAsync(folder.Id);
+        var requests = folders.Select(x => _api.Lists.GetInFolderAsync(x.Id));
+        var responses = await Task.WhenAll(requests);
 
+        foreach (var (folder, response) in folders.Zip(responses))
+        {
             folder.Lists.SoftReplace(
-                replacement: listsResponse.Lists,
+                replacement: response.Lists,
                 match: (o, n) => o.Id == n.Id,
                 add: n => new ClickUpListDbo
                 {

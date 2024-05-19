@@ -5,6 +5,6 @@ namespace Webion.ClickUp.Api.V2.Folders;
 
 public interface IClickUpFoldersApi
 {
-    [Get("/v2/space/{space_id}/folder")]
-    Task<GetAllFoldersResponse> GetAllAsync([AliasAs("space_id")] long spaceId, [Query, AliasAs("archived")] bool? Archived);
+    [Get("/v2/space/{spaceId}/folder")]
+    Task<GetAllFoldersResponse> GetAllAsync(string spaceId, [Query] bool? archived);
 }
