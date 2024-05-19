@@ -13,6 +13,6 @@ public static class AbstractValidatorExtensions
     {
         var result = await validator.ValidateAsync(model, cancellationToken);
         foreach (var e in result.Errors)
-            modelState.AddModelError(e.ErrorCode, e.ErrorMessage);
+            modelState.AddModelError(e.PropertyName, e.ErrorMessage);
     }
 }
