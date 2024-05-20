@@ -19,6 +19,13 @@ public class LinkClickUpObjectController : ControllerBase
         _db = db;
     }
 
+    /// <summary>
+    /// Link clickup object
+    /// </summary>
+    /// <remarks>
+    /// Links a clickup object to this project.<br/>
+    /// This will ensure that all synchronized tasks will be added to it.
+    /// </remarks>
     [HttpPut]
     public async Task<IActionResult> Link(
         [FromRoute] Guid projectId,
