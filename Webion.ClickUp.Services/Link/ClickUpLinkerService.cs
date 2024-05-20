@@ -1,8 +1,10 @@
+using System.Collections;
 using Microsoft.EntityFrameworkCore;
 using Webion.Extensions.Linq;
 using Webion.Stargaze.Core.Entities;
 using Webion.Stargaze.Core.Enums;
 using Webion.Stargaze.Pgsql;
+using Webion.Stargaze.Pgsql.Entities.ClickUp;
 
 namespace Webion.Stargaze.Services.Link;
 
@@ -15,44 +17,18 @@ public sealed class ClickUpLinkerService
         _db = db;
     }
 
-    public async Task<bool> LinkAsync(Guid projectId, List<ClickUpObjectId> clickUpObjectIds)
+    public async Task<bool> LinkAsync(Guid projectId, List<ClickUpObjectId> clickUpObjectIds, CancellationToken cancellationToken)
     {
-        var clickUpSpacesIds = clickUpObjectIds
-            .Where(x => x.Type == ClickUpObjectType.Space)
-            .Select(x => x.Id)
-            .ToList();
-
-        var clickUpSpaces = await _db.ClickUpSpaces
-            .Include(x => x.Projects)
-            .Where(x => clickUpSpacesIds.Contains(x.Id))
-            .ToListAsync();
-
-        var clickUpListsIds = clickUpObjectIds
-            .Where(x => x.Type == ClickUpObjectType.List)
-            .Select(x => x.Id)
-            .ToList();
-
-        var clickUpLists = await _db.ClickUpLists
-            .Include(x => x.Projects)
-            .Where(x => clickUpListsIds.Contains(x.Id))
-            .ToListAsync();
-
-        var clickUpFoldersIds = clickUpObjectIds
-            .Where(x => x.Type == ClickUpObjectType.Folder)
-            .Select(x => x.Id)
-            .ToList();
-
-        var clickUpFolders = await _db.ClickUpFolders
-            .Include(x => x.Projects)
-            .Where(x => clickUpFoldersIds.Contains(x.Id))
-            .ToListAsync();
+        var clickUpSpaces = (List<ClickUpSpaceDbo>)await GetClickUpObjects(clickUpObjectIds, ClickUpObjectType.Space, cancellationToken);
+        var clickUpLists = (List<ClickUpListDbo>)await GetClickUpObjects(clickUpObjectIds, ClickUpObjectType.List, cancellationToken);
+        var clickUpFolders = (List<ClickUpFolderDbo>)await GetClickUpObjects(clickUpObjectIds, ClickUpObjectType.Folder, cancellationToken);
 
         var project = await _db.Projects
             .Include(x => x.ClickUpSpaces)
             .Include(x => x.ClickUpLists)
             .Include(x => x.ClickUpFolders)
             .Where(x => x.Id == projectId)
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(cancellationToken);
 
         if (project is null)
             return false;
@@ -81,7 +57,32 @@ public sealed class ClickUpLinkerService
             delete: (n) => n.Projects.Remove(project)
         );
 
-        await _db.SaveChangesAsync();
+        await _db.SaveChangesAsync(cancellationToken);
         return true;
+    }
+
+    private async Task<IEnumerable> GetClickUpObjects(List<ClickUpObjectId> ids, ClickUpObjectType type, CancellationToken cancellationToken)
+    {
+        var typedClickUpObjectsIds = ids
+            .Where(x => x.Type == type)
+            .Select(x => x.Id)
+            .ToList();
+
+        return type switch
+        {
+            ClickUpObjectType.Space => await _db.ClickUpSpaces
+                .Include(x => x.Projects)
+                .Where(x => typedClickUpObjectsIds.Contains(x.Id))
+                .ToListAsync(cancellationToken),
+            ClickUpObjectType.List => await _db.ClickUpLists
+                .Include(x => x.Projects)
+                .Where(x => typedClickUpObjectsIds.Contains(x.Id))
+                .ToListAsync(cancellationToken),
+            ClickUpObjectType.Folder => await _db.ClickUpFolders
+                .Include(x => x.Projects)
+                .Where(x => typedClickUpObjectsIds.Contains(x.Id))
+                .ToListAsync(cancellationToken),
+            _ => throw new NotImplementedException(),
+        };
     }
 }

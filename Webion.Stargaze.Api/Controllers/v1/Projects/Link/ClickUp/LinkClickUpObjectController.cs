@@ -6,7 +6,7 @@ namespace Webion.Stargaze.Api.Controllers.v1.Projects.Link.ClickUp;
 
 [Authorize]
 [ApiController]
-[Route("v{version:apiVersion}/projects/{projectId:guid}/link/")]
+[Route("v{version:apiVersion}/projects/{projectId:guid}/link")]
 [ApiVersion("1.0")]
 [Tags("Projects")]
 public class LinkClickUpObjectController : ControllerBase
@@ -27,10 +27,11 @@ public class LinkClickUpObjectController : ControllerBase
     [HttpPut]
     public async Task<IActionResult> Link(
         [FromRoute] Guid projectId,
-        [FromBody] LinkClickUpObjectRequest request
+        [FromBody] LinkClickUpObjectRequest request,
+        CancellationToken cancellationToken
     )
     {
-        var result = await _linker.LinkAsync(projectId, request.ClickUpObjectIds);
+        var result = await _linker.LinkAsync(projectId, request.ClickUpObjectIds, cancellationToken);
 
         if (!result)
             NotFound();
