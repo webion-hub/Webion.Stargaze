@@ -25,6 +25,8 @@ public class LinkClickUpObjectController : ControllerBase
     /// This will ensure that all synchronized tasks will be added to it.
     /// </remarks>
     [HttpPut]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(404)]
     public async Task<IActionResult> Link(
         [FromRoute] Guid projectId,
         [FromBody] LinkClickUpObjectRequest request,

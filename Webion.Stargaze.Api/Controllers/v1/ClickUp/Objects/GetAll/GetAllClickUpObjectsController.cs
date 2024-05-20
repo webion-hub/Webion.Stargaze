@@ -56,8 +56,8 @@ public sealed class GetAllClickUpObjectsController : ControllerBase
             .Where(x => x.FolderId == null)
             .Select(x => new ClickUpObjectDto
             {
-                Id = new ClickUpObjectId(x.Id, ClickUpObjectType.Folder),
-                Type = ClickUpObjectType.Folder,
+                Id = new ClickUpObjectId(x.Id, ClickUpObjectType.List),
+                Type = ClickUpObjectType.List,
                 Path = $"{x.Space.Name} / {x.Name}",
             })
             .AsNoTracking()
@@ -67,8 +67,8 @@ public sealed class GetAllClickUpObjectsController : ControllerBase
             .Where(x => x.FolderId != null)
             .Select(x => new ClickUpObjectDto
             {
-                Id = new ClickUpObjectId(x.Id, ClickUpObjectType.Folder),
-                Type = ClickUpObjectType.Folder,
+                Id = new ClickUpObjectId(x.Id, ClickUpObjectType.List),
+                Type = ClickUpObjectType.List,
                 Path = $"{x.Space.Name} / {x.Folder!.Name} / {x.Name}",
             })
             .AsNoTracking()

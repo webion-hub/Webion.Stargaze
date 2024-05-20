@@ -21,6 +21,7 @@ public class GetAllLinkedObjectsController : ControllerBase
     }
 
     [HttpGet]
+    [ProducesResponseType(200)]
     public async Task<IActionResult> GetAll(
         [FromRoute] Guid projectId,
         CancellationToken cancellationToken
