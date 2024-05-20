@@ -18,6 +18,7 @@ builder.Add<SwaggerConfig>();
 builder.Add<OptionsConfig>();
 builder.Add<ControllersConfig>();
 builder.Add<ClickUpApiConfig>();
+builder.Add<ApiServicesConfig>();
 
 builder.Add<AuthNConfig>();
 builder.Add<AuthZConfig>();

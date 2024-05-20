@@ -1,22 +1,20 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Webion.Stargaze.Core.Entities;
-using Webion.Stargaze.Pgsql;
+using Webion.Stargaze.Services.Link;
 
 namespace Webion.Stargaze.Api.Controllers.v1.Projects.Link.ClickUp;
 
 [Authorize]
 [ApiController]
-[Route("v{version:apiVersion}/projects/{projectId:guid}/link/{clickUpObjectId}")]
+[Route("v{version:apiVersion}/projects/{projectId:guid}/link/")]
 [ApiVersion("1.0")]
 [Tags("Projects")]
 public class LinkClickUpObjectController : ControllerBase
 {
-    private readonly StargazeDbContext _db;
-
-    public LinkClickUpObjectController(StargazeDbContext db)
+    private readonly ClickUpLinkerService _linker;
+    public LinkClickUpObjectController(ClickUpLinkerService linker)
     {
-        _db = db;
+        _linker = linker;
     }
 
     /// <summary>
@@ -29,11 +27,14 @@ public class LinkClickUpObjectController : ControllerBase
     [HttpPut]
     public async Task<IActionResult> Link(
         [FromRoute] Guid projectId,
-        [FromRoute] ClickUpObjectId clickUpObjectId
+        [FromBody] LinkClickUpObjectRequest request
     )
     {
-        
-        
+        var result = await _linker.LinkAsync(projectId, request.ClickUpObjectIds);
+
+        if (!result)
+            NotFound();
+
         return Ok();
     }
 }
