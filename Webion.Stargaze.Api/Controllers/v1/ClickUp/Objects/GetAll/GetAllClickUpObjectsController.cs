@@ -20,7 +20,7 @@ public sealed class GetAllClickUpObjectsController : ControllerBase
     {
         _db = db;
     }
-    
+
     /// <summary>
     /// Get all objects
     /// </summary>
@@ -47,7 +47,7 @@ public sealed class GetAllClickUpObjectsController : ControllerBase
             {
                 Id = new ClickUpObjectId(x.Id, ClickUpObjectType.Folder),
                 Type = ClickUpObjectType.Folder,
-                Path = $"{x.Space.Name} / {x.Name}",
+                Path = x.Path,
             })
             .AsNoTracking()
             .ToListAsync(cancellationToken);
@@ -58,7 +58,7 @@ public sealed class GetAllClickUpObjectsController : ControllerBase
             {
                 Id = new ClickUpObjectId(x.Id, ClickUpObjectType.List),
                 Type = ClickUpObjectType.List,
-                Path = $"{x.Space.Name} / {x.Name}",
+                Path = x.Path,
             })
             .AsNoTracking()
             .ToListAsync(cancellationToken);
@@ -69,7 +69,7 @@ public sealed class GetAllClickUpObjectsController : ControllerBase
             {
                 Id = new ClickUpObjectId(x.Id, ClickUpObjectType.List),
                 Type = ClickUpObjectType.List,
-                Path = $"{x.Space.Name} / {x.Folder!.Name} / {x.Name}",
+                Path = x.Path,
             })
             .AsNoTracking()
             .ToListAsync(cancellationToken);

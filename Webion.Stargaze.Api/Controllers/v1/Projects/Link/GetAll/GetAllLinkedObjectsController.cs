@@ -33,7 +33,9 @@ public class GetAllLinkedObjectsController : ControllerBase
             .Select(x => new LinkedObjectDto
             {
                 Id = x.Id,
-                Name = x.Name
+                Name = x.Name,
+                Type = Core.Enums.ClickUpObjectType.List,
+                Path = x.Path
             })
             .ToListAsync(cancellationToken);
 
@@ -43,7 +45,9 @@ public class GetAllLinkedObjectsController : ControllerBase
             .Select(x => new LinkedObjectDto
             {
                 Id = x.Id,
-                Name = x.Name
+                Name = x.Name,
+                Type = Core.Enums.ClickUpObjectType.Space,
+                Path = x.Path
             })
             .ToListAsync(cancellationToken);
 
@@ -53,15 +57,16 @@ public class GetAllLinkedObjectsController : ControllerBase
             .Select(x => new LinkedObjectDto
             {
                 Id = x.Id,
-                Name = x.Name
+                Name = x.Name,
+                Type = Core.Enums.ClickUpObjectType.Folder,
+                Path = x.Path
             })
             .ToListAsync(cancellationToken);
 
-        var response = new GetAllLinkedObjectsResponse
-        {
-            LinkedObjects = linkedLists.Concat(linkedSpaces).Concat(linkedFolders)
-        };
-
-        return Ok(response);
+        return Ok(linkedLists
+            .Concat(linkedSpaces)
+            .Concat(linkedFolders)
+            .OrderBy(x => x.Path)
+        );
     }
 }
