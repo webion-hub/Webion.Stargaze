@@ -25,7 +25,7 @@ internal sealed class ClickUpFoldersSynchronizer
 
         var requests = spaces.Select(x => _api.Folders.GetAllAsync(x.Id, null));
         var responses = await Task.WhenAll(requests);
-        
+
         foreach (var (space, response) in spaces.Zip(responses))
         {
             space.Folders.SoftReplace(
@@ -35,11 +35,13 @@ internal sealed class ClickUpFoldersSynchronizer
                 {
                     Id = n.Id,
                     SpaceId = n.Space.Id,
-                    Name = n.Name
+                    Name = n.Name,
+                    Path = $"{n.Space.Name} / {n.Name}"
                 },
                 update: (o, n) =>
                 {
                     o.Name = n.Name;
+                    o.Path = $"{n.Space.Name} / {n.Name}";
                 },
                 delete: o => _db.Remove(o)
             );

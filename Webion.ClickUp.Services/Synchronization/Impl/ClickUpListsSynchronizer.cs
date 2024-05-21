@@ -16,7 +16,7 @@ internal sealed class ClickUpListsSynchronizer
         _db = db;
         _api = api;
     }
-    
+
     public async Task SynchronizeAsync(CancellationToken cancellationToken)
     {
         await SyncSpaceListsAsync(cancellationToken);
@@ -33,7 +33,7 @@ internal sealed class ClickUpListsSynchronizer
 
         var requests = spaces.Select(x => _api.Lists.GetNotInFolderAsync(x.Id));
         var responses = await Task.WhenAll(requests);
-        
+
         foreach (var (space, response) in spaces.Zip(responses))
         {
             space.Lists.SoftReplace(
@@ -44,10 +44,12 @@ internal sealed class ClickUpListsSynchronizer
                     Id = n.Id,
                     SpaceId = n.Space.Id,
                     Name = n.Name,
+                    Path = $"{n.Space.Name} / {n.Name}"
                 },
                 update: (o, n) =>
                 {
                     o.Name = n.Name;
+                    o.Path = $"{n.Space.Name} / {n.Name}";
                 },
                 delete: o => _db.Remove(o)
             );
@@ -77,10 +79,12 @@ internal sealed class ClickUpListsSynchronizer
                     Id = n.Id,
                     SpaceId = n.Space.Id,
                     Name = n.Name,
+                    Path = $"{n.Space.Name} / {n.Folder!.Name} / {n.Name}"
                 },
                 update: (o, n) =>
                 {
                     o.Name = n.Name;
+                    o.Path = $"{n.Space.Name} / {n.Folder!.Name} / {n.Name}";
                 },
                 delete: o => _db.Remove(o)
             );
