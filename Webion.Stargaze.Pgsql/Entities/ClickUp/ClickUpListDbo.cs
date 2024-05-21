@@ -4,12 +4,12 @@ using Webion.Stargaze.Pgsql.Entities.Projects;
 
 namespace Webion.Stargaze.Pgsql.Entities.ClickUp;
 
-public sealed class ClickUpListDbo : IEntityTypeConfiguration<ClickUpListDbo>
+public sealed class ClickUpListDbo : IEntityTypeConfiguration<ClickUpListDbo>, IClickUpObject
 {
     public string Id { get; set; } = null!;
     public string SpaceId { get; set; } = null!;
     public string? FolderId { get; set; }
-    
+
     public string? Name { get; set; }
 
     public ClickUpSpaceDbo Space { get; set; } = null!;
@@ -28,17 +28,17 @@ public sealed class ClickUpListDbo : IEntityTypeConfiguration<ClickUpListDbo>
             .WithMany(x => x.Lists)
             .HasForeignKey(x => x.SpaceId)
             .OnDelete(DeleteBehavior.Cascade);
-        
+
         builder
             .HasOne(x => x.Folder)
             .WithMany(x => x.Lists)
             .HasForeignKey(x => x.FolderId)
             .IsRequired(false)
             .OnDelete(DeleteBehavior.SetNull);
-        
+
         builder
             .HasMany(x => x.Projects)
             .WithMany(x => x.ClickUpLists)
-            .UsingEntity("click_up_project_list");
+            .UsingEntity(j => j.ToTable("click_up_project_list", Schemas.ClickUp));
     }
 }

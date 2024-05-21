@@ -19,6 +19,8 @@ public sealed class ProjectDbo : IEntityTypeConfiguration<ProjectDbo>
     public List<TaskDbo> Tasks { get; set; } = [];
     public List<TimePackageDbo> TimePackages { get; set; } = [];
     public List<ClickUpListDbo> ClickUpLists { get; set; } = [];
+    public List<ClickUpSpaceDbo> ClickUpSpaces { get; set; } = [];
+    public List<ClickUpFolderDbo> ClickUpFolders { get; set; } = [];
 
     public void Configure(EntityTypeBuilder<ProjectDbo> builder)
     {

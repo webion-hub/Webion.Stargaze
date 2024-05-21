@@ -17,16 +17,20 @@ internal sealed class ClickUpSpacesSynchronizer
         _db = db;
         _api = api;
     }
-    
+
     public async Task SynchronizeAsync(ClickUpId teamId, CancellationToken cancellationToken)
     {
-        var spacesResponse = await _api.Spaces.GetAllAsync(teamId, null!);
+        var spacesResponse = await _api.Spaces.GetAllAsync(teamId);
         var spaces = await _db.ClickUpSpaces.ToListAsync(cancellationToken);
 
-        var newSpaceIds = spacesResponse.Spaces
+        var newSpaces = spacesResponse.Spaces
             .Where(x => spaces.All(s => s.Id != x.Id))
-            .Select(x => x.Id);
-        
+            .Select(x => new ClickUpSpaceDbo
+            {
+                Id = x.Id,
+                Name = x.Name,
+            });
+
         spaces.SoftReplace(
             replacement: spacesResponse.Spaces,
             match: (o, n) => o.Id == n.Id,
@@ -42,9 +46,8 @@ internal sealed class ClickUpSpacesSynchronizer
             delete: o => _db.Remove(o)
         );
 
-        var newSpaces = spaces.Where(x => newSpaceIds.Contains(x.Id));
         _db.AddRange(newSpaces);
-        
+
         await _db.SaveChangesAsync(cancellationToken);
     }
 }

@@ -8,8 +8,6 @@ using Webion.AspNetCore;
 using Webion.AspNetCore.Authentication.ClickUp;
 using Webion.Stargaze.Auth.Extensions;
 using Webion.Stargaze.Auth.Settings;
-using Webion.Stargaze.Pgsql;
-using Webion.Stargaze.Pgsql.Entities.Identity;
 
 namespace Webion.Stargaze.Api.Config;
 

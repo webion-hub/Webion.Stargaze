@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Webion.Stargaze.Pgsql;
@@ -11,9 +12,11 @@ using Webion.Stargaze.Pgsql;
 namespace Webion.Stargaze.Pgsql.Migrations.Migrations
 {
     [DbContext(typeof(StargazeDbContext))]
-    partial class StargazeDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240520083427_AddProjectsNavigations")]
+    partial class AddProjectsNavigations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,63 +24,6 @@ namespace Webion.Stargaze.Pgsql.Migrations.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("ClickUpFolderDboProjectDbo", b =>
-                {
-                    b.Property<string>("ClickUpFoldersId")
-                        .HasColumnType("text")
-                        .HasColumnName("click_up_folders_id");
-
-                    b.Property<Guid>("ProjectsId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("projects_id");
-
-                    b.HasKey("ClickUpFoldersId", "ProjectsId")
-                        .HasName("pk_click_up_project_folder");
-
-                    b.HasIndex("ProjectsId")
-                        .HasDatabaseName("ix_click_up_project_folder_projects_id");
-
-                    b.ToTable("click_up_project_folder", "click_up");
-                });
-
-            modelBuilder.Entity("ClickUpListDboProjectDbo", b =>
-                {
-                    b.Property<string>("ClickUpListsId")
-                        .HasColumnType("text")
-                        .HasColumnName("click_up_lists_id");
-
-                    b.Property<Guid>("ProjectsId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("projects_id");
-
-                    b.HasKey("ClickUpListsId", "ProjectsId")
-                        .HasName("pk_click_up_project_list");
-
-                    b.HasIndex("ProjectsId")
-                        .HasDatabaseName("ix_click_up_project_list_projects_id");
-
-                    b.ToTable("click_up_project_list", "click_up");
-                });
-
-            modelBuilder.Entity("ClickUpSpaceDboProjectDbo", b =>
-                {
-                    b.Property<string>("ClickUpSpacesId")
-                        .HasColumnType("text")
-                        .HasColumnName("click_up_spaces_id");
-
-                    b.Property<Guid>("ProjectsId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("projects_id");
-
-                    b.HasKey("ClickUpSpacesId", "ProjectsId")
-                        .HasName("pk_click_up_project_space");
-
-                    b.HasIndex("ProjectsId")
-                        .HasDatabaseName("ix_click_up_project_space_projects_id");
-
-                    b.ToTable("click_up_project_space", "click_up");
-                });
 
             modelBuilder.Entity("Webion.Stargaze.Pgsql.Entities.Accounting.BankAccountDbo", b =>
                 {
@@ -1062,6 +1008,63 @@ namespace Webion.Stargaze.Pgsql.Migrations.Migrations
                     b.ToTable("time_package_rate", "time_tracking");
                 });
 
+            modelBuilder.Entity("click_up_project_folder", b =>
+                {
+                    b.Property<string>("ClickUpFoldersId")
+                        .HasColumnType("text")
+                        .HasColumnName("click_up_folders_id");
+
+                    b.Property<Guid>("ProjectsId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("projects_id");
+
+                    b.HasKey("ClickUpFoldersId", "ProjectsId")
+                        .HasName("pk_click_up_project_folder");
+
+                    b.HasIndex("ProjectsId")
+                        .HasDatabaseName("ix_click_up_project_folder_projects_id");
+
+                    b.ToTable("click_up_project_folder", (string)null);
+                });
+
+            modelBuilder.Entity("click_up_project_list", b =>
+                {
+                    b.Property<string>("ClickUpListsId")
+                        .HasColumnType("text")
+                        .HasColumnName("click_up_lists_id");
+
+                    b.Property<Guid>("ProjectsId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("projects_id");
+
+                    b.HasKey("ClickUpListsId", "ProjectsId")
+                        .HasName("pk_click_up_project_list");
+
+                    b.HasIndex("ProjectsId")
+                        .HasDatabaseName("ix_click_up_project_list_projects_id");
+
+                    b.ToTable("click_up_project_list", (string)null);
+                });
+
+            modelBuilder.Entity("click_up_project_space", b =>
+                {
+                    b.Property<string>("ClickUpSpacesId")
+                        .HasColumnType("text")
+                        .HasColumnName("click_up_spaces_id");
+
+                    b.Property<Guid>("ProjectsId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("projects_id");
+
+                    b.HasKey("ClickUpSpacesId", "ProjectsId")
+                        .HasName("pk_click_up_project_space");
+
+                    b.HasIndex("ProjectsId")
+                        .HasDatabaseName("ix_click_up_project_space_projects_id");
+
+                    b.ToTable("click_up_project_space", (string)null);
+                });
+
             modelBuilder.Entity("invoice_document", b =>
                 {
                     b.Property<Guid>("DocumentsId")
@@ -1117,57 +1120,6 @@ namespace Webion.Stargaze.Pgsql.Migrations.Migrations
                         .HasDatabaseName("ix_user_task_tasks_id");
 
                     b.ToTable("user_task", (string)null);
-                });
-
-            modelBuilder.Entity("ClickUpFolderDboProjectDbo", b =>
-                {
-                    b.HasOne("Webion.Stargaze.Pgsql.Entities.ClickUp.ClickUpFolderDbo", null)
-                        .WithMany()
-                        .HasForeignKey("ClickUpFoldersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_click_up_project_folder_folder_click_up_folders_id");
-
-                    b.HasOne("Webion.Stargaze.Pgsql.Entities.Projects.ProjectDbo", null)
-                        .WithMany()
-                        .HasForeignKey("ProjectsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_click_up_project_folder_projects_projects_id");
-                });
-
-            modelBuilder.Entity("ClickUpListDboProjectDbo", b =>
-                {
-                    b.HasOne("Webion.Stargaze.Pgsql.Entities.ClickUp.ClickUpListDbo", null)
-                        .WithMany()
-                        .HasForeignKey("ClickUpListsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_click_up_project_list_list_click_up_lists_id");
-
-                    b.HasOne("Webion.Stargaze.Pgsql.Entities.Projects.ProjectDbo", null)
-                        .WithMany()
-                        .HasForeignKey("ProjectsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_click_up_project_list_projects_projects_id");
-                });
-
-            modelBuilder.Entity("ClickUpSpaceDboProjectDbo", b =>
-                {
-                    b.HasOne("Webion.Stargaze.Pgsql.Entities.ClickUp.ClickUpSpaceDbo", null)
-                        .WithMany()
-                        .HasForeignKey("ClickUpSpacesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_click_up_project_space_space_click_up_spaces_id");
-
-                    b.HasOne("Webion.Stargaze.Pgsql.Entities.Projects.ProjectDbo", null)
-                        .WithMany()
-                        .HasForeignKey("ProjectsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_click_up_project_space_projects_projects_id");
                 });
 
             modelBuilder.Entity("Webion.Stargaze.Pgsql.Entities.Accounting.InvoiceDbo", b =>
@@ -1522,6 +1474,57 @@ namespace Webion.Stargaze.Pgsql.Migrations.Migrations
                     b.Navigation("TimePackage");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("click_up_project_folder", b =>
+                {
+                    b.HasOne("Webion.Stargaze.Pgsql.Entities.ClickUp.ClickUpFolderDbo", null)
+                        .WithMany()
+                        .HasForeignKey("ClickUpFoldersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_click_up_project_folder_folder_click_up_folders_id");
+
+                    b.HasOne("Webion.Stargaze.Pgsql.Entities.Projects.ProjectDbo", null)
+                        .WithMany()
+                        .HasForeignKey("ProjectsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_click_up_project_folder_projects_projects_id");
+                });
+
+            modelBuilder.Entity("click_up_project_list", b =>
+                {
+                    b.HasOne("Webion.Stargaze.Pgsql.Entities.ClickUp.ClickUpListDbo", null)
+                        .WithMany()
+                        .HasForeignKey("ClickUpListsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_click_up_project_list_list_click_up_lists_id");
+
+                    b.HasOne("Webion.Stargaze.Pgsql.Entities.Projects.ProjectDbo", null)
+                        .WithMany()
+                        .HasForeignKey("ProjectsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_click_up_project_list_projects_projects_id");
+                });
+
+            modelBuilder.Entity("click_up_project_space", b =>
+                {
+                    b.HasOne("Webion.Stargaze.Pgsql.Entities.ClickUp.ClickUpSpaceDbo", null)
+                        .WithMany()
+                        .HasForeignKey("ClickUpSpacesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_click_up_project_space_space_click_up_spaces_id");
+
+                    b.HasOne("Webion.Stargaze.Pgsql.Entities.Projects.ProjectDbo", null)
+                        .WithMany()
+                        .HasForeignKey("ProjectsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_click_up_project_space_projects_projects_id");
                 });
 
             modelBuilder.Entity("invoice_document", b =>
