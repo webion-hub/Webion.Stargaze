@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Webion.Stargaze.Services.Sync;
+using Webion.ClickUp.Sync.Synchronization;
 
 namespace Webion.Stargaze.Api.Controllers.v1.Projects.Tasks.Sync;
 
@@ -11,8 +11,8 @@ namespace Webion.Stargaze.Api.Controllers.v1.Projects.Tasks.Sync;
 [Tags("Projects")]
 public class SyncClickUpTasksController : ControllerBase
 {
-    private readonly SyncProjectTasksService _synchronizer;
-    public SyncClickUpTasksController(SyncProjectTasksService synchronizer)
+    private readonly ClickUpProjectTasksSynchronizer _synchronizer;
+    public SyncClickUpTasksController(ClickUpProjectTasksSynchronizer synchronizer)
     {
         _synchronizer = synchronizer;
     }

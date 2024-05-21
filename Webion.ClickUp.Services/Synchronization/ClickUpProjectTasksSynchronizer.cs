@@ -5,14 +5,14 @@ using Webion.Stargaze.Pgsql;
 using Webion.Stargaze.Pgsql.Entities.ClickUp;
 using Webion.Stargaze.Pgsql.Entities.Projects;
 
-namespace Webion.Stargaze.Services.Sync;
+namespace Webion.ClickUp.Sync.Synchronization;
 
-public sealed class SyncProjectTasksService
+public sealed class ClickUpProjectTasksSynchronizer
 {
     private readonly StargazeDbContext _db;
     private readonly IClickUpApi _api;
 
-    public SyncProjectTasksService(StargazeDbContext db, IClickUpApi api)
+    public ClickUpProjectTasksSynchronizer(StargazeDbContext db, IClickUpApi api)
     {
         _db = db;
         _api = api;
@@ -20,7 +20,9 @@ public sealed class SyncProjectTasksService
 
     public async Task<bool> SyncAsync(Guid projectId, CancellationToken cancellationToken)
     {
-        var project = await _db.Projects.FirstOrDefaultAsync(x => x.Id == projectId, cancellationToken);
+        var project = await _db.Projects
+            .Include(x => x.Tasks)
+            .FirstOrDefaultAsync(x => x.Id == projectId, cancellationToken);
 
         if (project is null)
             return false;
@@ -62,6 +64,7 @@ public sealed class SyncProjectTasksService
             add: n => new TaskDbo
             {
                 ClickUpTask = n,
+                Title = ""
             },
             update: (o, n) => { },
             delete: (n) => { }

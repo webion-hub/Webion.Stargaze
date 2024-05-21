@@ -1,4 +1,3 @@
-using System.Collections;
 using Microsoft.EntityFrameworkCore;
 using Webion.Extensions.Linq;
 using Webion.Stargaze.Core.Entities;
@@ -19,10 +18,6 @@ public sealed class ClickUpLinkerService
 
     public async Task<bool> LinkAsync(Guid projectId, List<ClickUpObjectId> clickUpObjectIds, CancellationToken cancellationToken)
     {
-        var clickUpSpaces = (List<ClickUpSpaceDbo>)await GetClickUpObjects(clickUpObjectIds, ClickUpObjectType.Space, cancellationToken);
-        var clickUpLists = (List<ClickUpListDbo>)await GetClickUpObjects(clickUpObjectIds, ClickUpObjectType.List, cancellationToken);
-        var clickUpFolders = (List<ClickUpFolderDbo>)await GetClickUpObjects(clickUpObjectIds, ClickUpObjectType.Folder, cancellationToken);
-
         var project = await _db.Projects
             .Include(x => x.ClickUpSpaces)
             .Include(x => x.ClickUpLists)
@@ -32,6 +27,10 @@ public sealed class ClickUpLinkerService
 
         if (project is null)
             return false;
+
+        var clickUpSpaces = await GetClickUpObjects(_db.ClickUpSpaces, clickUpObjectIds, ClickUpObjectType.Space, cancellationToken);
+        var clickUpLists = await GetClickUpObjects(_db.ClickUpLists, clickUpObjectIds, ClickUpObjectType.List, cancellationToken);
+        var clickUpFolders = await GetClickUpObjects(_db.ClickUpFolders, clickUpObjectIds, ClickUpObjectType.Folder, cancellationToken);
 
         project.ClickUpSpaces.SoftReplace(
             replacement: clickUpSpaces,
@@ -61,28 +60,19 @@ public sealed class ClickUpLinkerService
         return true;
     }
 
-    private async Task<IEnumerable> GetClickUpObjects(List<ClickUpObjectId> ids, ClickUpObjectType type, CancellationToken cancellationToken)
+    private async Task<IEnumerable<T>> GetClickUpObjects<T>(DbSet<T> dbSet, List<ClickUpObjectId> ids, ClickUpObjectType type, CancellationToken cancellationToken)
+        where T : class, IClickUpObject
     {
         var typedClickUpObjectsIds = ids
             .Where(x => x.Type == type)
             .Select(x => x.Id)
             .ToList();
 
-        return type switch
-        {
-            ClickUpObjectType.Space => await _db.ClickUpSpaces
-                .Include(x => x.Projects)
-                .Where(x => typedClickUpObjectsIds.Contains(x.Id))
-                .ToListAsync(cancellationToken),
-            ClickUpObjectType.List => await _db.ClickUpLists
-                .Include(x => x.Projects)
-                .Where(x => typedClickUpObjectsIds.Contains(x.Id))
-                .ToListAsync(cancellationToken),
-            ClickUpObjectType.Folder => await _db.ClickUpFolders
-                .Include(x => x.Projects)
-                .Where(x => typedClickUpObjectsIds.Contains(x.Id))
-                .ToListAsync(cancellationToken),
-            _ => throw new NotImplementedException(),
-        };
+        var result = await dbSet
+            .Include(x => x.Projects)
+            .Where(x => typedClickUpObjectsIds.Contains(x.Id))
+            .ToListAsync(cancellationToken);
+
+        return result;
     }
 }

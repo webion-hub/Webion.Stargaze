@@ -21,7 +21,7 @@ public class LinkClickUpObjectController : ControllerBase
     /// Link clickup object
     /// </summary>
     /// <remarks>
-    /// Links a clickup object to this project.<br/>
+    /// Links a list of clickup objects to this project.<br/>
     /// This will ensure that all synchronized tasks will be added to it.
     /// </remarks>
     [HttpPut]

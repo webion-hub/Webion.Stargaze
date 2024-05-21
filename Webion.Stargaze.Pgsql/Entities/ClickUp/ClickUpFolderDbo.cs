@@ -4,7 +4,7 @@ using Webion.Stargaze.Pgsql.Entities.Projects;
 
 namespace Webion.Stargaze.Pgsql.Entities.ClickUp;
 
-public sealed class ClickUpFolderDbo : IEntityTypeConfiguration<ClickUpFolderDbo>
+public sealed class ClickUpFolderDbo : IEntityTypeConfiguration<ClickUpFolderDbo>, IClickUpObject
 {
     public string Id { get; set; } = null!;
     public string SpaceId { get; set; } = null!;
@@ -31,6 +31,6 @@ public sealed class ClickUpFolderDbo : IEntityTypeConfiguration<ClickUpFolderDbo
         builder
             .HasMany(x => x.Projects)
             .WithMany(x => x.ClickUpFolders)
-            .UsingEntity("click_up_project_folder");
+            .UsingEntity(j => j.ToTable("click_up_project_folder", Schemas.ClickUp));
     }
 }
