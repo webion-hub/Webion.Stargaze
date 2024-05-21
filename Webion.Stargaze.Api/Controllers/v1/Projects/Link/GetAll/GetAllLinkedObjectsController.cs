@@ -21,7 +21,7 @@ public class GetAllLinkedObjectsController : ControllerBase
     }
 
     [HttpGet]
-    [ProducesResponseType(200)]
+    [ProducesResponseType<GetAllLinkedObjectsResponse>(200)]
     public async Task<IActionResult> GetAll(
         [FromRoute] Guid projectId,
         CancellationToken cancellationToken
@@ -57,8 +57,11 @@ public class GetAllLinkedObjectsController : ControllerBase
             })
             .ToListAsync(cancellationToken);
 
-        var result = linkedLists.Concat(linkedSpaces).Concat(linkedFolders);
+        var response = new GetAllLinkedObjectsResponse
+        {
+            LinkedObjects = linkedLists.Concat(linkedSpaces).Concat(linkedFolders)
+        };
 
-        return Ok(result);
+        return Ok(response);
     }
 }
