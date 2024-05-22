@@ -17,7 +17,7 @@ public sealed class ClickUpProjectTasksSynchronizer
         _db = db;
         _api = api;
     }
-
+ 
     public async Task<bool> SyncAsync(Guid projectId, CancellationToken cancellationToken)
     {
         var project = await _db.Projects
@@ -53,7 +53,11 @@ public sealed class ClickUpProjectTasksSynchronizer
                     Title = n.Name,
                     Description = n.Description
                 },
-                update: (o, n) => { },
+                update: (o, n) =>
+                {
+                    o.Title = n.Name;
+                    o.Description = n.Description;
+                },
                 delete: o => _db.Remove(o)
             );
 
@@ -62,15 +66,19 @@ public sealed class ClickUpProjectTasksSynchronizer
 
         project.Tasks.SoftReplace(
             replacement: lists.SelectMany(x => x.Tasks),
-            match: (o, n) => o.Id == n.TaskId,
+            match: (o, n) => o.ClickUpTask!.Id == n.Id,
             add: n => new TaskDbo
             {
                 ClickUpTask = n,
                 Title = n.Title ?? "",
                 Description = n.Description
             },
-            update: (o, n) => { },
-            delete: (n) => { }
+            update: (o, n) =>
+            {
+                o.Title = n.Title!;
+                o.Description = n.Description;
+            },
+            delete: o => { }
         );
         await _db.SaveChangesAsync(cancellationToken);
 
