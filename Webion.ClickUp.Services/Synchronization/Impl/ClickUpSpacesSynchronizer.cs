@@ -29,7 +29,8 @@ internal sealed class ClickUpSpacesSynchronizer
             {
                 Id = x.Id,
                 Name = x.Name,
-            });
+            })
+            .ToList();
 
         spaces.SoftReplace(
             replacement: spacesResponse.Spaces,
@@ -47,7 +48,6 @@ internal sealed class ClickUpSpacesSynchronizer
         );
 
         _db.AddRange(newSpaces);
-
         await _db.SaveChangesAsync(cancellationToken);
     }
 }
