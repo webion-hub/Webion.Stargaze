@@ -9,6 +9,8 @@ public sealed class ClickUpTaskDbo : IEntityTypeConfiguration<ClickUpTaskDbo>
     public string Id { get; set; } = null!;
     public string ListId { get; set; } = null!;
     public Guid? TaskId { get; set; }
+    public string? Title { get; set; }
+    public string? Description { get; set; }
 
     public TaskDbo? Task { get; set; }
     public ClickUpListDbo List { get; set; } = null!;
@@ -26,7 +28,7 @@ public sealed class ClickUpTaskDbo : IEntityTypeConfiguration<ClickUpTaskDbo>
             .HasForeignKey<ClickUpTaskDbo>(x => x.TaskId)
             .IsRequired(false)
             .OnDelete(DeleteBehavior.SetNull);
-        
+
         builder
             .HasOne(x => x.List)
             .WithMany(x => x.Tasks)

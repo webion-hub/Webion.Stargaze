@@ -18,13 +18,13 @@ namespace Webion.Stargaze.Api.Controllers.v1.ClickUp.Sync.Time;
 [ApiVersion("1.0")]
 public sealed class SyncClickUpTrackedTimeController : ControllerBase
 {
-    private readonly IClickUpApi _clickUpApi;
+    private readonly IClickUpApi _api;
     private readonly StargazeDbContext _db;
     private readonly ClickUpSettings _clickUpSettings;
 
-    public SyncClickUpTrackedTimeController(IClickUpApi clickUpApi, IOptions<ClickUpSettings> clickUpSettings, StargazeDbContext db)
+    public SyncClickUpTrackedTimeController(IClickUpApi api, IOptions<ClickUpSettings> clickUpSettings, StargazeDbContext db)
     {
-        _clickUpApi = clickUpApi;
+        _api = api;
         _clickUpSettings = clickUpSettings.Value;
         _db = db;
     }
@@ -39,17 +39,17 @@ public sealed class SyncClickUpTrackedTimeController : ControllerBase
     [ProducesResponseType(200)]
     public async Task<IActionResult> Sync(CancellationToken cancellationToken)
     {
-        var teamsResponse = await _clickUpApi.Teams.GetAllAsync();
+        var teamsResponse = await _api.Teams.GetAllAsync();
         var team = teamsResponse.Teams.First(x => x.Id == _clickUpSettings.TeamId);
-        
+
         var request = new GetTeamTimeEntriesRequest
         {
             Assignee = team.Members
                 .Select(x => x.User.Id)
                 .Distinct()
         };
-        
-        var response = await _clickUpApi.Teams.GetTimeEntriesAsync(team.Id, request);
+
+        var response = await _api.Teams.GetTimeEntriesAsync(team.Id, request);
 
         await using var transaction = await _db.Database.BeginTransactionAsync(cancellationToken);
         var users = await _db.UserLogins
@@ -79,7 +79,7 @@ public sealed class SyncClickUpTrackedTimeController : ControllerBase
 
             await _db.SaveChangesAsync(cancellationToken);
         }
-        
+
         await transaction.CommitAsync(cancellationToken);
         return Ok();
     }

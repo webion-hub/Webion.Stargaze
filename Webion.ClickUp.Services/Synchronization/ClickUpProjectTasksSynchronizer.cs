@@ -50,6 +50,8 @@ public sealed class ClickUpProjectTasksSynchronizer
                 {
                     Id = n.Id,
                     ListId = n.List.Id,
+                    Title = n.Name,
+                    Description = n.Description
                 },
                 update: (o, n) => { },
                 delete: o => _db.Remove(o)
@@ -64,7 +66,8 @@ public sealed class ClickUpProjectTasksSynchronizer
             add: n => new TaskDbo
             {
                 ClickUpTask = n,
-                Title = ""
+                Title = n.Title ?? "",
+                Description = n.Description
             },
             update: (o, n) => { },
             delete: (n) => { }
