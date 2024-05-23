@@ -26,4 +26,7 @@ public interface IClickUpTeamApi
     /// </remarks>
     [Get("/v2/team/{teamId}/time_entries")]
     Task<GetTeamTimeEntriesResponse> GetTimeEntriesAsync(string teamId, [Query] GetTeamTimeEntriesRequest request);
+
+    [Get("/v2/team/{teamId}/time_entries/current")]
+    Task<GetTeamCurrentTimeEntryResponse> GetCurrentTimeEntryAsync(string teamId, [Query, AliasAs("assignee")] long? Assignee = null);
 }

@@ -9,7 +9,7 @@ using Webion.Stargaze.Api.Options;
 using Webion.Stargaze.Pgsql;
 using Webion.Stargaze.Pgsql.Entities.TimeTracking;
 
-namespace Webion.Stargaze.Api.Controllers.v1.ClickUp.Sync.Time;
+namespace Webion.Stargaze.Api.Controllers.v1.ClickUp.Sync.Time.Tracked;
 
 [ApiController]
 [Authorize]
