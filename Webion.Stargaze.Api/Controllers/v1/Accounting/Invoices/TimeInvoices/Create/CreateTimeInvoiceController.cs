@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Webion.Stargaze.Api.Extensions;
 using Webion.Stargaze.Pgsql;
 using Webion.Stargaze.Pgsql.Entities.Accounting;
@@ -49,8 +50,11 @@ public sealed class CreateTimeInvoiceController : ControllerBase
             .AsNoTracking()
             .ToListAsync(cancellationToken);
 
-        if (timeEntries is null)
-            return BadRequest();
+        if (timeEntries.IsNullOrEmpty())
+            return Problem(
+                detail: "The time package has not time entries linked",
+                statusCode: StatusCodes.Status400BadRequest
+            ); ;
 
         var timeInvoice = new TimeInvoiceDbo
         {
