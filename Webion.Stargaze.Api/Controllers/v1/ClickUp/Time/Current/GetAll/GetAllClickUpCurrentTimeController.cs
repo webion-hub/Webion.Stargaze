@@ -1,8 +1,11 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Webion.ClickUp.Api.V2;
+using Webion.Stargaze.Api.Controllers.Dtos;
 using Webion.Stargaze.Api.Options;
+using Webion.Stargaze.Pgsql;
 
 namespace Webion.Stargaze.Api.Controllers.v1.ClickUp.Time.Current.GetAll;
 
@@ -14,11 +17,13 @@ namespace Webion.Stargaze.Api.Controllers.v1.ClickUp.Time.Current.GetAll;
 public sealed class GetAllClickUpCurrentTimeController : ControllerBase
 {
     private readonly IClickUpApi _api;
+    private readonly StargazeDbContext _db;
     private readonly ClickUpSettings _clickUpSettings;
 
-    public GetAllClickUpCurrentTimeController(IClickUpApi api, IOptions<ClickUpSettings> clickUpSettings)
+    public GetAllClickUpCurrentTimeController(IClickUpApi api, StargazeDbContext db, IOptions<ClickUpSettings> clickUpSettings)
     {
         _api = api;
+        _db = db;
         _clickUpSettings = clickUpSettings.Value;
     }
 
@@ -29,8 +34,8 @@ public sealed class GetAllClickUpCurrentTimeController : ControllerBase
     /// Return all current time entries.
     /// </remarks>
     [HttpGet]
-    [ProducesResponseType(200)]
-    public async Task<IActionResult> Sync()
+    [ProducesResponseType<GetAllClickUpCurrentTimeResponse>(200)]
+    public async Task<IActionResult> Sync(CancellationToken cancellationToken)
     {
         var teamsResponse = await _api.Teams.GetAllAsync();
         var team = teamsResponse.Teams.First(x => x.Id == _clickUpSettings.TeamId);
@@ -45,8 +50,38 @@ public sealed class GetAllClickUpCurrentTimeController : ControllerBase
 
         var timeEntries = responses
             .Where(x => x.Data is not null)
-            .Select(x => x.Data);
+            .Select(x => x.Data!);
 
-        return Ok(timeEntries);
+        List<ClickUpCurrentTimeEntryDto> results = [];
+
+        foreach (var timeEntry in timeEntries)
+        {
+            var task = await _db.Tasks
+                .Where(x => x.ClickUpTask != null)
+                .Where(x => timeEntry.Task!.Id == x.ClickUpTask!.Id)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(cancellationToken);
+
+            var user = await _db.UserLogins
+                .Where(x => timeEntry.User.Id == x.ProviderKey)
+                .Select(x => x.User)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(cancellationToken);
+
+            results.Add(new ClickUpCurrentTimeEntryDto
+            {
+                Description = timeEntry.Description,
+                Billable = timeEntry.Billable,
+                Start = timeEntry.Start.LocalDateTime,
+                Duration = DateTimeOffset.Now - timeEntry.Start.LocalDateTime,
+                TaskId = task?.Id,
+                TaskName = task?.Title,
+                TaskDescription = task?.Description,
+                UserUsername = user?.UserName,
+                UserEmail = user?.Email,
+            });
+        }
+
+        return Ok(results);
     }
 }
