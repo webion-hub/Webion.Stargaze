@@ -4,26 +4,26 @@ using Microsoft.Extensions.Options;
 using Webion.ClickUp.Api.V2;
 using Webion.Stargaze.Api.Options;
 
-namespace Webion.Stargaze.Api.Controllers.v1.ClickUp.Sync.Time.Current;
+namespace Webion.Stargaze.Api.Controllers.v1.ClickUp.Time.Current.GetAll;
 
 [ApiController]
 [Authorize]
 [Route("v{version:apiVersion}/clickup/sync/time/current")]
 [Tags("ClickUp")]
 [ApiVersion("1.0")]
-public sealed class SyncClickUpCurrentTimeController : ControllerBase
+public sealed class GetAllClickUpCurrentTimeController : ControllerBase
 {
     private readonly IClickUpApi _api;
     private readonly ClickUpSettings _clickUpSettings;
 
-    public SyncClickUpCurrentTimeController(IClickUpApi api, IOptions<ClickUpSettings> clickUpSettings)
+    public GetAllClickUpCurrentTimeController(IClickUpApi api, IOptions<ClickUpSettings> clickUpSettings)
     {
         _api = api;
         _clickUpSettings = clickUpSettings.Value;
     }
 
     /// <summary>
-    /// Get current time entries
+    /// Get all current time entries
     /// </summary>
     /// <remarks>
     /// Return all current time entries.
