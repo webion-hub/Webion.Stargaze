@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Webion.Extensions.EntityFrameworkCore;
 using Webion.Extensions.Linq;
 using Webion.Stargaze.Api.Controllers.Dtos;
 using Webion.Stargaze.Pgsql;
@@ -40,14 +39,14 @@ public sealed class GetAllTimePackagesController : ControllerBase
         var linkedProjects = timePackages
             .SelectMany(x => x.AppliesTo)
             .Select(x => x.Id);
-            
+
         var durations = await _db.TimeEntries
             .Where(x => linkedProjects.Contains(x.Task!.ProjectId))
             .Where(x => !x.Billed)
             .Select(x => x.Duration)
             .ToListAsync(cancellationToken);
-        
-        
+
+
         var totalTime = durations.Aggregate(TimeSpan.Zero, (p, c) => p + c);
         var currTime = totalTime;
 
@@ -64,10 +63,10 @@ public sealed class GetAllTimePackagesController : ControllerBase
                     RemainingHours = package.Hours,
                     TrackedHours = 0,
                 });
-                
+
                 break;
             }
-            
+
             var totalHours = TimeSpan.FromHours(package.Hours);
             var diffTime = totalHours - currTime;
             var remainingTime = diffTime < TimeSpan.Zero
@@ -86,10 +85,10 @@ public sealed class GetAllTimePackagesController : ControllerBase
             currTime -= remainingTime;
         }
 
-        return Ok(new
+        return Ok(new GetAllTimePackagesResponse
         {
-            TotalTime = totalTime,
-            RemainingBillableTime = currTime < TimeSpan.Zero ? 0 : currTime.TotalHours,
+            TotalTime = totalTime.Milliseconds,
+            RemainingBillableTime = currTime < TimeSpan.Zero ? 0 : currTime.TotalMilliseconds,
             Packages = res,
         });
     }

@@ -2,4 +2,9 @@ using Webion.Stargaze.Api.Controllers.Dtos;
 
 namespace Webion.Stargaze.Api.Controllers.v1.TimePackages.GetAll;
 
-public sealed class GetAllTimePackagesResponse : PaginatedResponse<TimePackageDto, GetAllTimePackagesResponse>;
+public sealed class GetAllTimePackagesResponse
+{
+    public required double TotalTime { get; init; }
+    public required double RemainingBillableTime { get; init; }
+    public required IEnumerable<TimePackageDto> Packages { get; init; }
+}
