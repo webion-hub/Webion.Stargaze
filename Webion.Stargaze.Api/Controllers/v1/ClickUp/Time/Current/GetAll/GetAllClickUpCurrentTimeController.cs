@@ -52,7 +52,7 @@ public sealed class GetAllClickUpCurrentTimeController : ControllerBase
             .Where(x => x.Data is not null)
             .Select(x => x.Data!);
 
-        List<ClickUpCurrentTimeEntryDto> results = [];
+        var results = new List<ClickUpCurrentTimeEntryDto>();
 
         foreach (var timeEntry in timeEntries)
         {

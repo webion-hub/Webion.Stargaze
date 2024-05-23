@@ -38,10 +38,18 @@ public sealed class GetAllTimePackagesController : ControllerBase
 
         var linkedProjects = timePackages
             .SelectMany(x => x.AppliesTo)
-            .Select(x => x.Id);
+            .Select(x => new ProjectDto
+            {
+                Id = x.Id,
+                CompanyId = x.CompanyId,
+                Name = x.Name,
+                Description = x.Description
+            });
 
         var durations = await _db.TimeEntries
-            .Where(x => linkedProjects.Contains(x.Task!.ProjectId))
+            .Where(x => linkedProjects
+                .Select(x => x.Id)
+                .Contains(x.Task!.ProjectId))
             .Where(x => !x.Billed)
             .Select(x => x.Duration)
             .ToListAsync(cancellationToken);
@@ -50,12 +58,12 @@ public sealed class GetAllTimePackagesController : ControllerBase
         var totalTime = durations.Aggregate(TimeSpan.Zero, (p, c) => p + c);
         var currTime = totalTime;
 
-        var res = new List<TimePackageDto>();
+        var packages = new List<TimePackageDto>();
         foreach (var package in timePackages)
         {
             if (currTime <= TimeSpan.Zero)
             {
-                res.Add(new TimePackageDto
+                packages.Add(new TimePackageDto
                 {
                     Id = package.Id,
                     TotalHours = package.Hours,
@@ -73,7 +81,7 @@ public sealed class GetAllTimePackagesController : ControllerBase
                 ? totalHours
                 : diffTime;
 
-            res.Add(new TimePackageDto
+            packages.Add(new TimePackageDto
             {
                 Id = package.Id,
                 TotalHours = package.Hours,
@@ -85,11 +93,18 @@ public sealed class GetAllTimePackagesController : ControllerBase
             currTime -= remainingTime;
         }
 
+        var projects = new List<TimePackageDto>();
+        foreach (var package in timePackages)
+        {
+
+        }
+
         return Ok(new GetAllTimePackagesResponse
         {
             TotalTime = totalTime.Milliseconds,
             RemainingBillableTime = currTime < TimeSpan.Zero ? 0 : currTime.TotalMilliseconds,
-            Packages = res,
+            Packages = packages,
+            AppliesTo = linkedProjects
         });
     }
 }

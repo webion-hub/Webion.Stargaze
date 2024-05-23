@@ -7,4 +7,5 @@ public sealed class GetAllTimePackagesResponse
     public required double TotalTime { get; init; }
     public required double RemainingBillableTime { get; init; }
     public required IEnumerable<TimePackageDto> Packages { get; init; }
+    public required IEnumerable<ProjectDto> AppliesTo { get; init; }
 }
