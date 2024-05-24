@@ -33,6 +33,8 @@ public sealed class GetAllTimePackagesController : ControllerBase
                 .Where(x => x.CompanyId == request.CompanyId)
             )
             .Where(x => x.AppliesTo.Count != 0)
+            .Where(x => x.Rates.Count != 0)
+            .Include(x => x.Rates)
             .Select(x => new TimePackageDto
             {
                 Id = x.Id,
@@ -42,12 +44,17 @@ public sealed class GetAllTimePackagesController : ControllerBase
                 RemainingHours = x.Hours,
                 TrackedHours = 0,
                 AppliesTo = x.AppliesTo
-                    .Select(x => x.Id)
+                    .Select(x => x.Id),
+                Users = x.Rates
+                    .Select(x => x.UserId)
             })
             .ToListAsync(cancellationToken);
 
         var projectsIds = timePackages
             .SelectMany(x => x.AppliesTo)
+            .ToList();
+        var usersIds = timePackages
+            .SelectMany(x => x.Users)
             .ToList();
 
         var trackedTimes = await _db.TimeEntries
@@ -56,6 +63,9 @@ public sealed class GetAllTimePackagesController : ControllerBase
             .Where(x => x.Billed == false)
             .Where(x => projectsIds
                 .Contains(x.Task!.ProjectId)
+            )
+            .Where(x => usersIds
+                .Contains(x.UserId)
             )
             .GroupBy(x => x.Task!.ProjectId)
             .Select(x => new TrackedTimeDto

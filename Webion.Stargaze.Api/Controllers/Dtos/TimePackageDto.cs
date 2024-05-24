@@ -9,4 +9,5 @@ public sealed class TimePackageDto
     public required double RemainingHours { get; set; }
     public required double TrackedHours { get; set; }
     public required IEnumerable<Guid> AppliesTo { get; init; }
+    public required IEnumerable<Guid> Users { get; init; }
 }
