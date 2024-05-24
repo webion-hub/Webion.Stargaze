@@ -29,82 +29,62 @@ public sealed class GetAllTimePackagesController : ControllerBase
     )
     {
         var timePackages = await _db.TimePackages
-            .Include(x => x.AppliesTo)
             .If(request.CompanyId is not null, b => b
                 .Where(x => x.CompanyId == request.CompanyId)
             )
-            .AsNoTracking()
-            .ToListAsync(cancellationToken);
-
-        var linkedProjects = timePackages
-            .SelectMany(x => x.AppliesTo)
-            .Select(x => new ProjectDto
+            .Where(x => x.AppliesTo.Count != 0)
+            .Select(x => new TimePackageDto
             {
                 Id = x.Id,
                 CompanyId = x.CompanyId,
                 Name = x.Name,
-                Description = x.Description
-            });
-
-        var durations = await _db.TimeEntries
-            .Where(x => linkedProjects
-                .Select(x => x.Id)
-                .Contains(x.Task!.ProjectId))
-            .Where(x => !x.Billed)
-            .Select(x => x.Duration)
+                TotalHours = x.Hours,
+                RemainingHours = x.Hours,
+                TrackedHours = 0,
+                AppliesTo = x.AppliesTo
+                    .Select(x => x.Id)
+            })
             .ToListAsync(cancellationToken);
 
+        var projectsIds = timePackages
+            .SelectMany(x => x.AppliesTo)
+            .ToList();
 
-        var totalTime = durations.Aggregate(TimeSpan.Zero, (p, c) => p + c);
-        var currTime = totalTime;
-
-        var packages = new List<TimePackageDto>();
-        foreach (var package in timePackages)
-        {
-            if (currTime <= TimeSpan.Zero)
+        var trackedTimes = await _db.TimeEntries
+            .Where(x => x.Task != null)
+            .Where(x => x.Billable == true)
+            .Where(x => x.Billed == false)
+            .Where(x => projectsIds
+                .Contains(x.Task!.ProjectId)
+            )
+            .GroupBy(x => x.Task!.ProjectId)
+            .Select(x => new TrackedTimeDto
             {
-                packages.Add(new TimePackageDto
-                {
-                    Id = package.Id,
-                    TotalHours = package.Hours,
-                    Name = package.Name,
-                    RemainingHours = package.Hours,
-                    TrackedHours = 0,
-                });
+                ProjectId = x.Key,
+                TotalHours = x
+                    .Sum(x => x.Duration.Hours)
+            })
+            .ToDictionaryAsync(
+                keySelector: x => x.ProjectId,
+                elementSelector: x => x.TotalHours,
+                cancellationToken: cancellationToken);
 
-                break;
+        foreach (var t in timePackages)
+        {
+            foreach (var project in t.AppliesTo)
+            {
+                t.TrackedHours += trackedTimes[project] > t.TotalHours
+                    ? t.TotalHours
+                    : trackedTimes[project];
+                t.RemainingHours -= t.TrackedHours;
+
+                trackedTimes[project] -= t.TrackedHours;
             }
-
-            var totalHours = TimeSpan.FromHours(package.Hours);
-            var diffTime = totalHours - currTime;
-            var remainingTime = diffTime < TimeSpan.Zero
-                ? totalHours
-                : diffTime;
-
-            packages.Add(new TimePackageDto
-            {
-                Id = package.Id,
-                TotalHours = package.Hours,
-                Name = package.Name,
-                RemainingHours = remainingTime.TotalHours,
-                TrackedHours = (totalHours - remainingTime).TotalHours,
-            });
-
-            currTime -= remainingTime;
-        }
-
-        var projects = new List<TimePackageDto>();
-        foreach (var package in timePackages)
-        {
-
         }
 
         return Ok(new GetAllTimePackagesResponse
         {
-            TotalTime = totalTime.Milliseconds,
-            RemainingBillableTime = currTime < TimeSpan.Zero ? 0 : currTime.TotalMilliseconds,
-            Packages = packages,
-            AppliesTo = linkedProjects
+            TimePackages = timePackages
         });
     }
 }
