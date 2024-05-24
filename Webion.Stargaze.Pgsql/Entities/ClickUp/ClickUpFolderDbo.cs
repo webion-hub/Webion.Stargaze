@@ -10,6 +10,7 @@ public sealed class ClickUpFolderDbo : IEntityTypeConfiguration<ClickUpFolderDbo
     public string SpaceId { get; set; } = null!;
 
     public string? Name { get; set; }
+    public string? Path { get; set; }
 
     public ClickUpSpaceDbo Space { get; set; } = null!;
     public List<ClickUpListDbo> Lists { get; set; } = [];

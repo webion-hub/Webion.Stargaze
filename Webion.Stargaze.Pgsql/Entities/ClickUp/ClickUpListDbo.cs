@@ -11,6 +11,7 @@ public sealed class ClickUpListDbo : IEntityTypeConfiguration<ClickUpListDbo>, I
     public string? FolderId { get; set; }
 
     public string? Name { get; set; }
+    public string? Path { get; set; }
 
     public ClickUpSpaceDbo Space { get; set; } = null!;
     public ClickUpFolderDbo? Folder { get; set; }

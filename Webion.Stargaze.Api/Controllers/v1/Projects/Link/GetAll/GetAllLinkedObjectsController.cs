@@ -21,7 +21,7 @@ public class GetAllLinkedObjectsController : ControllerBase
     }
 
     [HttpGet]
-    [ProducesResponseType(200)]
+    [ProducesResponseType<GetAllLinkedObjectsResponse>(200)]
     public async Task<IActionResult> GetAll(
         [FromRoute] Guid projectId,
         CancellationToken cancellationToken
@@ -33,7 +33,9 @@ public class GetAllLinkedObjectsController : ControllerBase
             .Select(x => new LinkedObjectDto
             {
                 Id = x.Id,
-                Name = x.Name
+                Name = x.Name,
+                Type = Core.Enums.ClickUpObjectType.List,
+                Path = x.Path
             })
             .ToListAsync(cancellationToken);
 
@@ -43,7 +45,9 @@ public class GetAllLinkedObjectsController : ControllerBase
             .Select(x => new LinkedObjectDto
             {
                 Id = x.Id,
-                Name = x.Name
+                Name = x.Name,
+                Type = Core.Enums.ClickUpObjectType.Space,
+                Path = x.Path
             })
             .ToListAsync(cancellationToken);
 
@@ -53,12 +57,16 @@ public class GetAllLinkedObjectsController : ControllerBase
             .Select(x => new LinkedObjectDto
             {
                 Id = x.Id,
-                Name = x.Name
+                Name = x.Name,
+                Type = Core.Enums.ClickUpObjectType.Folder,
+                Path = x.Path
             })
             .ToListAsync(cancellationToken);
 
-        var result = linkedLists.Concat(linkedSpaces).Concat(linkedFolders);
-
-        return Ok(result);
+        return Ok(linkedLists
+            .Concat(linkedSpaces)
+            .Concat(linkedFolders)
+            .OrderBy(x => x.Path)
+        );
     }
 }

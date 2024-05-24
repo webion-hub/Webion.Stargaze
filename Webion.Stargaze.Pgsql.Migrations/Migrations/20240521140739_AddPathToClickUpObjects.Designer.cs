@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Webion.Stargaze.Pgsql;
@@ -11,9 +12,11 @@ using Webion.Stargaze.Pgsql;
 namespace Webion.Stargaze.Pgsql.Migrations.Migrations
 {
     [DbContext(typeof(StargazeDbContext))]
-    partial class StargazeDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240521140739_AddPathToClickUpObjects")]
+    partial class AddPathToClickUpObjects
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -434,10 +437,6 @@ namespace Webion.Stargaze.Pgsql.Migrations.Migrations
                         .HasColumnType("text")
                         .HasColumnName("id");
 
-                    b.Property<string>("Description")
-                        .HasColumnType("text")
-                        .HasColumnName("description");
-
                     b.Property<string>("ListId")
                         .IsRequired()
                         .HasColumnType("text")
@@ -446,10 +445,6 @@ namespace Webion.Stargaze.Pgsql.Migrations.Migrations
                     b.Property<Guid?>("TaskId")
                         .HasColumnType("uuid")
                         .HasColumnName("task_id");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("text")
-                        .HasColumnName("title");
 
                     b.HasKey("Id")
                         .HasName("pk_task");

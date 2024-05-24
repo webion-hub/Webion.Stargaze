@@ -29,6 +29,7 @@ internal sealed class ClickUpSpacesSynchronizer
             {
                 Id = x.Id,
                 Name = x.Name,
+                Path = x.Name
             })
             .ToList();
 
@@ -38,11 +39,13 @@ internal sealed class ClickUpSpacesSynchronizer
             add: n => new ClickUpSpaceDbo
             {
                 Id = n.Id,
-                Name = n.Name
+                Name = n.Name,
+                Path = n.Name
             },
             update: (o, n) =>
             {
                 o.Name = n.Name;
+                o.Path = n.Name;
             },
             delete: o => _db.Remove(o)
         );
