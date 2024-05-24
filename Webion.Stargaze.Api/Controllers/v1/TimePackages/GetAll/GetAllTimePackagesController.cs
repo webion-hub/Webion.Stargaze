@@ -52,12 +52,14 @@ public sealed class GetAllTimePackagesController : ControllerBase
 
         var projectsIds = timePackages
             .SelectMany(x => x.AppliesTo)
+            .Distinct()
             .ToList();
         var usersIds = timePackages
             .SelectMany(x => x.Users)
+            .Distinct()
             .ToList();
 
-        var trackedTimes = await _db.TimeEntries
+        var trackedHours = await _db.TimeEntries
             .Where(x => x.Task != null)
             .Where(x => x.Billable == true)
             .Where(x => x.Billed == false)
@@ -83,12 +85,9 @@ public sealed class GetAllTimePackagesController : ControllerBase
         {
             foreach (var project in t.AppliesTo)
             {
-                t.TrackedHours += trackedTimes[project] > t.TotalHours
-                    ? t.TotalHours
-                    : trackedTimes[project];
+                t.TrackedHours += Math.Min(trackedHours[project], t.TotalHours);
                 t.RemainingHours -= t.TrackedHours;
-
-                trackedTimes[project] -= t.TrackedHours;
+                trackedHours[project] -= t.TrackedHours;
             }
         }
 
