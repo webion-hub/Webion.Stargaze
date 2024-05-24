@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Webion.ClickUp.Api.V2;
+using Webion.Extensions.Linq;
 using Webion.Stargaze.Api.Controllers.Dtos;
 using Webion.Stargaze.Api.Options;
 using Webion.Stargaze.Pgsql;
@@ -58,7 +59,8 @@ public sealed class GetAllClickUpCurrentTimeController : ControllerBase
         {
             var task = await _db.Tasks
                 .Where(x => x.ClickUpTask != null)
-                .Where(x => timeEntry.Task!.Id == x.ClickUpTask!.Id)
+                .If(timeEntry.Task is not null, b => b
+                    .Where(x => timeEntry.Task!.Id == x.ClickUpTask!.Id))
                 .AsNoTracking()
                 .FirstOrDefaultAsync(cancellationToken);
 
