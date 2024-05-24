@@ -64,13 +64,19 @@ public sealed class CreateTimeInvoiceController : ControllerBase
         };
         _db.TimeInvoices.Add(timeInvoice);
 
+        var invoicedTime = timeInvoice.InvoicedTime;
+
         foreach (var timeEntry in timeEntries)
         {
+            invoicedTime -= timeEntry.Duration;
+
             var timeEntryInvoice = new TimeEntryInvoiceDbo
             {
                 TimeInvoiceId = timeInvoice.Id,
                 TimeEntryId = timeEntry.Id,
-                BilledTime = timeEntry.Duration
+                BilledTime = invoicedTime > TimeSpan.Zero
+                    ? timeEntry.Duration
+                    : -invoicedTime
             };
             _db.TimeEntryInvoices.Add(timeEntryInvoice);
         }
