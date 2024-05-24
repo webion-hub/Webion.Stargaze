@@ -2,6 +2,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Webion.AspNetCore.Authentication.ClickUp;
 using Webion.Stargaze.Auth.Services.Jwt;
 using Webion.Stargaze.Auth.Services.Jwt.Exchange;
 using Webion.Stargaze.Pgsql;
@@ -51,7 +52,6 @@ public sealed class EndExternalLoginController : ControllerBase
             providerKey: info.ProviderKey
         );
 
-
         user ??= await ImportExternalUserAsync(info);
         if (user is null || !ModelState.IsValid)
             return ValidationProblem();
@@ -62,7 +62,7 @@ public sealed class EndExternalLoginController : ControllerBase
             _logger.LogWarning("Could not find client with id {ClientId}", request.ClientId);
             return Forbid();
         }
-        
+
         var pair = await _jwtIssuer.IssuePairAsync(user, client, cancellationToken);
         var code = await _exchangeCodeManager.GetCodeAsync(pair);
 
@@ -78,6 +78,7 @@ public sealed class EndExternalLoginController : ControllerBase
     {
         var userName = info.Principal.FindFirstValue(ClaimTypes.Name);
         var email = info.Principal.FindFirstValue(ClaimTypes.Email);
+        var accessToken = info.Principal.FindFirstValue(ClickUpClaims.AccessToken);
 
         if (userName is null)
         {
@@ -98,6 +99,16 @@ public sealed class EndExternalLoginController : ControllerBase
                 ModelState.AddModelError(e.Code, e.Description);
 
             return null;
+        }
+
+        if (accessToken is not null)
+        {
+            await _userManager.SetAuthenticationTokenAsync(
+                user,
+                info.LoginProvider,
+                ClickUpClaims.AccessToken,
+                accessToken
+            );
         }
 
         var addLoginRes = await _userManager.AddLoginAsync(user, new UserLoginInfo(

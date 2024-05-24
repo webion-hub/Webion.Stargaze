@@ -26,7 +26,7 @@ public sealed class GetAllClickUpObjectsController : ControllerBase
     /// </summary>
     /// <remarks>
     /// Returns all the clickup objects.
-    /// That is, spaces, lists and folders.
+    /// That are spaces, lists and folders.
     /// </remarks>
     [HttpGet]
     [ProducesResponseType<GetAllClickUpObjectsResponse>(200)]

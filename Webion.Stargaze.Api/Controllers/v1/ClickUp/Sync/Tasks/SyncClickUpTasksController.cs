@@ -42,7 +42,7 @@ public sealed class SyncClickUpTasksController : ControllerBase
 
         var requests = lists.Select(x => _api.Tasks.GetAllAsync(x.Id));
         var responses = await Task.WhenAll(requests);
-        
+
         foreach (var (list, response) in lists.Zip(responses))
         {
             list.Tasks.SoftReplace(
@@ -52,8 +52,14 @@ public sealed class SyncClickUpTasksController : ControllerBase
                 {
                     Id = n.Id,
                     ListId = n.List.Id,
+                    Title = n.Name,
+                    Description = n.Description
                 },
-                update: (o, n) => { },
+                update: (o, n) =>
+                {
+                    o.Title = n.Name;
+                    o.Description = n.Description;
+                },
                 delete: o => _db.Remove(o)
             );
 

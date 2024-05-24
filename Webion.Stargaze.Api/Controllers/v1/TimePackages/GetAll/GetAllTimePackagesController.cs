@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Webion.Extensions.EntityFrameworkCore;
 using Webion.Extensions.Linq;
 using Webion.Stargaze.Api.Controllers.Dtos;
 using Webion.Stargaze.Pgsql;
@@ -39,24 +38,32 @@ public sealed class GetAllTimePackagesController : ControllerBase
 
         var linkedProjects = timePackages
             .SelectMany(x => x.AppliesTo)
-            .Select(x => x.Id);
-            
+            .Select(x => new ProjectDto
+            {
+                Id = x.Id,
+                CompanyId = x.CompanyId,
+                Name = x.Name,
+                Description = x.Description
+            });
+
         var durations = await _db.TimeEntries
-            .Where(x => linkedProjects.Contains(x.Task!.ProjectId))
+            .Where(x => linkedProjects
+                .Select(x => x.Id)
+                .Contains(x.Task!.ProjectId))
             .Where(x => !x.Billed)
             .Select(x => x.Duration)
             .ToListAsync(cancellationToken);
-        
-        
+
+
         var totalTime = durations.Aggregate(TimeSpan.Zero, (p, c) => p + c);
         var currTime = totalTime;
 
-        var res = new List<TimePackageDto>();
+        var packages = new List<TimePackageDto>();
         foreach (var package in timePackages)
         {
             if (currTime <= TimeSpan.Zero)
             {
-                res.Add(new TimePackageDto
+                packages.Add(new TimePackageDto
                 {
                     Id = package.Id,
                     TotalHours = package.Hours,
@@ -64,17 +71,17 @@ public sealed class GetAllTimePackagesController : ControllerBase
                     RemainingHours = package.Hours,
                     TrackedHours = 0,
                 });
-                
+
                 break;
             }
-            
+
             var totalHours = TimeSpan.FromHours(package.Hours);
             var diffTime = totalHours - currTime;
             var remainingTime = diffTime < TimeSpan.Zero
                 ? totalHours
                 : diffTime;
 
-            res.Add(new TimePackageDto
+            packages.Add(new TimePackageDto
             {
                 Id = package.Id,
                 TotalHours = package.Hours,
@@ -86,11 +93,18 @@ public sealed class GetAllTimePackagesController : ControllerBase
             currTime -= remainingTime;
         }
 
-        return Ok(new
+        var projects = new List<TimePackageDto>();
+        foreach (var package in timePackages)
         {
-            TotalTime = totalTime,
-            RemainingBillableTime = currTime < TimeSpan.Zero ? 0 : currTime.TotalHours,
-            Packages = res,
+
+        }
+
+        return Ok(new GetAllTimePackagesResponse
+        {
+            TotalTime = totalTime.Milliseconds,
+            RemainingBillableTime = currTime < TimeSpan.Zero ? 0 : currTime.TotalMilliseconds,
+            Packages = packages,
+            AppliesTo = linkedProjects
         });
     }
 }

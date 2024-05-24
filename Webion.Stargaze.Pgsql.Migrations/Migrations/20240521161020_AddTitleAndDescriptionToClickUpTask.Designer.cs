@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Webion.Stargaze.Pgsql;
@@ -11,9 +12,11 @@ using Webion.Stargaze.Pgsql;
 namespace Webion.Stargaze.Pgsql.Migrations.Migrations
 {
     [DbContext(typeof(StargazeDbContext))]
-    partial class StargazeDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240521161020_AddTitleAndDescriptionToClickUpTask")]
+    partial class AddTitleAndDescriptionToClickUpTask
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -355,10 +358,6 @@ namespace Webion.Stargaze.Pgsql.Migrations.Migrations
                         .HasColumnType("text")
                         .HasColumnName("name");
 
-                    b.Property<string>("Path")
-                        .HasColumnType("text")
-                        .HasColumnName("path");
-
                     b.Property<string>("SpaceId")
                         .IsRequired()
                         .HasColumnType("text")
@@ -387,10 +386,6 @@ namespace Webion.Stargaze.Pgsql.Migrations.Migrations
                         .HasColumnType("text")
                         .HasColumnName("name");
 
-                    b.Property<string>("Path")
-                        .HasColumnType("text")
-                        .HasColumnName("path");
-
                     b.Property<string>("SpaceId")
                         .IsRequired()
                         .HasColumnType("text")
@@ -417,10 +412,6 @@ namespace Webion.Stargaze.Pgsql.Migrations.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("text")
                         .HasColumnName("name");
-
-                    b.Property<string>("Path")
-                        .HasColumnType("text")
-                        .HasColumnName("path");
 
                     b.HasKey("Id")
                         .HasName("pk_space");

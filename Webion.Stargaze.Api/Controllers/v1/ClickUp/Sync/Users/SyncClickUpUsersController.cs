@@ -40,10 +40,10 @@ public sealed class SyncClickUpUsersController : ControllerBase
     public async Task<IActionResult> Sync(CancellationToken cancellationToken)
     {
         await using var transaction = await _db.Database.BeginTransactionAsync(cancellationToken);
-        
+
         var teamsResponse = await _clickUpApi.Teams.GetAllAsync();
         var team = teamsResponse.Teams.First(x => x.Id == _clickUpSettings.TeamId);
-        
+
         foreach (var m in team.Members)
         {
             var exists = await _userManager.FindByLoginAsync(
@@ -59,14 +59,15 @@ public sealed class SyncClickUpUsersController : ControllerBase
                 UserName = m.User.UserName
                     .Replace(" ", ".")
                     .ToLower(),
+                Email = m.User.Email
             };
-            
+
             var createResult = await _userManager.CreateAsync(user);
             if (!createResult.Succeeded)
             {
                 foreach (var e in createResult.Errors)
                     ModelState.AddModelError(e.Code, e.Description);
-                
+
                 continue;
             }
 
@@ -75,7 +76,7 @@ public sealed class SyncClickUpUsersController : ControllerBase
                 providerKey: m.User.Id,
                 displayName: ClickUpDefaults.DisplayName
             ));
-            
+
             foreach (var e in addLoginResult.Errors)
                 ModelState.AddModelError(e.Code, e.Description);
         }
@@ -96,7 +97,7 @@ public sealed class SyncClickUpUsersController : ControllerBase
             })
             .AsNoTracking()
             .ToListAsync(cancellationToken);
-        
+
         return Ok();
     }
 }

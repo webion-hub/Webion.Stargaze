@@ -16,6 +16,4 @@ public sealed class TimeEntryDto
     public required bool Billable { get; init; }
     public required bool Billed { get; init; }
     public required bool Paid { get; init; }
-    
-    
 }

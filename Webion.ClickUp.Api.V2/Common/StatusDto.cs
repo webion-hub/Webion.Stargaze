@@ -4,7 +4,7 @@ namespace Webion.ClickUp.Api.V2.Common;
 
 public sealed class StatusDto
 {
-    public required string Id { get; init; }
+    public string? Id { get; init; }
     public required string Status { get; init; }
     public required string Color { get; init; }
 
