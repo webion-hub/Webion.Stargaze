@@ -9,7 +9,7 @@ using Webion.Stargaze.Pgsql.Entities.Projects;
 
 namespace Webion.Stargaze.Api.Controllers.v1.TimePackages.GetAll;
 
-// [Authorize]
+[Authorize]
 [ApiController]
 [Route("v{version:apiVersion}/time/packages")]
 [Tags("Time Packages")]
