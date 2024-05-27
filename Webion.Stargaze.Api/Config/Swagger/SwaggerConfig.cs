@@ -53,6 +53,7 @@ public sealed class SwaggerConfig : IWebApplicationConfiguration
                     <script>
                         var configuration = {
                             theme: 'purple',
+                            layout: 'modern',
                         }
 
                         document.getElementById('api-reference').dataset.configuration = JSON.stringify(configuration)
