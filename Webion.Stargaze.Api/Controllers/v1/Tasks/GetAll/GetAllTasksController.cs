@@ -22,6 +22,12 @@ public sealed class GetAllTasksController : ControllerBase
         _db = db;
     }
 
+    /// <summary>
+    /// Get all tasks
+    /// </summary>
+    /// <remarks>
+    /// Returns all tasks filtered by company or project.
+    /// </remarks>
     [HttpGet]
     [ProducesResponseType<GetAllTasksResponse>(200)]
     public async Task<IActionResult> GetAll(

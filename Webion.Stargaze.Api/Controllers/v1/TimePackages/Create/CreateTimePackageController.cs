@@ -23,6 +23,12 @@ public class CreateTimePackageController : ControllerBase
         _requestValidator = requestValidator;
     }
 
+    /// <summary>
+    /// Create time package
+    /// </summary>
+    /// <remarks>
+    /// Creates a time package.
+    /// </remarks>
     [HttpPost]
     [ProducesResponseType<CreateTimePackageResponse>(201)]
     [ProducesResponseType(400)]

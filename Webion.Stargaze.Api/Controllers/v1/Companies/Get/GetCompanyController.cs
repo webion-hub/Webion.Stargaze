@@ -19,6 +19,12 @@ public sealed class GetCompanyController : ControllerBase
         _db = db;
     }
 
+    /// <summary>
+    /// Get company
+    /// </summary>
+    /// <remarks>
+    /// Returns a company.
+    /// </remarks>
     [HttpGet]
     [ProducesResponseType<GetCompanyResponse>(200)]
     [ProducesResponseType(404)]

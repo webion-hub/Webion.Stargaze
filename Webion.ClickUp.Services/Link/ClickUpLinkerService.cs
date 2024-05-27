@@ -60,8 +60,12 @@ public sealed class ClickUpLinkerService
         return true;
     }
 
-    private async Task<IEnumerable<T>> GetClickUpObjects<T>(DbSet<T> dbSet, List<ClickUpObjectId> ids, ClickUpObjectType type, CancellationToken cancellationToken)
-        where T : class, IClickUpObject
+    private static async Task<IEnumerable<T>> GetClickUpObjects<T>(
+        DbSet<T> dbSet,
+        List<ClickUpObjectId> ids,
+        ClickUpObjectType type,
+        CancellationToken cancellationToken
+    ) where T : class, IClickUpObject
     {
         var typedClickUpObjectsIds = ids
             .Where(x => x.Type == type)

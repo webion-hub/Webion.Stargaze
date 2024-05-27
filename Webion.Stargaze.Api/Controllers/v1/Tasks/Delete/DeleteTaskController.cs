@@ -19,6 +19,12 @@ public sealed class DeleteTaskController : ControllerBase
         _db = db;
     }
 
+    /// <summary>
+    /// Delete task
+    /// </summary>
+    /// <remarks>
+    /// Deletes a task.
+    /// </remarks>
     [HttpDelete]
     [ProducesResponseType(204)]
     [ProducesResponseType(404)]

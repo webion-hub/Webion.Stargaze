@@ -24,6 +24,12 @@ public sealed class CreateTimeInvoiceController : ControllerBase
         _requestValidator = requestValidator;
     }
 
+    /// <summary>
+    /// Create time invoice
+    /// </summary>
+    /// <remarks>
+    /// Creates a time invoice.
+    /// </remarks>
     [HttpPost]
     [ProducesResponseType(201)]
     [ProducesResponseType(400)]

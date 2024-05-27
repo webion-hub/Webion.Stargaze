@@ -17,6 +17,12 @@ public class SyncClickUpTasksController : ControllerBase
         _synchronizer = synchronizer;
     }
 
+    /// <summary>
+    /// Synchronize linked task
+    /// </summary>
+    /// <remarks>
+    /// Synchronizes all tasks linked to projects.
+    /// </remarks>
     [HttpPut]
     [ProducesResponseType(200)]
     public async Task<IActionResult> Sync(

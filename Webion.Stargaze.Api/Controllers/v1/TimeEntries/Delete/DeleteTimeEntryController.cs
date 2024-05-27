@@ -19,6 +19,12 @@ public sealed class DeleteTimeEntryController : ControllerBase
         _db = db;
     }
 
+    /// <summary>
+    /// Delete time entry
+    /// </summary>
+    /// <remarks>
+    /// Deletes a time entry.
+    /// </remarks>
     [HttpDelete]
     [ProducesResponseType(204)]
     [ProducesResponseType(404)]

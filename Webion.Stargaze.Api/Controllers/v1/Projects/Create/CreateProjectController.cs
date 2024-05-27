@@ -22,6 +22,12 @@ public sealed class CreateProjectController : ControllerBase
         _requestValidator = requestValidator;
     }
 
+    /// <summary>
+    /// Create project
+    /// </summary>
+    /// <remarks>
+    /// Creates a project.
+    /// </remarks>
     [HttpPost]
     [ProducesResponseType<CreateProjectResponse>(201)]
     [ProducesResponseType(400)]

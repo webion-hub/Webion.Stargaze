@@ -21,6 +21,12 @@ public sealed class GetAllPackageRatesController : ControllerBase
         _db = db;
     }
 
+    /// <summary>
+    /// Get all time package rates
+    /// </summary>
+    /// <remarks>
+    /// Get all time package rates filtered by user.
+    /// </remarks>
     [HttpGet]
     [ProducesResponseType<GetAllPackageRatesResponse>(200)]
     public async Task<IActionResult> GetAll(

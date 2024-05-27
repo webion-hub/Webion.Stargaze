@@ -19,6 +19,12 @@ public sealed class RemovePackageRateController : ControllerBase
         _db = db;
     }
 
+    /// <summary>
+    /// Remove time package rate
+    /// </summary>
+    /// <remarks>
+    /// Removes a time package rate.
+    /// </remarks>
     [HttpDelete]
     [ProducesResponseType(204)]
     [ProducesResponseType(404)]

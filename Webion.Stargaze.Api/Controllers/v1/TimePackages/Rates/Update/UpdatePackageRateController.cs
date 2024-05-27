@@ -19,6 +19,12 @@ public sealed class UpdatePackageRateController : ControllerBase
         _db = db;
     }
 
+    /// <summary>
+    /// Update time package rate
+    /// </summary>
+    /// <remarks>
+    /// Update a time package rate.
+    /// </remarks>
     [HttpPut]
     [ProducesResponseType(204)]
     [ProducesResponseType(400)]

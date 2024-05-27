@@ -22,6 +22,12 @@ public sealed class UpdateProjectController : ControllerBase
         _requestValidator = requestValidator;
     }
 
+    /// <summary>
+    /// Update project
+    /// </summary>
+    /// <remarks>
+    /// Updates a project.
+    /// </remarks>
     [HttpPut]
     [ProducesResponseType(204)]
     [ProducesResponseType(400)]

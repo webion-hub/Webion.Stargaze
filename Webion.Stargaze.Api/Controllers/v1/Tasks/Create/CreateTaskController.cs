@@ -22,6 +22,12 @@ public sealed class CreateTaskController : ControllerBase
         _requestValidator = requestValidator;
     }
 
+    /// <summary>
+    /// Create task
+    /// </summary>
+    /// <remarks>
+    /// Creates a task.
+    /// </remarks>
     [HttpPost]
     [ProducesResponseType<CreateTaskResponse>(201)]
     [ProducesResponseType(400)]

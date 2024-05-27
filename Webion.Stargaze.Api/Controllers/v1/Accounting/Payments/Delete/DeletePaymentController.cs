@@ -19,6 +19,12 @@ public sealed class DeletePaymentController : ControllerBase
         _db = db;
     }
 
+    /// <summary>
+    /// Delete payment
+    /// </summary>
+    /// <remarks>
+    /// Deletes a payment.
+    /// </remarks>
     [HttpDelete]
     [ProducesResponseType(204)]
     [ProducesResponseType(404)]

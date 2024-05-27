@@ -22,7 +22,10 @@ public sealed class ExchangeCodeController : ControllerBase
         _clientsManager = clientsManager;
         _logger = logger;
     }
-    
+
+    /// <summary>
+    /// Exchange code
+    /// </summary>
     [HttpPost]
     [ProducesResponseType<ExchangeCodeResponse>(200)]
     [ProducesResponseType(403)]
@@ -38,11 +41,11 @@ public sealed class ExchangeCodeController : ControllerBase
             _logger.LogWarning("Could not find client with id {ClientId}", request.ClientId);
             return Forbid();
         }
-            
+
         var isValid = _clientsManager.VerifySecret(client, request.ClientSecret);
         if (!isValid)
             return Forbid();
-        
+
         var tokenPair = await _exchangeCodeManager.ExchangeCodeAsync(code);
         if (tokenPair is null)
             return Forbid();

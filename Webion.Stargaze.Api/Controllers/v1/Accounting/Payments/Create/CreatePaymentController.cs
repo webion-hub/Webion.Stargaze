@@ -22,6 +22,12 @@ public sealed class CreatePaymentController : ControllerBase
         _requestValidator = requestValidator;
     }
 
+    /// <summary>
+    /// Create payment
+    /// </summary>
+    /// <remarks>
+    /// Creates a payment.
+    /// </remarks>
     [HttpPost]
     [ProducesResponseType<CreatePaymentResponse>(201)]
     [ProducesResponseType(400)]

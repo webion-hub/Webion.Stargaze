@@ -22,9 +22,9 @@ public sealed class GetAllTimePackagesController : ControllerBase
     {
         _db = db;
     }
-    
+
     /// <summary>
-    /// Get time packages
+    /// Get all time packages
     /// </summary>
     /// <remarks>
     /// Returns all the time packages filtered by company.
@@ -51,7 +51,7 @@ public sealed class GetAllTimePackagesController : ControllerBase
             .Select(x => x.Id)
             .Distinct()
             .ToList();
-        
+
         var usersIds = timePackages
             .SelectMany(x => x.Rates)
             .Select(x => x.UserId)
@@ -95,7 +95,7 @@ public sealed class GetAllTimePackagesController : ControllerBase
             {
                 if (dto.TrackedHours >= package.Hours)
                     break;
-                
+
                 var entry = entries
                     .Where(x => dto.AppliesTo.Contains(x.Project.Id))
                     .Where(x => dto.Users.Contains(x.User.Id))
@@ -117,13 +117,13 @@ public sealed class GetAllTimePackagesController : ControllerBase
                 dto.TrackedHours += applicableHours.TotalHours;
                 dto.RemainingHours = package.Hours - dto.TrackedHours;
                 dto.Earnings += (decimal)applicableHours.TotalHours * userRate;
-                
+
                 entry.TrackedTime -= applicableHours;
 
                 if (entry.TrackedTime <= TimeSpan.Zero)
                     entries.Remove(entry);
             }
-            
+
             dtos.Add(dto);
         }
 
