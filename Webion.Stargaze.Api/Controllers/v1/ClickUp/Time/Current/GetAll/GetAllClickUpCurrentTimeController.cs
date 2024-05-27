@@ -6,6 +6,7 @@ using Webion.ClickUp.Api.V2;
 using Webion.Stargaze.Api.Controllers.Dtos;
 using Webion.Stargaze.Api.Options;
 using Webion.Stargaze.Pgsql;
+using Webion.Stargaze.Pgsql.Entities.Projects;
 
 namespace Webion.Stargaze.Api.Controllers.v1.ClickUp.Time.Current.GetAll;
 
@@ -56,11 +57,15 @@ public sealed class GetAllClickUpCurrentTimeController : ControllerBase
 
         foreach (var timeEntry in timeEntries)
         {
-            var task = await _db.Tasks
-                .Where(x => x.ClickUpTask != null)
-                .Where(x => timeEntry.Task!.Id == x.ClickUpTask!.Id)
-                .AsNoTracking()
-                .FirstOrDefaultAsync(cancellationToken);
+            TaskDbo? task = null;
+            if (timeEntry.Task?.Id is not null)
+            {
+                task = await _db.Tasks
+                    .Where(x => x.ClickUpTask != null)
+                    .Where(x => timeEntry.Task!.Id == x.ClickUpTask!.Id)
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(cancellationToken);
+            }
 
             var user = await _db.UserLogins
                 .Where(x => timeEntry.User.Id == x.ProviderKey)
