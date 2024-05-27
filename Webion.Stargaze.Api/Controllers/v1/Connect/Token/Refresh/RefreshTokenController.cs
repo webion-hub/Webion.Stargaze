@@ -32,8 +32,12 @@ public sealed class RefreshTokenController : ControllerBase
     }
 
     /// <summary>
-    /// Refresh token
+    /// Token refresh
     /// </summary>
+    /// <remarks>
+    /// Send a refresh token to get a new pair of access and refresh tokens.<br/>
+    /// The refresh token used in the request will expire immediately.
+    /// </remarks>
     [HttpPost]
     [ProducesResponseType<RefreshTokenResponse>(200)]
     [ProducesResponseType(401)]

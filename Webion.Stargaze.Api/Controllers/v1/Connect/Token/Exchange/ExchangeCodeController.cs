@@ -24,8 +24,11 @@ public sealed class ExchangeCodeController : ControllerBase
     }
 
     /// <summary>
-    /// Exchange code
+    /// Code exchange
     /// </summary>
+    /// <remarks>
+    /// Exchanges a code obtained from an external sign-in with a pair of access and refresh tokens.
+    /// </remarks>
     [HttpPost]
     [ProducesResponseType<ExchangeCodeResponse>(200)]
     [ProducesResponseType(403)]
