@@ -1,3 +1,5 @@
+using Webion.Stargaze.Api.IntegrationTests.Seeders;
+
 namespace Webion.Stargaze.Api.IntegrationTests.Api.Controllers.v1.TimePackages;
 
 public sealed class GetAllTimePackagesTest : IAssemblyFixture<StargazeWebApplicationFactory>
@@ -15,15 +17,28 @@ public sealed class GetAllTimePackagesTest : IAssemblyFixture<StargazeWebApplica
         // Arrange
         var client = _factory.Api.TimePackages;
 
+        var kAuthTime = ProjectsSeeder.KAuth.Tasks
+            .SelectMany(x => x.TimeEntries
+                .Select(x => x.Duration.TotalHours))
+            .Sum();
+        var kTraceTime = ProjectsSeeder.KTrace.Tasks
+            .SelectMany(x => x.TimeEntries
+                .Select(x => x.Duration.TotalHours))
+            .Sum();
+        var kTrendTime = ProjectsSeeder.KTrend.Tasks
+            .SelectMany(x => x.TimeEntries
+                .Select(x => x.Duration.TotalHours))
+            .Sum();
+
+        var totalTime = kAuthTime + kTraceTime + kTrendTime;
+
         // Act
         var response = await client.GetAllTimePackagesTestAsync();
 
         // Assert
-        Assert.NotEmpty(response.Packages);
-        Assert.NotEmpty(response.AppliesTo);
+        Assert.NotEmpty(response.TimePackages);
 
-        // TODO
-        Assert.NotEqual(int.MinValue, response.TotalTime);
-        Assert.NotEqual(int.MinValue, response.RemainingBillableTime);
+        Assert.Equal(totalTime, response.TotalTime, 5);
+        Assert.Equal(0, response.RemainingBillableTime);
     }
 }
