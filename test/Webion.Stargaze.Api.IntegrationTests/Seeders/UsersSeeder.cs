@@ -17,15 +17,15 @@ public class UsersSeeder : ISeeder
 
     static UsersSeeder()
     {
-        Stefano = new UserDbo();
-        Alessandro = new UserDbo();
-        Matteo = new UserDbo();
-        Davide = new UserDbo();
-        Jacopo = new UserDbo();
-        Francesco = new UserDbo();
-        Filippo = new UserDbo();
-        Daniele = new UserDbo();
-        Lorenzo = new UserDbo();
+        Stefano = new UserDbo { UserName = "Stefano" };
+        Alessandro = new UserDbo { UserName = "Alessandro" };
+        Matteo = new UserDbo { UserName = "Matteo" };
+        Davide = new UserDbo { UserName = "Davide" };
+        Jacopo = new UserDbo { UserName = "Jacopo" };
+        Francesco = new UserDbo { UserName = "Francesco" };
+        Filippo = new UserDbo { UserName = "Filippo" };
+        Daniele = new UserDbo { UserName = "Daniele" };
+        Lorenzo = new UserDbo { UserName = "Lorenzo" };
     }
 
     public void Seed(StargazeDbContext db)
