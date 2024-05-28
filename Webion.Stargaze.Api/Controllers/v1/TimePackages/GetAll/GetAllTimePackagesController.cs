@@ -3,9 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Webion.Extensions.Linq;
 using Webion.Stargaze.Api.Controllers.Dtos;
+using Webion.Stargaze.Api.Controllers.Entities;
 using Webion.Stargaze.Pgsql;
-using Webion.Stargaze.Pgsql.Entities.Identity;
-using Webion.Stargaze.Pgsql.Entities.Projects;
 
 namespace Webion.Stargaze.Api.Controllers.v1.TimePackages.GetAll;
 
@@ -65,7 +64,7 @@ public sealed class GetAllTimePackagesController : ControllerBase
             .Where(x => projectsIds.Contains(x.Task!.ProjectId))
             .Where(x => usersIds.Contains(x.UserId))
             .OrderBy(x => x.Start)
-            .Select(x => new EntryDetail(
+            .Select(x => new EntryDetailEntity(
                 x.Task!.Project,
                 x.User,
                 x.Duration
@@ -73,6 +72,8 @@ public sealed class GetAllTimePackagesController : ControllerBase
             .AsNoTrackingWithIdentityResolution()
             .ToListAsync(cancellationToken);
 
+        var totalTime = entries
+            .Sum(x => x.TrackedTime.TotalHours);
 
         var dtos = new List<TimePackageDto>();
         foreach (var package in timePackages)
@@ -127,21 +128,14 @@ public sealed class GetAllTimePackagesController : ControllerBase
             dtos.Add(dto);
         }
 
+        var remainingBillableTime = entries
+            .Sum(x => x.TrackedTime.TotalHours);
+
         return Ok(new GetAllTimePackagesResponse
         {
-            TimePackages = dtos
+            TimePackages = dtos,
+            TotalTime = totalTime,
+            RemainingBillableTime = remainingBillableTime
         });
     }
-}
-
-
-file class EntryDetail(
-    ProjectDbo project,
-    UserDbo user,
-    TimeSpan trackedTime
-)
-{
-    public ProjectDbo Project { get; init; } = project;
-    public UserDbo User { get; init; } = user;
-    public TimeSpan TrackedTime { get; set; } = trackedTime;
 }
