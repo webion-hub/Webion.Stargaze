@@ -1,5 +1,4 @@
 using FluentValidation;
-using Qubi.Api.Config;
 using Webion.Application.Extensions;
 using Webion.AspNetCore;
 using Webion.Stargaze.Api;

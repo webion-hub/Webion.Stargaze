@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Webion.AspNetCore;
 
-namespace Qubi.Api.Config;
+namespace Webion.Stargaze.Api.Config;
 
 public sealed class ApiVersioningConfig : IWebApplicationConfiguration
 {
