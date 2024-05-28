@@ -1,15 +1,11 @@
-using System.ComponentModel.DataAnnotations;
 using Webion.Stargaze.Api.Controllers.Dtos;
 
 namespace Webion.Stargaze.Api.Controllers.v1.TimeEntries.GetAll;
 
 public sealed class GetAllTimeEntriesRequest : PaginatedRequest
 {
-    [Required]
-    public DateTime From { get; init; }
-    
-    [Required]
-    public DateTime To { get; init; }
+    public DateTime? From { get; init; }
+    public DateTime? To { get; init; }
     
     /// <summary>
     /// Filter the time entries by task.

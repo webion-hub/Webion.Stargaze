@@ -36,8 +36,12 @@ public sealed class GetAllTimeEntriesController : ControllerBase
     )
     {
         var page = await _db.TimeEntries
-            .Where(x => x.Start >= request.From)
-            .Where(x => x.End <= request.To)
+            .If(request.From is not null, b => b
+                .Where(x => x.Start >= request.From)
+            )
+            .If(request.To is not null, b => b
+                .Where(x => x.End <= request.To)
+            )
             .If(request.ProjectId is not null, b => b
                 .Where(x => x.Task!.ProjectId == request.ProjectId)
             )
