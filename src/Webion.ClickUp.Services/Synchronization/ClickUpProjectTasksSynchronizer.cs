@@ -17,7 +17,7 @@ public sealed class ClickUpProjectTasksSynchronizer
         _db = db;
         _api = api;
     }
- 
+
     public async Task<bool> SyncAsync(Guid projectId, CancellationToken cancellationToken)
     {
         var project = await _db.Projects
@@ -66,7 +66,7 @@ public sealed class ClickUpProjectTasksSynchronizer
 
         project.Tasks.SoftReplace(
             replacement: lists.SelectMany(x => x.Tasks),
-            match: (o, n) => o.ClickUpTask!.Id == n.Id,
+            match: (o, n) => o.ClickUpTask?.Id == n.Id,
             add: n => new TaskDbo
             {
                 ClickUpTask = n,
