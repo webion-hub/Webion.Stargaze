@@ -1,18 +1,10 @@
-using System.Globalization;
-using Bogus;
 using FluentValidation;
-using Qubi.Api.Config;
 using Webion.Application.Extensions;
 using Webion.AspNetCore;
 using Webion.Stargaze.Api;
 using Webion.Stargaze.Api.Config;
 using Webion.Stargaze.Api.Config.Swagger;
 using Webion.Stargaze.Auth;
-using Webion.Stargaze.Pgsql;
-using Webion.Stargaze.Pgsql.Entities.Core;
-using Webion.Stargaze.Pgsql.Entities.Identity;
-using Webion.Stargaze.Pgsql.Entities.Projects;
-using Webion.Stargaze.Pgsql.Entities.TimeTracking;
 
 var builder = WebApplication.CreateBuilder(args);
 

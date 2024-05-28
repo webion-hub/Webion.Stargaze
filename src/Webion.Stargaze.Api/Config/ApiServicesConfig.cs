@@ -2,7 +2,7 @@ using Webion.AspNetCore;
 using Webion.ClickUp.Sync.Synchronization;
 using Webion.Stargaze.Services.Link;
 
-namespace Qubi.Api.Config;
+namespace Webion.Stargaze.Api.Config;
 
 public sealed class ApiServicesConfig : IWebApplicationConfiguration
 {
