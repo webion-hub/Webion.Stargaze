@@ -21,6 +21,12 @@ public sealed class GetAllCompaniesController : ControllerBase
         _db = db;
     }
 
+    /// <summary>
+    /// Get all companies
+    /// </summary>
+    /// <remarks>
+    /// Returns all companies.
+    /// </remarks>
     [HttpGet]
     [ProducesResponseType<GetAllCompaniesResponse>(200)]
     public async Task<IActionResult> GetAll(

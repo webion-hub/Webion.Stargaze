@@ -22,6 +22,12 @@ public sealed class UpdateTimeEntryController : ControllerBase
         _requestValidator = requestValidator;
     }
 
+    /// <summary>
+    /// Update time entry
+    /// </summary>
+    /// <remarks>
+    /// Update a time entry.
+    /// </remarks>
     [HttpPut]
     [ProducesResponseType(204)]
     [ProducesResponseType(400)]

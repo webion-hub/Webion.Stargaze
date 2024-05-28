@@ -19,6 +19,12 @@ public sealed class GetTaskController : ControllerBase
         _db = db;
     }
 
+    /// <summary>
+    /// Get task
+    /// </summary>
+    /// <remarks>
+    /// Returns a task.
+    /// </remarks>
     [HttpGet]
     [ProducesResponseType<GetTaskResponse>(200)]
     [ProducesResponseType(404)]

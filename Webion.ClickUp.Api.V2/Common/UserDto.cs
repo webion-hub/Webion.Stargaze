@@ -12,5 +12,5 @@ public sealed class UserDto
 
     [JsonPropertyName("profilePicture")]
     public required string ProfilePicture { get; init; }
-    public required string Email { get; init; }
+    public string? Email { get; init; }
 }

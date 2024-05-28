@@ -22,6 +22,13 @@ public sealed class CreateCompanyController : ControllerBase
         _requestValidator = requestValidator;
     }
 
+
+    /// <summary>
+    /// Create company
+    /// </summary>
+    /// <remarks>
+    /// Creates a company.
+    /// </remarks>
     [HttpPost]
     [ProducesResponseType<CreateCompanyResponse>(201)]
     [ProducesResponseType(400)]
@@ -33,7 +40,7 @@ public sealed class CreateCompanyController : ControllerBase
         await _requestValidator.ValidateModelAsync(request, ModelState, cancellationToken);
         if (!ModelState.IsValid)
             return ValidationProblem();
-        
+
         var company = new CompanyDbo
         {
             Name = request.Name,
@@ -41,7 +48,7 @@ public sealed class CreateCompanyController : ControllerBase
 
         _db.Companies.Add(company);
         await _db.SaveChangesAsync(cancellationToken);
-        
+
         return Created($"v1/companies/{company.Id}", new CreateCompanyResponse
         {
             Id = company.Id,

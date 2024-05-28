@@ -19,6 +19,13 @@ public sealed class DeleteCompanyController : ControllerBase
         _db = db;
     }
 
+
+    /// <summary>
+    /// Delete company
+    /// </summary>
+    /// <remarks>
+    /// Deletes a company.
+    /// </remarks>
     [HttpDelete]
     [ProducesResponseType(204)]
     [ProducesResponseType(404)]

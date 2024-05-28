@@ -22,6 +22,12 @@ public sealed class UpdateTaskController : ControllerBase
         _requestValidator = requestValidator;
     }
 
+    /// <summary>
+    /// Update task
+    /// </summary>
+    /// <remarks>
+    /// Updates a task.
+    /// </remarks>
     [HttpPut]
     [ProducesResponseType(204)]
     [ProducesResponseType(400)]

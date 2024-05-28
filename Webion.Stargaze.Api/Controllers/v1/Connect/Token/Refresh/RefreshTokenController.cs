@@ -30,7 +30,14 @@ public sealed class RefreshTokenController : ControllerBase
         _logger = logger;
         _refreshTokenManager = refreshTokenManager;
     }
-    
+
+    /// <summary>
+    /// Token refresh
+    /// </summary>
+    /// <remarks>
+    /// Send a refresh token to get a new pair of access and refresh tokens.<br/>
+    /// The refresh token used in the request will expire immediately.
+    /// </remarks>
     [HttpPost]
     [ProducesResponseType<RefreshTokenResponse>(200)]
     [ProducesResponseType(401)]
@@ -41,11 +48,11 @@ public sealed class RefreshTokenController : ControllerBase
     )
     {
         await using var transaction = await _db.Database.BeginTransactionAsync(cancellationToken);
-        
+
         var token = await _refreshTokenManager.RetrieveAsync(request.RefreshToken, cancellationToken);
         if (token is null)
             return Forbid();
-        
+
         var client = await _clientsManager.FindByIdAsync(request.ClientId, cancellationToken);
         if (client is null)
         {
@@ -56,10 +63,10 @@ public sealed class RefreshTokenController : ControllerBase
         var isValid = _clientsManager.VerifySecret(client, request.ClientSecret);
         if (!isValid)
             return Forbid();
-        
+
         var pair = await _jwtIssuer.IssuePairAsync(token.User, client, cancellationToken);
         token.ExpiresAt = _timeProvider.GetUtcNow();
-        
+
         await _db.SaveChangesAsync(cancellationToken);
 
         await transaction.CommitAsync(cancellationToken);

@@ -19,6 +19,12 @@ public sealed class GetPaymentController : ControllerBase
         _db = db;
     }
 
+    /// <summary>
+    /// Get payment
+    /// </summary>
+    /// <remarks>
+    /// Returns a payment.
+    /// </remarks>
     [HttpGet]
     [ProducesResponseType<GetPaymentResponse>(200)]
     [ProducesResponseType(404)]

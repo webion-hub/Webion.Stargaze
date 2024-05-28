@@ -23,6 +23,12 @@ public sealed class AddPackageRateController : ControllerBase
         _requestValidator = requestValidator;
     }
 
+    /// <summary>
+    /// Add time package rate
+    /// </summary>
+    /// <remarks>
+    /// Adds a time package rate.
+    /// </remarks>
     [HttpPost]
     [ProducesResponseType<AddPackageRateResponse>(201)]
     [ProducesResponseType(400)]

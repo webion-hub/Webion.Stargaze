@@ -58,11 +58,11 @@ public sealed class GetAllClickUpCurrentTimeController : ControllerBase
         foreach (var timeEntry in timeEntries)
         {
             var task = await _db.Tasks
-                .Where(x => x.ClickUpTask != null)
-                .If(timeEntry.Task is not null, b => b
-                    .Where(x => timeEntry.Task!.Id == x.ClickUpTask!.Id))
-                .AsNoTracking()
-                .FirstOrDefaultAsync(cancellationToken);
+            .Where(x => x.ClickUpTask != null)
+            .If(timeEntry.Task is not null, b => b
+                .Where(x => timeEntry.Task!.Id == x.ClickUpTask!.Id))
+            .AsNoTracking()
+            .FirstOrDefaultAsync(cancellationToken);
 
             var user = await _db.UserLogins
                 .Where(x => timeEntry.User.Id == x.ProviderKey)

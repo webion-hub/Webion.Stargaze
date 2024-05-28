@@ -20,6 +20,12 @@ public sealed class AddInvoiceItemController : ControllerBase
         _db = db;
     }
 
+    /// <summary>
+    /// Add invoice item
+    /// </summary>
+    /// <remarks>
+    /// Adds an item to an invoice.
+    /// </remarks>
     [HttpPost]
     [ProducesResponseType<AddInvoiceItemResponse>(201)]
     [ProducesResponseType(404)]

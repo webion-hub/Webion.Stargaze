@@ -22,6 +22,12 @@ public class CreateTimeEntryController : ControllerBase
         _requestValidator = requestValidator;
     }
 
+    /// <summary>
+    /// Create time entry
+    /// </summary>
+    /// <remarks>
+    /// Creates a time entry.
+    /// </remarks>
     [HttpPost]
     [ProducesResponseType<CreateTimeEntryRequest>(201)]
     [ProducesResponseType(400)]

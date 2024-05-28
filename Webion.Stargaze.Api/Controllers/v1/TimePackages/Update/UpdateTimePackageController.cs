@@ -22,6 +22,12 @@ public sealed class UpdateTimePackageController : ControllerBase
         _requestValidator = requestValidator;
     }
 
+    /// <summary>
+    /// Update time package
+    /// </summary>
+    /// <remarks>
+    /// Updates a time package.
+    /// </remarks>
     [HttpPut]
     [ProducesResponseType(204)]
     [ProducesResponseType(400)]

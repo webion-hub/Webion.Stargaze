@@ -22,6 +22,12 @@ public sealed class UpdateInvoiceController : ControllerBase
         _requestValidator = requestValidator;
     }
 
+    /// <summary>
+    /// Update invoice
+    /// </summary>
+    /// <remarks>
+    /// Updates an invoice.
+    /// </remarks>
     [HttpPut]
     [ProducesResponseType(204)]
     [ProducesResponseType(400)]
