@@ -35,6 +35,6 @@ public sealed class TimePackageDbo : IEntityTypeConfiguration<TimePackageDbo>
         builder
             .HasMany(x => x.AppliesTo)
             .WithMany(x => x.TimePackages)
-            .UsingEntity("time_package_project");
+            .UsingEntity(j => j.ToTable("time_package_project", Schemas.TimeTracking));
     }
 }

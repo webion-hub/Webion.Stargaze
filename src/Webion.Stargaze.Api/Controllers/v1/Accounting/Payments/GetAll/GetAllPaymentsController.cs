@@ -22,6 +22,12 @@ public sealed class GetAllPaymentsController : ControllerBase
         _db = db;
     }
 
+    /// <summary>
+    /// Get all payments
+    /// </summary>
+    /// <remarks>
+    /// Returns all payments filtered by invoice, bank account or category.
+    /// </remarks>
     [HttpGet]
     [ProducesResponseType<GetAllPaymentsResponse>(200)]
     public async Task<IActionResult> GetAll(

@@ -20,6 +20,12 @@ public class GetAllLinkedObjectsController : ControllerBase
         _db = db;
     }
 
+    /// <summary>
+    /// Get all linked objects
+    /// </summary>
+    /// <remarks>
+    /// Returns all linked objects.
+    /// </remarks>
     [HttpGet]
     [ProducesResponseType<GetAllLinkedObjectsResponse>(200)]
     public async Task<IActionResult> GetAll(

@@ -30,7 +30,8 @@ public sealed class SyncClickUpObjectsController : ControllerBase
     /// Synchronize objects
     /// </summary>
     /// <remarks>
-    /// Synchronizes all spaces, folders and lists.
+    /// Synchronizes all spaces, folders and lists.<br/>
+    /// It works on the team that were imported using the <c>v1/clickup/sync/users</c> endpoint.
     /// </remarks>
     [HttpPost]
     [ProducesResponseType(200)]

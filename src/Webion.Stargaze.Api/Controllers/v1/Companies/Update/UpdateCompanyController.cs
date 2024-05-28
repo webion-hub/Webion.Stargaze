@@ -22,6 +22,12 @@ public sealed class UpdateCompanyController : ControllerBase
         _requestValidator = requestValidator;
     }
 
+    /// <summary>
+    /// Update company
+    /// </summary>
+    /// <remarks>
+    /// Updates a company.
+    /// </remarks>
     [HttpPut]
     [ProducesResponseType(204)]
     [ProducesResponseType(400)]

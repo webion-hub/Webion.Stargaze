@@ -19,6 +19,12 @@ public sealed class GetProjectController : ControllerBase
         _db = db;
     }
 
+    /// <summary>
+    /// Get project
+    /// </summary>
+    /// <remarks>
+    /// Returns a project.
+    /// </remarks>
     [HttpGet]
     [ProducesResponseType<GetProjectResponse>(200)]
     [ProducesResponseType(404)]

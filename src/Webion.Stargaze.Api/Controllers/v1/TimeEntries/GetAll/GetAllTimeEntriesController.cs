@@ -22,7 +22,12 @@ public sealed class GetAllTimeEntriesController : ControllerBase
         _db = db;
     }
 
-
+    /// <summary>
+    /// Get all time entries
+    /// </summary>
+    /// <remarks>
+    /// Get all time entries filtered by project, task or user.
+    /// </remarks>
     [HttpGet]
     [ProducesResponseType<GetAllTimeEntriesResponse>(200)]
     public async Task<IActionResult> GetAll(

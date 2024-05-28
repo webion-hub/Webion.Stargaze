@@ -19,6 +19,12 @@ public sealed class DeleteProjectController : ControllerBase
         _db = db;
     }
 
+    /// <summary>
+    /// Delete project
+    /// </summary>
+    /// <remarks>
+    /// Deletes a project.
+    /// </remarks>
     [HttpDelete]
     [ProducesResponseType(204)]
     [ProducesResponseType(404)]

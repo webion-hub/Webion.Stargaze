@@ -19,6 +19,12 @@ public sealed class DeleteTimePackageController : ControllerBase
         _db = db;
     }
 
+    /// <summary>
+    /// Delete time package
+    /// </summary>
+    /// <remarks>
+    /// Deletes a time package.
+    /// </remarks>
     [HttpDelete]
     [ProducesResponseType(204)]
     [ProducesResponseType(404)]

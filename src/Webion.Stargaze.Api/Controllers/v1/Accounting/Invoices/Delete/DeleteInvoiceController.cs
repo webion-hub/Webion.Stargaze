@@ -19,6 +19,12 @@ public sealed class DeleteInvoiceController : ControllerBase
         _db = db;
     }
 
+    /// <summary>
+    /// Delete invoice
+    /// </summary>
+    /// <remarks>
+    /// Deletes an invoice.
+    /// </remarks>
     [HttpDelete]
     [ProducesResponseType(204)]
     [ProducesResponseType(404)]

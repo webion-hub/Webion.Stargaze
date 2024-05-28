@@ -22,6 +22,12 @@ public sealed class CreateInvoiceController : ControllerBase
         _requestValidator = requestValidator;
     }
 
+    /// <summary>
+    /// Create invoice
+    /// </summary>
+    /// <remarks>
+    /// Creates an invoice.
+    /// </remarks>
     [HttpPost]
     [ProducesResponseType<CreateInvoiceResponse>(201)]
     [ProducesResponseType(400)]

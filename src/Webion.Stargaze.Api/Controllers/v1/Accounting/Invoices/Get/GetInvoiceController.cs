@@ -19,6 +19,12 @@ public sealed class GetInvoiceController : ControllerBase
         _db = db;
     }
 
+    /// <summary>
+    /// Get invoice
+    /// </summary>
+    /// <remarks>
+    /// Returns an invoice.
+    /// </remarks>
     [HttpGet]
     [ProducesResponseType<GetInvoiceResponse>(200)]
     [ProducesResponseType(404)]

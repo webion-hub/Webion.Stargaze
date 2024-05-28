@@ -22,6 +22,12 @@ public sealed class GetAllInvoicesController : ControllerBase
         _db = db;
     }
 
+    /// <summary>
+    /// Get all invoices
+    /// </summary>
+    /// <remarks>
+    /// Returns all invoices filtered by company.
+    /// </remarks>
     [HttpGet]
     [ProducesResponseType<GetAllInvoicesResponse>(200)]
     public async Task<IActionResult> GetAll(
