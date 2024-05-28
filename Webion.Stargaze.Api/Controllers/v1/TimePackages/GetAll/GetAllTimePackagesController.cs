@@ -92,7 +92,7 @@ public sealed class GetAllTimePackagesController : ControllerBase
                 Users = package.Rates.Select(x => x.UserId),
             };
 
-            while (true)
+            foreach (var i in Enumerable.Range(0, 10_000))
             {
                 if (dto.TrackedHours >= package.Hours)
                     break;
