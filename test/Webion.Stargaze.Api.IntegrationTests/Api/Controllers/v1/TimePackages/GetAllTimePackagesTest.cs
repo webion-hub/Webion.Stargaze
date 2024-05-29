@@ -17,28 +17,44 @@ public sealed class GetAllTimePackagesTest : IAssemblyFixture<StargazeWebApplica
         // Arrange
         var client = _factory.Api.TimePackages;
 
-        var kAuthTime = ProjectsSeeder.KAuth.Tasks
-            .SelectMany(x => x.TimeEntries
-                .Select(x => x.Duration.TotalHours))
-            .Sum();
-        var kTraceTime = ProjectsSeeder.KTrace.Tasks
-            .SelectMany(x => x.TimeEntries
-                .Select(x => x.Duration.TotalHours))
-            .Sum();
-        var kTrendTime = ProjectsSeeder.KTrend.Tasks
-            .SelectMany(x => x.TimeEntries
-                .Select(x => x.Duration.TotalHours))
+        var seniorUsersIds = TimePackagesSeeder.KaireSenior.Rates
+            .Select(x => x.UserId);
+        var juniorUsersIds = TimePackagesSeeder.KaireJunior.Rates
+            .Select(x => x.UserId);
+
+        var timeEntries = ProjectsSeeder.KTrend.Tasks
+                .SelectMany(x => x.TimeEntries)
+                .ToList();
+        timeEntries.AddRange(ProjectsSeeder.KAuth.Tasks
+            .SelectMany(x => x.TimeEntries));
+        timeEntries.AddRange(ProjectsSeeder.KTrace.Tasks
+            .SelectMany(x => x.TimeEntries));
+
+        var seniorHours = timeEntries
+            .Where(x => seniorUsersIds.Contains(x.UserId))
+            .Select(x => x.Duration.TotalHours)
             .Sum();
 
-        var totalTime = kAuthTime + kTraceTime + kTrendTime;
+        var juniorHours = timeEntries
+            .Where(x => juniorUsersIds.Contains(x.UserId))
+            .Select(x => x.Duration.TotalHours)
+            .Sum();
 
         // Act
         var response = await client.GetAllTimePackagesTestAsync();
 
+        var seniorPackage = response.TimePackages
+            .FirstOrDefault(x => x.Id == TimePackagesSeeder.KaireSenior.Id);
+        var juniorPackage = response.TimePackages
+            .FirstOrDefault(x => x.Id == TimePackagesSeeder.KaireJunior.Id);
+
         // Assert
         Assert.NotEmpty(response.TimePackages);
 
-        Assert.Equal(totalTime, response.TotalTime, 5);
-        Assert.Equal(0, response.RemainingBillableTime);
+        Assert.Equal(seniorHours + juniorHours, response.TotalTime, 5);
+        Assert.Equal(0, response.RemainingBillableTime, 5);
+
+        Assert.Equal(seniorHours, seniorPackage!.TrackedHours, 5);
+        Assert.Equal(juniorHours, juniorPackage!.TrackedHours, 5);
     }
 }
