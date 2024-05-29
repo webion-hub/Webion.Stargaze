@@ -54,6 +54,6 @@ public sealed class TimeEntryDbo : IEntityTypeConfiguration<TimeEntryDbo>
             .WithMany(x => x.TimeEntries)
             .HasForeignKey(x => x.TaskId)
             .IsRequired(false)
-            .OnDelete(DeleteBehavior.NoAction);
+            .OnDelete(DeleteBehavior.SetNull);
     }
 }

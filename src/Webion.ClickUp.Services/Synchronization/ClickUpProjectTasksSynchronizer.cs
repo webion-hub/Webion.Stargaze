@@ -78,7 +78,7 @@ public sealed class ClickUpProjectTasksSynchronizer
                 o.Title = n.Title!;
                 o.Description = n.Description;
             },
-            delete: o => { }
+            delete: o => _db.Remove(o)
         );
         await _db.SaveChangesAsync(cancellationToken);
 
