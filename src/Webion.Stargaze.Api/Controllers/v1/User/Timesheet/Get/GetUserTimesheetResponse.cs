@@ -2,7 +2,7 @@ using Webion.Stargaze.Api.Controllers.Dtos;
 
 namespace Webion.Stargaze.Api.Controllers.v1.User.Timesheet.Get;
 
-public sealed class GetUserTimesheetResponse
+public sealed class GetUserTimesheetResponse : PaginatedResponse<TimeEntryDto, GetUserTimesheetResponse>
 {
-    public required IEnumerable<TimeEntryDto> TimeEntries { get; init; }
+    public IEnumerable<TimeEntryDto> TimeEntries { get; init; } = [];
 }

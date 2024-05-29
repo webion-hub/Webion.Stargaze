@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
+using Webion.Extensions.EntityFrameworkCore;
 using Webion.Stargaze.Api.Controllers.Dtos;
 using Webion.Stargaze.Pgsql;
 using Webion.Stargaze.Pgsql.Entities.Identity;
@@ -35,9 +35,9 @@ public sealed class GetUserTimesheetController : ControllerBase
     /// </remarks>
     [HttpGet]
     [ProducesResponseType<GetUserTimesheetResponse>(200)]
-    [ProducesResponseType(404)]
     [ProducesResponseType(500)]
     public async Task<IActionResult> Get(
+        [FromQuery] GetUserTimesheetRequest request,
         CancellationToken cancellationToken
     )
     {
@@ -50,7 +50,7 @@ public sealed class GetUserTimesheetController : ControllerBase
             providerKey: info.ProviderKey
         );
 
-        var timeEntries = await _db.TimeEntries
+        var page = await _db.TimeEntries
             .Where(x => x.UserId == user!.Id)
             .Select(x => new TimeEntryDto
             {
@@ -67,14 +67,8 @@ public sealed class GetUserTimesheetController : ControllerBase
                 Paid = x.Paid,
             })
             .AsNoTracking()
-            .ToListAsync(cancellationToken);
+            .PaginateAsync(request.Page, request.PageSize, cancellationToken);
 
-        if (timeEntries.IsNullOrEmpty())
-            return NotFound();
-
-        return Ok(new GetUserTimesheetResponse
-        {
-            TimeEntries = timeEntries
-        });
+        return Ok(GetUserTimesheetResponse.From(page));
     }
 }
