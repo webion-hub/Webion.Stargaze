@@ -45,6 +45,7 @@ public sealed class CreateTaskController : ControllerBase
             ProjectId = request.ProjectId,
             Title = request.Title,
             Description = request.Description,
+            TimeEstimate = request.TimeEstimate
         };
 
         _db.Tasks.Add(task);

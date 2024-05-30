@@ -41,6 +41,7 @@ public sealed class GetTaskController : ControllerBase
                 ProjectId = x.ProjectId,
                 Title = x.Title,
                 Description = x.Description,
+                TimeEstimate = x.TimeEstimate
             })
             .AsNoTracking()
             .FirstOrDefaultAsync(cancellationToken);

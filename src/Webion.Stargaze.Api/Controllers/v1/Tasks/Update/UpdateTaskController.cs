@@ -50,6 +50,7 @@ public sealed class UpdateTaskController : ControllerBase
                     .SetProperty(x => x.ProjectId, request.ProjectId)
                     .SetProperty(x => x.Title, request.Title)
                     .SetProperty(x => x.Description, request.Description)
+                    .SetProperty(x => x.TimeEstimate, request.TimeEstimate)
             );
 
         if (updatedRows <= 0)

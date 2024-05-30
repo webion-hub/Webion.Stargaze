@@ -10,4 +10,5 @@ public sealed class UpdateTaskRequest
     [Required]
     public string Title { get; init; } = null!;
     public string? Description { get; init; }
+    public TimeSpan? TimeEstimate { get; init; }
 }
