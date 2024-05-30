@@ -51,6 +51,7 @@ public sealed class GetAllTasksController : ControllerBase
                 ProjectId = x.ProjectId,
                 Title = x.Title,
                 Description = x.Description,
+                TimeEstimate = x.TimeEstimate
             })
             .AsNoTracking()
             .PaginateAsync(request.Page, request.PageSize, cancellationToken);

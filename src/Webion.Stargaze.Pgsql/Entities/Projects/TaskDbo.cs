@@ -13,8 +13,8 @@ public sealed class TaskDbo : IEntityTypeConfiguration<TaskDbo>
 
     public string Title { get; set; } = null!;
     public string? Description { get; set; }
+    public TimeSpan? TimeEstimate { get; set; }
 
-    
     public ProjectDbo Project { get; set; } = null!;
     public List<TimeEntryDbo> TimeEntries { get; set; } = [];
     public List<UserDbo> Assignees { get; set; } = [];
