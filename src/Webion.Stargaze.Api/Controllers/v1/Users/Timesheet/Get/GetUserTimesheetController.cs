@@ -7,12 +7,12 @@ using Webion.Stargaze.Api.Controllers.Dtos;
 using Webion.Stargaze.Pgsql;
 using Webion.Stargaze.Pgsql.Entities.Identity;
 
-namespace Webion.Stargaze.Api.Controllers.v1.User.Timesheet.Get;
+namespace Webion.Stargaze.Api.Controllers.v1.Users.Timesheet.Get;
 
 [Authorize]
 [ApiController]
-[Route("v{version:apiVersion}/user/timesheet")]
-[Tags("User")]
+[Route("v{version:apiVersion}/users/timesheet")]
+[Tags("Users")]
 [ApiVersion("1.0")]
 public sealed class GetUserTimesheetController : ControllerBase
 {

@@ -4,5 +4,5 @@ namespace Webion.ClickUp.Api.V2.OAuth.Dtos;
 
 public sealed class GetAuthorizedUserResponse
 {
-    public required UserDto User { get; init; }
+    public required ClickUpUserDto User { get; init; }
 }
