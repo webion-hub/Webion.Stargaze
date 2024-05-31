@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace Webion.ClickUp.Api.V2.Common;
 
-public sealed class UserDto
+public sealed class ClickUpUserDto
 {
     public required ClickUpId Id { get; init; }
 
